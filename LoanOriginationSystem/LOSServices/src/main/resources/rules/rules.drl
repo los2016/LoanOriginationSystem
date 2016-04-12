@@ -1,0 +1,46 @@
+package com.myorg.losservices
+
+import com.myorg.losservices.model.Answer;
+import com.myorg.losservices.model.UserInfo;
+import java.util.List;
+import java.util.ArrayList;
+import com.myorg.losservices.util.QNSUtil
+
+rule "get_initial_qns_list_pb"
+when
+	$userInfo : UserInfo( lob == "PB" )
+then
+	System.out.println( "User Lob: " +  $userInfo.getLob());	
+	
+	QNSUtil.addNewQuestionId("qns-1");
+	QNSUtil.addNewQuestionId("qns-2");
+	QNSUtil.addNewQuestionId("qns-3");	
+	
+end
+
+rule "get_initial_qns_list_pwm"
+when
+	$userInfo : UserInfo( lob == "PWM" )
+then
+	System.out.println( "User Lob: " +  $userInfo.getLob());	
+	
+	QNSUtil.addNewQuestionId("qns-1");	
+	QNSUtil.addNewQuestionId("qns-3");	
+	
+end
+
+rule "show_ans4"
+when 
+	ans : Answer( ansId == "ans-11")
+then
+	QNSUtil.addNewQuestionId("qns-4");
+end	
+				
+
+
+rule "my_rule"
+when 
+	$ans : Answer( ansValue == "werw" )
+then 
+	System.out.println( "Selected Ans Id: " +  $ans.getAnsId());
+end

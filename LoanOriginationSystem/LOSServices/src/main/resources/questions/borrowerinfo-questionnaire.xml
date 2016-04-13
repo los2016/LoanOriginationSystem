@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questionnaire>
+  <title>Borrower Info</title>
+    <questions>
+      <question>
+        <questionnaire>Is this an individual or entity?</questionnaire>
+        <answerType>radio</answerType>
+		<answer>Yes</answer>
+        <answer>No</answer>
+		<required>Y</required>
+      </question>
+	  <question>
+        <questionnaire>What is your country of primary domicile?</questionnaire>
+        <answerType>single-select</answerType>
+		<answer>US;UK;</answer>
+		<required>Y</required>
+      </question>
+	  <question>
+        <questionnaire>What is your full name?</questionnaire>
+        <answerType>textbox</answerType>
+		<required>Y</required>
+      </question>
+    </questions>
+</questionnaire>

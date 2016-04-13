@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questionnaire>
+  <title>Contact Info</title>
+    <questions>
+	  <question>
+        <questionnaire>What is your legal address?</questionnaire>
+        <answerType>textbox</answerType>
+		<required>N</required>
+      </question>
+	  <question>
+        <questionnaire>What is your legal phone?</questionnaire>
+        <answerType>textbox</answerType>
+		<required>N</required>
+      </question>
+	  <question>
+        <questionnaire>What is your legal email?</questionnaire>
+        <answerType>textbox</answerType>
+		<required>Y</required>
+      </question>
+    </questions>
+</questionnaire>

@@ -5,20 +5,22 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.kie.api.cdi.KReleaseId;
 import org.kie.api.cdi.KSession;
 import org.kie.api.runtime.KieSession;
 import org.springframework.stereotype.Component;
 
+import com.myorg.losmodel.model.Answer;
+import com.myorg.losmodel.model.LoanInfo;
+import com.myorg.losmodel.model.Question;
+import com.myorg.losmodel.util.ModelUtils;
 import com.myorg.losservices.core.QNAServices;
-import com.myorg.losservices.model.Answer;
-import com.myorg.losservices.model.LoanInfo;
-import com.myorg.losservices.model.Question;
-import com.myorg.losservices.util.QNSUtil;
 
 @Component
 public class QNAServicesImpl implements QNAServices {
 	
 	@KSession("kieSession")
+	@KReleaseId( groupId = "com.myorg", artifactId = "LOSRules", version = "1.0")
 	private KieSession kieSession;
 
 
@@ -26,7 +28,7 @@ public class QNAServicesImpl implements QNAServices {
 	@Override
 	public List<Question> getInitialQNAList(LoanInfo loadInfo) throws Exception {
 
-		QNSUtil.cleanQnsIdList();
+		ModelUtils.cleanQnsIdList();
 		
 		kieSession.insert(loadInfo.getUserInfo());				
 		int noOfRulefired = kieSession.fireAllRules();
@@ -40,7 +42,7 @@ public class QNAServicesImpl implements QNAServices {
 		}
 		
 		
-		qnsIdList = QNSUtil.getQnsListId();
+		qnsIdList = ModelUtils.getQnsListId();
 		
 		return getQNSDeails(qnsIdList);
 		
@@ -148,7 +150,7 @@ public class QNAServicesImpl implements QNAServices {
 			}
 			
 			
-			qnsIdList = QNSUtil.getQnsListId();
+			qnsIdList = ModelUtils.getQnsListId();
 			
 			return getQNSDeails(qnsIdList);
 		}

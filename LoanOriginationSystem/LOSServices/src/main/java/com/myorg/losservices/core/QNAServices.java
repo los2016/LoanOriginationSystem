@@ -2,9 +2,9 @@ package com.myorg.losservices.core;
 
 import java.util.List;
 
-import com.myorg.losservices.model.Answer;
-import com.myorg.losservices.model.LoanInfo;
-import com.myorg.losservices.model.Question;
+import com.myorg.losmodel.model.Answer;
+import com.myorg.losmodel.model.LoanInfo;
+import com.myorg.losmodel.model.Question;
 
 public interface QNAServices {
 

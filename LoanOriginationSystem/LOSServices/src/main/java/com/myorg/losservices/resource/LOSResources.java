@@ -10,10 +10,10 @@ import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.myorg.losmodel.model.Answer;
+import com.myorg.losmodel.model.LoanInfo;
+import com.myorg.losmodel.model.Question;
 import com.myorg.losservices.core.QNAServices;
-import com.myorg.losservices.model.Answer;
-import com.myorg.losservices.model.LoanInfo;
-import com.myorg.losservices.model.Question;
 
 @Path("/losservices")
 public class LOSResources {

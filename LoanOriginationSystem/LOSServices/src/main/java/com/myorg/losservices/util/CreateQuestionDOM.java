@@ -1,4 +1,4 @@
-package co.myorg.util;
+package com.myorg.losservices.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,7 +14,7 @@ import org.xml.sax.SAXException;
 
 public class CreateQuestionDOM {
 
-	final String questionnairePath = "";
+	final static String questionnairePath = "";
 	
 	public static Document getQuestionsDOM(final String category) throws SAXException,
 			ParserConfigurationException, IOException, URISyntaxException {

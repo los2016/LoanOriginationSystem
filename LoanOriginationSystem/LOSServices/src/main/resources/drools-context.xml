@@ -15,6 +15,9 @@
 							http://www.springframework.org/schema/util/spring-util-4.0.xsd">
 
   
+  	<kie:import releaseId-ref="namedKieSession" enableScanner="true" scannerInterval="1000"/>
+  	<kie:releaseId id="namedKieSession" groupId="com.myorg" artifactId="LOSRules" version="1.0"/>
+
   
   	<kie:kmodule id="LOSModule">
   		<kie:kbase name="kieBase" packages="rules">
@@ -25,6 +28,6 @@
   	
   	<bean id="kiePostProcessor" class="org.kie.spring.annotations.KModuleAnnotationPostProcessor"/>
   	
-  	<kie:import />
+  	
   
   </beans>

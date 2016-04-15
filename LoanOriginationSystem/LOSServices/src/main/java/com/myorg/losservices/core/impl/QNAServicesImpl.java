@@ -19,7 +19,7 @@ import com.myorg.losservices.core.QNAServices;
 @Component
 public class QNAServicesImpl implements QNAServices {
 	
-	@KSession("kieSession")
+	@KSession("defaultKieSession")
 	@KReleaseId( groupId = "com.myorg", artifactId = "LOSRules", version = "1.0")
 	private KieSession kieSession;
 

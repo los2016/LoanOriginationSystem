@@ -22,7 +22,7 @@ public class LoadQuestion {
 	
 	public LoadQuestion(final String category) 
 		throws SAXException,ParserConfigurationException,IOException, URISyntaxException{
-		dom = CreateQuestionDOM.getDOM(category);
+		//dom = CreateQuestionDOM.getDOM(category);
 	}
 	
 	public void populateQuestionList(final String category) { 
@@ -39,6 +39,7 @@ public class LoadQuestion {
 	    
 			for (int j = 0; j < childList.getLength(); j++) {
 				Node childNode = childList.item(j);
+				/*
 				if ("answer".equals(childNode.getNodeName()))
 				{
 					options[counter] = childList.item(j).getTextContent();
@@ -56,6 +57,7 @@ public class LoadQuestion {
 				{
 					required = childList.item(j).getTextContent();
 				}
+				*/
             
 			}
 			
@@ -66,11 +68,13 @@ public class LoadQuestion {
 			List<Answer> answerList = new ArrayList<Answer>();
 			for(String ans:options)
 			{
+				/*
 				Answer ans = new Answer();
 				ans.setAnsId(); //TODO set answer id and populate other fields answerType and required flag
 				ans.setAnsDesc(ans);    
 				ans.setAnsValue(ans);
 				answerList.add(ans);
+				*/
 			}
 			ques.setAnswerList(answerList);
 			questionList.add(ques);

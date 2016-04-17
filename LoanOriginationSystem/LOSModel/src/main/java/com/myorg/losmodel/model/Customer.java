@@ -1,22 +1,20 @@
 package com.myorg.losmodel.model;
 
-import java.util.List;
+import java.io.Serializable;
 
-public abstract class Customer {
+public abstract class Customer implements Serializable {
 	
-	private boolean highlySensitive;
+	static final long serialVersionUID = 1L;
 	
-	private boolean highlyConfidential;
+	private long ECI;
 	
-	private String country; // country of Primary Domicile
+	private char isHighlySensitive; // 'Y', 'N'
 	
-	private String state; // state of domicile
+	private char isHighlyConfidential; // 'Y', 'N'
 	
 	private String fullName;	
 	
-	private String nationality;
-	
-	private List<String> primaryCountriesOfAssets;
+	private String primaryCountryOfAssets;
 	
 	private String uniqueIdentifierType; // SSN, TIN or EIN
 	
@@ -24,44 +22,76 @@ public abstract class Customer {
 	
 	private String clientSponsorName; // internal Banker name
 	
-	private String existingClientOrProspect; // "C" - Client , "P" - prospect
+	private char isClientOrProspect; // "C" - Client , "P" - prospect
 	
 	private char witholdingFederalStatus; // 'Y'
 	
-	private String primaryIdentification;
+	private double netWorth;
 	
-	private String primaryIdentificationNo;
+	private Address legalAddress;
 	
-	public boolean isHighlySensitive() {
-		return highlySensitive;
+	private String creditRequestCaptureMode;
+	
+	private char anyOutstandingJudgements; // 'Y' / 'N'
+	
+	private char bankruptcyDuringLast7years; // 'Y' / 'N'
+	
+	private char forclosureDuringLast7years; // 'Y' / 'N'
+	
+	private char partyToLawsuit; // 'Y' / 'N'
+	
+	private char obligationToOtherLoans; // 'Y' / 'N'
+	
+	private char delinquencyOrDefaultStatus; // 'Y' / 'N'
+	
+	private char isPartOfDownPaymentBorrowed; // 'Y' / 'N'
+	
+	private String sourceOfDownPayment;
+	
+	private char comakerOrEndoreser;
+	
+	private char isUSCitizen;  // 'Y' / 'N'
+	
+	private char isPermenantResident; // 'Y' / 'N'
+	
+	private char hadOwnershipInterestinProperty;
+	
+	private String typeOfProperty;
+	
+	private String howWasTitleHold;
+	
+	private String whenWasApplicationSubmitted;
+	
+	private char isJPMSClient;
+	
+	private char mortgageDocumentMailedToResidence;
+	
+	private Address homeAddress;
+	
+	private char isInternationalClient;
+
+	public long getECI() {
+		return ECI;
 	}
 
-	public void setHighlySensitive(boolean highlySensitive) {
-		this.highlySensitive = highlySensitive;
+	public void setECI(long eCI) {
+		ECI = eCI;
 	}
 
-	public boolean isHighlyConfidential() {
-		return highlyConfidential;
+	public char getIsHighlySensitive() {
+		return isHighlySensitive;
 	}
 
-	public void setHighlyConfidential(boolean highlyConfidential) {
-		this.highlyConfidential = highlyConfidential;
+	public void setIsHighlySensitive(char isHighlySensitive) {
+		this.isHighlySensitive = isHighlySensitive;
 	}
 
-	public String getCountry() {
-		return country;
+	public char getIsHighlyConfidential() {
+		return isHighlyConfidential;
 	}
 
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
+	public void setIsHighlyConfidential(char isHighlyConfidential) {
+		this.isHighlyConfidential = isHighlyConfidential;
 	}
 
 	public String getFullName() {
@@ -72,20 +102,12 @@ public abstract class Customer {
 		this.fullName = fullName;
 	}
 
-	public String getNationality() {
-		return nationality;
+	public String getPrimaryCountryOfAssets() {
+		return primaryCountryOfAssets;
 	}
 
-	public void setNationality(String nationality) {
-		this.nationality = nationality;
-	}
-
-	public List<String> getPrimaryCountriesOfAssets() {
-		return primaryCountriesOfAssets;
-	}
-
-	public void setPrimaryCountriesOfAssets(List<String> primaryCountriesOfAssets) {
-		this.primaryCountriesOfAssets = primaryCountriesOfAssets;
+	public void setPrimaryCountryOfAssets(String primaryCountryOfAssets) {
+		this.primaryCountryOfAssets = primaryCountryOfAssets;
 	}
 
 	public String getUniqueIdentifierType() {
@@ -112,12 +134,12 @@ public abstract class Customer {
 		this.clientSponsorName = clientSponsorName;
 	}
 
-	public String getExistingClientOrProspect() {
-		return existingClientOrProspect;
+	public char getIsClientOrProspect() {
+		return isClientOrProspect;
 	}
 
-	public void setExistingClientOrProspect(String existingClientOrProspect) {
-		this.existingClientOrProspect = existingClientOrProspect;
+	public void setIsClientOrProspect(char isClientOrProspect) {
+		this.isClientOrProspect = isClientOrProspect;
 	}
 
 	public char getWitholdingFederalStatus() {
@@ -126,38 +148,6 @@ public abstract class Customer {
 
 	public void setWitholdingFederalStatus(char witholdingFederalStatus) {
 		this.witholdingFederalStatus = witholdingFederalStatus;
-	}
-
-	public String getPrimaryIdentification() {
-		return primaryIdentification;
-	}
-
-	public void setPrimaryIdentification(String primaryIdentification) {
-		this.primaryIdentification = primaryIdentification;
-	}
-
-	public String getPrimaryIdentificationNo() {
-		return primaryIdentificationNo;
-	}
-
-	public void setPrimaryIdentificationNo(String primaryIdentificationNo) {
-		this.primaryIdentificationNo = primaryIdentificationNo;
-	}
-
-	public String getPrimaryIdentificationIssuanceDate() {
-		return primaryIdentificationIssuanceDate;
-	}
-
-	public void setPrimaryIdentificationIssuanceDate(String primaryIdentificationIssuanceDate) {
-		this.primaryIdentificationIssuanceDate = primaryIdentificationIssuanceDate;
-	}
-
-	public String getPrimaryIdentificationExpiryDate() {
-		return primaryIdentificationExpiryDate;
-	}
-
-	public void setPrimaryIdentificationExpiryDate(String primaryIdentificationExpiryDate) {
-		this.primaryIdentificationExpiryDate = primaryIdentificationExpiryDate;
 	}
 
 	public double getNetWorth() {
@@ -174,22 +164,6 @@ public abstract class Customer {
 
 	public void setLegalAddress(Address legalAddress) {
 		this.legalAddress = legalAddress;
-	}
-
-	public Address getWorkAddress() {
-		return workAddress;
-	}
-
-	public void setWorkAddress(Address workAddress) {
-		this.workAddress = workAddress;
-	}
-
-	public Address getHomeAddress() {
-		return homeAddress;
-	}
-
-	public void setHomeAddress(Address homeAddress) {
-		this.homeAddress = homeAddress;
 	}
 
 	public String getCreditRequestCaptureMode() {
@@ -256,12 +230,68 @@ public abstract class Customer {
 		this.isPartOfDownPaymentBorrowed = isPartOfDownPaymentBorrowed;
 	}
 
+	public String getSourceOfDownPayment() {
+		return sourceOfDownPayment;
+	}
+
+	public void setSourceOfDownPayment(String sourceOfDownPayment) {
+		this.sourceOfDownPayment = sourceOfDownPayment;
+	}
+
 	public char getComakerOrEndoreser() {
 		return comakerOrEndoreser;
 	}
 
 	public void setComakerOrEndoreser(char comakerOrEndoreser) {
 		this.comakerOrEndoreser = comakerOrEndoreser;
+	}
+
+	public char getIsUSCitizen() {
+		return isUSCitizen;
+	}
+
+	public void setIsUSCitizen(char isUSCitizen) {
+		this.isUSCitizen = isUSCitizen;
+	}
+
+	public char getIsPermenantResident() {
+		return isPermenantResident;
+	}
+
+	public void setIsPermenantResident(char isPermenantResident) {
+		this.isPermenantResident = isPermenantResident;
+	}
+
+	public char getHadOwnershipInterestinProperty() {
+		return hadOwnershipInterestinProperty;
+	}
+
+	public void setHadOwnershipInterestinProperty(char hadOwnershipInterestinProperty) {
+		this.hadOwnershipInterestinProperty = hadOwnershipInterestinProperty;
+	}
+
+	public String getTypeOfProperty() {
+		return typeOfProperty;
+	}
+
+	public void setTypeOfProperty(String typeOfProperty) {
+		this.typeOfProperty = typeOfProperty;
+	}
+
+	public String getHowWasTitleHold() {
+		return howWasTitleHold;
+	}
+
+	public void setHowWasTitleHold(String howWasTitleHold) {
+		this.howWasTitleHold = howWasTitleHold;
+	}
+
+	public String getWhenWasApplicationSubmitted() {
+		return whenWasApplicationSubmitted;
+	}
+
+	public void setWhenWasApplicationSubmitted(String whenWasApplicationSubmitted) {
+		this.whenWasApplicationSubmitted = whenWasApplicationSubmitted;
 	}
 
 	public char getIsJPMSClient() {
@@ -272,6 +302,22 @@ public abstract class Customer {
 		this.isJPMSClient = isJPMSClient;
 	}
 
+	public char getMortgageDocumentMailedToResidence() {
+		return mortgageDocumentMailedToResidence;
+	}
+
+	public void setMortgageDocumentMailedToResidence(char mortgageDocumentMailedToResidence) {
+		this.mortgageDocumentMailedToResidence = mortgageDocumentMailedToResidence;
+	}
+
+	public Address getHomeAddress() {
+		return homeAddress;
+	}
+
+	public void setHomeAddress(Address homeAddress) {
+		this.homeAddress = homeAddress;
+	}
+
 	public char getIsInternationalClient() {
 		return isInternationalClient;
 	}
@@ -279,41 +325,5 @@ public abstract class Customer {
 	public void setIsInternationalClient(char isInternationalClient) {
 		this.isInternationalClient = isInternationalClient;
 	}
-
-	private String primaryIdentificationIssuanceDate;
-	
-	private String primaryIdentificationExpiryDate;
-	
-	private double netWorth;
-	
-	private Address legalAddress;
-
-	private Address workAddress;
-	
-	private Address homeAddress;
-	
-	private String creditRequestCaptureMode;
-	
-	private char anyOutstandingJudgements; // 'Y' / 'N'
-	
-	private char bankruptcyDuringLast7years; // 'Y' / 'N'
-	
-	private char forclosureDuringLast7years; // 'Y' / 'N'
-	
-	private char partyToLawsuit; // 'Y' / 'N'
-	
-	private char obligationToOtherLoans; // 'Y' / 'N'
-	
-	private char delinquencyOrDefaultStatus; // 'Y' / 'N'
-	
-	private char isPartOfDownPaymentBorrowed;
-	
-	private char comakerOrEndoreser;
-	
-	private char isJPMSClient;
-	
-	private char isInternationalClient;
-	
-	
 	
 }

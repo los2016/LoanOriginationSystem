@@ -1,6 +1,10 @@
 package com.myorg.losmodel.model;
 
-public class Person {
+import java.io.Serializable;
+
+public final class Person implements Serializable {
+	
+	static final long serialVersionUID = 1L;
 	
 	private String firstName;
 	
@@ -9,6 +13,10 @@ public class Person {
 	private String lastName;
 	
 	private String title;
+	
+	private String fullName;  // Should be used in case there is only one field to enter name
+	
+	private ContactInfo contact;
 	
 	public String getFirstName() {
 		return firstName;
@@ -42,13 +50,20 @@ public class Person {
 		this.title = title;
 	}
 
-	public String getPhone() {
-		return phone;
+	public ContactInfo getContact() {
+		return contact;
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setContact(ContactInfo contact) {
+		this.contact = contact;
 	}
 
-	private String phone;
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}		
+	
 }

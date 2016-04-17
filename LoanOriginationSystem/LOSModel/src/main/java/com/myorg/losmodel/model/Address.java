@@ -1,18 +1,40 @@
 package com.myorg.losmodel.model;
 
-public class Address {
+import java.io.Serializable;
+
+public abstract class Address implements Serializable {
 	
-	private String number;
+	static final long serialVersionUID = 1L;
+	
+	private int number;
 	
 	private String address1;
 	
 	private String address2;
 	
-	public String getNumber() {
+	private String address3;
+	
+	private String city;
+	
+	private String state;
+	
+	private String zip; // Kept String because it can include PO Box and special chars
+	
+	private ContactInfo contactInfo;
+	
+	public ContactInfo getContactInfo() {
+		return contactInfo;
+	}
+
+	public void setContactInfo(ContactInfo contactInfo) {
+		this.contactInfo = contactInfo;
+	}
+
+	public int getNumber() {
 		return number;
 	}
 
-	public void setNumber(String number) {
+	public void setNumber(int number) {
 		this.number = number;
 	}
 
@@ -63,32 +85,5 @@ public class Address {
 	public void setZip(String zip) {
 		this.zip = zip;
 	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	private String address3;
 	
-	private String city;
-	
-	private String state;
-	
-	private String zip;
-	
-	private String phone;
-	
-	private String email;
 }

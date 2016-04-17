@@ -1,10 +1,20 @@
 package com.myorg.losmodel.model;
 
-public class Property {
+import java.io.Serializable;
 
-		private Address propertyAddress;	
+public final class Property implements Serializable {
+	
+		static final long serialVersionUID = 1L;
 		
 		private String propertyType;
+		
+		private String occupancyType;
+		
+		private ContactInfo buildingContact;
+		
+		private char isthsRecognizedCoOp;
+		
+		private Address propertyAddress;		
 		
 		public Address getPropertyAddress() {
 			return propertyAddress;
@@ -30,5 +40,19 @@ public class Property {
 			this.occupancyType = occupancyType;
 		}
 
-		private String occupancyType;	
+		public ContactInfo getBuildingContact() {
+			return buildingContact;
+		}
+
+		public void setBuildingContact(ContactInfo buildingContact) {
+			this.buildingContact = buildingContact;
+		}
+
+		public char getIsthsRecognizedCoOp() {
+			return isthsRecognizedCoOp;
+		}
+
+		public void setIsthsRecognizedCoOp(char isthsRecognizedCoOp) {
+			this.isthsRecognizedCoOp = isthsRecognizedCoOp;
+		}				
 }

@@ -1,0 +1,45 @@
+<html>
+<head>
+  <script src="js/jquery-1.11.2.min.js"></script>
+</head>
+
+<body>
+	<h1>Document Upload for Application ID</h1>
+	<form id="upload-file-form">
+		<input id="clientId" type="text" value="CLNT00022123" />
+		<p>Select a Document : 
+		<input id="upload-file-input" type="file" name="file" accept="*" />
+		<input id="upload-file-button" type="button" value="Upload" />
+    	<span id="upload-file-message"></span>
+	</form>
+</body>
+
+
+<!-- Javascript functions -->
+<script>
+    $(document).ready(function() {
+      $("#upload-file-button").on("click", uploadFile);
+    });
+    
+    function uploadFile() {
+      $.ajax({
+        url: "/rest/file/upload",
+        type: "POST",
+        data: new FormData($("#upload-file-form")[0]),
+        enctype: 'multipart/form-data',
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function () {
+          // Handle upload success
+          $("#upload-file-message").text("File succesfully uploaded");
+        },
+        error: function () {
+          // Handle upload error
+          $("#upload-file-message").text(
+              "File not uploaded (perhaps it's too much big)");
+        }
+      });
+    } 
+</script>
+</html>

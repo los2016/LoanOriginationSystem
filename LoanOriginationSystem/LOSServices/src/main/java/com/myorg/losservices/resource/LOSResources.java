@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.myorg.losmodel.model.Answer;
 import com.myorg.losmodel.model.LoanInfo;
 import com.myorg.losmodel.model.Question;
+import com.myorg.losmodel.model.ValidateQuestionRequest;
+import com.myorg.losmodel.model.ValidateQuestionResponse;
 import com.myorg.losservices.core.QNAServices;
 
 @Path("/losservices")
@@ -41,6 +43,17 @@ public class LOSResources {
 		List<Question> questionList = qnaServices.getDependantQNAList(ansList);		
 		return questionList;
 		
+	}
+	
+	@POST
+	@Path("/validateQuestion")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ValidateQuestionResponse validateQuestion(ValidateQuestionRequest request) {
+		
+		ValidateQuestionResponse resp = qnaServices.validateQuestion(request.getQuestionId(), request.getPbEntityClient(), request.getPbIndividualClient());
+		
+		return resp;
 	}
 
 }

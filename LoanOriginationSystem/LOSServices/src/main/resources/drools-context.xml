@@ -16,16 +16,7 @@
 
   
   	<kie:import releaseId-ref="namedKieSession" enableScanner="true" scannerInterval="1000"/>
-  	<kie:releaseId id="namedKieSession" groupId="com.myorg" artifactId="LOSRules" version="1.0"/>
-
-    <!-- 
-  	<kie:kmodule id="LOSModule">
-  		<kie:kbase name="kieBase" packages="rules">
-  			 <kie:ksession name="kieSession" type="stateful"/>
-  		</kie:kbase>
-  	
-  	</kie:kmodule>
-  	 -->
+  	<kie:releaseId id="namedKieSession" groupId="com.myorg" artifactId="LOSRules" version="1.0"/>    
   	
   	<bean id="kiePostProcessor" class="org.kie.spring.annotations.KModuleAnnotationPostProcessor"/>
   	

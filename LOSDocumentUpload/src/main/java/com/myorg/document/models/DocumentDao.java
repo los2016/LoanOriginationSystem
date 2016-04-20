@@ -13,6 +13,8 @@ import org.springframework.stereotype.Repository;
 @Transactional
 public class DocumentDao {
 
+	private static final int DATATYPE_ID = 2; 
+	
 	@Autowired
 	private SessionFactory _sessionFactory;
 
@@ -22,6 +24,6 @@ public class DocumentDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Document> getAll() {
-		return getSession().createQuery("from Document").list();
+		return getSession().createQuery("from Document where dataTypeId = :dataTypeId").setParameter("dataTypeId", DATATYPE_ID).list();
 	}
 }

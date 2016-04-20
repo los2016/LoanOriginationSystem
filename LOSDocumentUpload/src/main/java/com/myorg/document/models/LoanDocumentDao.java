@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,29 @@ public class LoanDocumentDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<LoanDocument> getByLoanId(int loanId) {
-		return getSession().createQuery("from LoanDocument where loanId = :loanId").setParameter("loanId", loanId)
+	public List<LoanDocument> getByLoanId(long mortgageApplicationID) {
+		return getSession().createQuery("from LoanDocument where loanDocumentComposite.mortgageApplicationID = :loanId").setParameter("loanId", mortgageApplicationID)
 				.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public LoanDocument getDocument(long mortgageApplicationID, long documentTypeId, long sequenceNumber) {
+		Query query = getSession().createQuery("from LoanDocument where "
+				+ "loanDocumentComposite.mortgageApplicationID = :loanId and "
+				+ "loanDocumentComposite.documentTypeId = :documentTypeId and "
+				+ "loanDocumentComposite.sequenceNumber = :sequenceNumber");
+		query.setParameter("loanId", mortgageApplicationID);
+		query.setParameter("documentTypeId", documentTypeId);
+		query.setParameter("sequenceNumber", sequenceNumber);
+		List<LoanDocument> list = query.list();
+		if(list != null && list.size() > 0) {
+			return list.get(0);
+		} else {
+			return null;
+		}
+	}
+	
+	public void saveDocument(LoanDocument loanDocument) {
+		getSession().save(loanDocument);
 	}
 }

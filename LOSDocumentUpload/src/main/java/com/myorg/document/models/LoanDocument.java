@@ -1,73 +1,63 @@
 package com.myorg.document.models;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "mortgage.loan_documents")
-public class LoanDocument {
+@Table(name = "mortgage.transaction_data_item")
+public class LoanDocument implements Serializable{
 	
-	@Id
-	@Column(name ="SEQ_ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int sequenceId;
+	private static final long serialVersionUID = -6713284053396009032L;
+
+	@EmbeddedId
+	private LoanDocumentPK loanDocumentComposite;
 	
-	@Column(name ="LOAN_ID")
-	private int loanId;
+	@Column(name ="COL_LARGE_BIN_VAL")
+	private byte[] documentPayload;
 	
-	@Column(name ="DOCUMENT_ID")
-	private int documentId;
+	@Column(name ="COL_SIMPLE_VAL")
+	private String documentPath;
 	
-	@Column(name ="UPLOADED_LOC_URL_OR_PATH")
-	private String uploadLocation;
+	@ManyToOne
+	@JoinColumn(name="COL_ID", referencedColumnName="ATTRIBUTE_ID")
+	private Document documentMetadata;
 
-	@Column(name ="CD_UPLOADED_AS")
-	private String uploadedAs;
-
-	public int getSequenceId() {
-		return sequenceId;
+	public LoanDocumentPK getLoanDocumentComposite() {
+		return loanDocumentComposite;
 	}
 
-	public void setSequenceId(int sequenceId) {
-		this.sequenceId = sequenceId;
+	public void setLoanDocumentComposite(LoanDocumentPK loanDocumentComposite) {
+		this.loanDocumentComposite = loanDocumentComposite;
 	}
 
-	public int getLoanId() {
-		return loanId;
+	public byte[] getDocumentPayload() {
+		return documentPayload;
 	}
 
-	public void setLoanId(int loanId) {
-		this.loanId = loanId;
+	public void setDocumentPayload(byte[] documentPayload) {
+		this.documentPayload = documentPayload;
 	}
 
-	public int getDocumentId() {
-		return documentId;
+	public String getDocumentPath() {
+		return documentPath;
 	}
 
-	public void setDocumentId(int documentId) {
-		this.documentId = documentId;
+	public void setDocumentPath(String documentPath) {
+		this.documentPath = documentPath;
 	}
 
-	public String getUploadLocation() {
-		return uploadLocation;
+	public Document getDocumentMetadata() {
+		return documentMetadata;
 	}
 
-	public void setUploadLocation(String uploadLocation) {
-		this.uploadLocation = uploadLocation;
+	public void setDocumentMetadata(Document documentMetadata) {
+		this.documentMetadata = documentMetadata;
 	}
-
-	public String getUploadedAs() {
-		return uploadedAs;
-	}
-
-	public void setUploadedAs(String uploadedAs) {
-		this.uploadedAs = uploadedAs;
-	}
-	
-	
 	
 }

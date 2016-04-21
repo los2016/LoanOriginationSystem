@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Transactional
 public class DocumentDao {
 
-	private static final int DATATYPE_ID = 2; 
+	private static final String DATATYPE_ID = "2"; 
 	
 	@Autowired
 	private SessionFactory _sessionFactory;

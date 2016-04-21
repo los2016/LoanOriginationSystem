@@ -105,11 +105,11 @@ public class DocumentService {
 		return Response.status(200).entity(output).build();
 	}
 	
-	@GET
+	/*@GET
 	@Path("/downloadDocument/{mortgageApplicationID}/{documentTypeId}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public StreamingOutput downloadDocument(@PathVariable("mortgageApplicationID") final long mortgageApplicationID, final @PathVariable("documentTypeId") long documentTypeId) {
-		return new StreamingOutput() {
+	public Response downloadDocument(@PathVariable("mortgageApplicationID") final long mortgageApplicationID, final @PathVariable("documentTypeId") long documentTypeId) {
+		 StreamingOutput stream =  new StreamingOutput() {
 			@Override
 			public void write(OutputStream arg0) throws IOException{
 				BufferedOutputStream bus = new BufferedOutputStream(arg0);
@@ -122,7 +122,8 @@ public class DocumentService {
 				}
 			}
 		};
-	}
+		return Response.ok(stream).build();
+	}*/
 	
 
 	// save uploaded file to new location

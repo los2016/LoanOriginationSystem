@@ -20,7 +20,7 @@ public class WorkFlowServiceImplTest {
 		Map<String, Object> params = new HashMap<String, Object>();
         params.put("recipient", "john");
         //params.put("application", application);
-        Long instanceId = workFlowService.startProcess("com.myorg.losworkflow.workflow.MortgageOriginationActors", params);
+        long instanceId = workFlowService.startProcess("com.myorg.losworkflow.workflow.MortgageOriginationActors", params);
         System.out.println("Process Instance ID " + instanceId + " is generated for application");
         
         // let john execute Task 1
@@ -36,8 +36,9 @@ public class WorkFlowServiceImplTest {
  		workFlowService.completeTask(task.getId(), "mary", null);
  		
  		// let krisv execute Task 3
- 		list = workFlowService.getTaskForUser("krisv");
- 		task = list.get(0);
+ 		task = workFlowService.getTaskByProcessUserTaskName(instanceId, "krisv", "CollectInfo");
+ 		//list = workFlowService.getTaskForUser("krisv");
+ 		//task = list.get(0);
  		workFlowService.startTask(task.getId(), "krisv");
  		workFlowService.completeTask(task.getId(), "krisv", null);
  		

@@ -21,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -31,6 +32,7 @@ import com.myorg.document.models.DocumentDao;
 import com.myorg.document.models.DocumentPayLoad;
 import com.myorg.document.models.LoanDocument;
 import com.myorg.document.models.LoanDocumentDao;
+import com.myorg.document.models.LoanDocumentPK;
 
 @Component
 @Path("/document")
@@ -78,6 +80,31 @@ public class DocumentService {
 		return Response.ok(entity).build();
 	}
 	
+	@POST
+	@Path("/upload")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Response uploadFile(DocumentPayLoad payLoad) throws Throwable {
+		
+		LoanDocumentPK loanDocumentComposite = new LoanDocumentPK();
+		loanDocumentComposite.setMortgageApplicationID(payLoad.getMortgageApplicationID());
+		loanDocumentComposite.setDocumentTypeId(payLoad.getDocumentTypeId());
+		loanDocumentComposite.setSequenceNumber(1);
+		
+		LoanDocument loanDocument = new LoanDocument();
+		loanDocument.setLoanDocumentComposite(loanDocumentComposite);
+		loanDocument.setDocumentPayload(IOUtils.toByteArray(payLoad.getUploadedInputStream()));
+		
+		// Get the filename and build the local file path
+		String filename = payLoad.getUploadfile().getFileName();
+		String directory = env.getProperty("mortgage.paths.uploadedFiles");
+		String filepath = Paths.get(directory, filename).toString();
+
+		// save it
+		upload(payLoad.getUploadedInputStream(), filepath);
+		String output = "File uploaded to : " + filepath;
+		return Response.status(200).entity(output).build();
+	}
+	
 	@GET
 	@Path("/downloadDocument/{mortgageApplicationID}/{documentTypeId}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
@@ -96,21 +123,7 @@ public class DocumentService {
 			}
 		};
 	}
-
-	@POST
-	@Path("/upload")
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response uploadFile(DocumentPayLoad payLoad) {
-		// Get the filename and build the local file path
-		String filename = payLoad.getUploadfile().getFileName();
-		String directory = env.getProperty("mortgage.paths.uploadedFiles");
-		String filepath = Paths.get(directory, filename).toString();
-
-		// save it
-		upload(payLoad.getUploadedInputStream(), filepath);
-		String output = "File uploaded to : " + filepath;
-		return Response.status(200).entity(output).build();
-	}
+	
 
 	// save uploaded file to new location
 	private void upload(InputStream uploadedInputStream, String uploadedFileLocation) {

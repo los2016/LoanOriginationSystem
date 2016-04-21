@@ -25,7 +25,7 @@ public class LoanDocument implements Serializable{
 	private String documentPath;
 	
 	@ManyToOne
-	@JoinColumn(name="COL_ID", referencedColumnName="ATTRIBUTE_ID")
+	@JoinColumn(name="COL_ID", referencedColumnName="ATTRIBUTE_ID", insertable=false, updatable=false)
 	private Document documentMetadata;
 
 	public LoanDocumentPK getLoanDocumentComposite() {

@@ -1,31 +1,15 @@
 <html>
 <head>
   <script src="/js/jquery-1.11.2.min.js"></script>
-  <style>
-  div.DialogMask
-	{
-    	padding: 10px;
-    	position: fixed;
-    	top: 0;
-    	right: 0;
-    	bottom: 0;
-    	left: 0;
-    	z-index: 50;
-    	background-color: #606060;
-    	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
-    	-moz-opacity: .5;
-    	opacity: .5;
-	}
-	</style>
 </head>
 
 <body>
 	<div id="DialogMask" ></div> 
 	<h1>Document Upload for Loan ID : <span id="loanId"></span></h1>
 	<form id="upload-file-form">
-		<input id="clientId" type="text" value="CLNT00022123" />
-		<p>Select a Document : 
-		<input id="upload-file-input" type="file" name="file" accept="*" />
+		<input id="mortgageApplicationID" name="mortgageApplicationID" type="text" value="CLNT00022123" />
+		<p>Select a Document : <select id="documentTypeId" name="documentTypeId"></select> 
+		<input id="documentPayload" type="file" name="documentPayload" accept="*" />
 		<input id="upload-file-button" type="button" value="Upload" />
     	<span id="upload-file-message"></span>
 	</form>
@@ -36,21 +20,19 @@
 <script>
     $(document).ready(function() {
       $("#upload-file-button").on("click", uploadFile);
-      $("#DialogMask").show();
-      setTimeout(function(){ getCustomerId(); }, 100000);
+      getDocumentListToUpload();
     });
     
     function getCustomerId() {
     	var path = window.location.pathname;
     	var customerId = "";
     	var lastIndex = path.substring(path.lastIndexOf("/"), path.length);
-    	//alert(lastIndex);
-    	$("#DialogMask").hide();
     }
     
     function uploadFile() {
+    	
       $.ajax({
-        url: "/rest/file/upload",
+        url: "/rest/document/upload",
         type: "POST",
         data: new FormData($("#upload-file-form")[0]),
         enctype: 'multipart/form-data',
@@ -58,18 +40,28 @@
         contentType: false,
         cache: false,
         success: function () {
-          // Handle upload success
           $("#upload-file-message").text("File succesfully uploaded");
         },
         error: function () {
-          // Handle upload error
-          $("#upload-file-message").text(
-              "File not uploaded (perhaps it's too much big)");
+          $("#upload-file-message").text("File not uploaded (perhaps it's too much big)");
         }
       });
-      
-      
-      
     } 
+    
+    function getDocumentListToUpload(){
+    	 $.ajax({
+                type: "GET",
+                url: '/rest/document/documentlist',
+                dataType: 'json',
+                success: function(json) {
+                    var $el = $("#documentTypeId");
+                    $el.empty(); // remove old options
+                    $el.append($("<option></option>").attr("value", '').text('Please Select'));
+                	for(var prop in json) {
+                        $el.append($("<option></option>").attr("value", json[prop].documentTypeId).text(json[prop].documentDescription));
+                    }
+                }
+            });
+    }
 </script>
 </html>

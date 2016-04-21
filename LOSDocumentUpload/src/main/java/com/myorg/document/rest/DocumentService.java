@@ -1,6 +1,5 @@
 package com.myorg.document.rest;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,9 +18,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.StreamingOutput;
 
 import org.apache.commons.io.IOUtils;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -83,24 +83,29 @@ public class DocumentService {
 	@POST
 	@Path("/upload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response uploadFile(DocumentPayLoad payLoad) throws Throwable {
+	public Response uploadFile(@FormDataParam("documentPayload") InputStream uploadedInputStream,
+			@FormDataParam("documentPayload") FormDataContentDisposition fileDetail,
+			@FormDataParam("mortgageApplicationID") Long mortgageApplicationID,
+			@FormDataParam("documentTypeId") Long documentTypeId) throws Throwable {
 		
+		System.out.println("mortgageApplicationID="+mortgageApplicationID+", documentTypeId="+documentTypeId);
 		LoanDocumentPK loanDocumentComposite = new LoanDocumentPK();
-		loanDocumentComposite.setMortgageApplicationID(payLoad.getMortgageApplicationID());
-		loanDocumentComposite.setDocumentTypeId(payLoad.getDocumentTypeId());
+		loanDocumentComposite.setMortgageApplicationID(mortgageApplicationID);
+		loanDocumentComposite.setDocumentTypeId(documentTypeId);
 		loanDocumentComposite.setSequenceNumber(1);
 		
 		LoanDocument loanDocument = new LoanDocument();
 		loanDocument.setLoanDocumentComposite(loanDocumentComposite);
-		loanDocument.setDocumentPayload(IOUtils.toByteArray(payLoad.getUploadedInputStream()));
+		loanDocument.setDocumentPayload(IOUtils.toByteArray(uploadedInputStream));
+		_loanDocumentDao.saveDocument(loanDocument);
 		
 		// Get the filename and build the local file path
-		String filename = payLoad.getUploadfile().getFileName();
+		String filename = fileDetail.getFileName();
 		String directory = env.getProperty("mortgage.paths.uploadedFiles");
 		String filepath = Paths.get(directory, filename).toString();
 
 		// save it
-		upload(payLoad.getUploadedInputStream(), filepath);
+		upload(uploadedInputStream, filepath);
 		String output = "File uploaded to : " + filepath;
 		return Response.status(200).entity(output).build();
 	}

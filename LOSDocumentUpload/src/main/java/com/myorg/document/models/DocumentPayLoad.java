@@ -14,12 +14,6 @@ public class DocumentPayLoad implements Serializable{
 	private long documentTypeId;
 	private String documentDescription;
 	private String documentDownloadLink;
-	
-	@FormDataParam("documentPayload") 
-	private InputStream uploadedInputStream;
-	
-	@FormDataParam("documentPayload")
-	private FormDataContentDisposition uploadfile;
 
 	public long getMortgageApplicationID() {
 		return mortgageApplicationID;
@@ -44,18 +38,6 @@ public class DocumentPayLoad implements Serializable{
 	}
 	public void setDocumentDownloadLink(String documentDownloadLink) {
 		this.documentDownloadLink = documentDownloadLink;
-	}
-	public InputStream getUploadedInputStream() {
-		return uploadedInputStream;
-	}
-	public void setUploadedInputStream(InputStream uploadedInputStream) {
-		this.uploadedInputStream = uploadedInputStream;
-	}
-	public FormDataContentDisposition getUploadfile() {
-		return uploadfile;
-	}
-	public void setUploadfile(FormDataContentDisposition uploadfile) {
-		this.uploadfile = uploadfile;
 	}
 	
 }

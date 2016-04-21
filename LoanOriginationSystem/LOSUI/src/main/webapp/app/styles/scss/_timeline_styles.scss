@@ -1,0 +1,213 @@
+/* TODO: apply sassy here..*/
+
+/* timeline styles */
+.timeline-panel {
+    margin: 45px 0 0;    
+}
+
+/* timeline list*/
+.timeline-list {
+
+}
+
+/* timeline ruler style*/
+/*
+ul.timeline-list.level-0 > li::before {
+    content: '';
+    border-top: 3px dotted #666;
+    display: block;
+    position: absolute;
+    top: 48%;
+    width: 100%;
+    left: 100%;
+    z-index: -1;
+    height: 141px;
+}
+*/
+
+.timeline-list ul {
+    display: inline-block;
+}
+
+.timeline-list li{
+    display: inline-block;
+    background: transparent;
+/*                -webkit-transition: all 0.4s ease;*/
+    margin: -25px;
+}
+
+.timeline-list li a {
+    padding: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.timeline-list li a:hover {
+    box-shadow: 0px 0px 4px 4px #8cadd5, 0px 0px 25px rgba(0,0,0,0.8);
+    -webkit-box-shadow: 0px 0px 4px 4px #8cadd5, 0px 0px 25px rgba(0,0,0,0.8);
+    -moz-box-shadow: 0px 0px 4px 4px #8cadd5, 0px 0px 25px rgba(0,0,0,0.8);
+    -o-box-shadow: 0px 0px 4px 4px #8cadd5, 0px 0px 25px rgba(0,0,0,0.8);
+/*                transform: scale(1.2, 1.2);*/
+    transition: all 0.4s ease;
+    -webkit-transition: all 0.4s ease;
+    text-decoration: none;
+}
+
+.timeline-list.level-0 {
+  -webkit-transform: perspective(0);
+  -webkit-transform-style: preserve-3d;
+}
+
+.timeline-list.level-0 >  li {
+    position: relative;
+}
+
+.timeline-list.level-0 a {
+    color: #fff;
+    border: 3px solid #fff;
+    background: #8cadd5;
+    width: 120px;
+    height: 120px;
+    border-radius: 120px;
+    transition: all 0.5s ease;
+
+    box-shadow: 0px 0px 4px 4px #8cadd5;
+    -webkit-box-shadow: 0px 0px 4px 4px #8cadd5;
+    -moz-box-shadow: 0px 0px 4px 4px #8cadd5;
+    -o-box-shadow: 0px 0px 4px 4px #8cadd5;
+}
+
+.level-0 > li > a {
+    position: relative;
+    font-weight: bold !important; 
+    padding: 2.5em 0.5em;
+}
+
+.timeline-list.level-1 a {
+    background: #8cadd5;
+    width: 90px;
+    height: 90px;
+    border-radius: 90px;
+    opacity: 0.8;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.timeline-list.level-2 a {
+    background: #8cadd5;
+    width: 60px;
+    height: 60px;
+    border-radius: 60px;    
+    opacity: 0.6;
+}
+
+a.user-info {
+    background: #8cadd5;
+}
+
+a.system-info,
+a.system-info:link {
+    background: #aaa !important;
+    opacity: 0.8;
+    box-shadow: 0px 0px 4px 4px #aaa !important;
+    -webkit-box-shadow: 0px 0px 4px 4px #aaa !important;
+    -moz-box-shadow: 0px 0px 4px 4px #aaa !important;
+    -o-box-shadow: 0px 0px 4px 4px #aaa !important;
+}
+a.system-info:hover {
+    box-shadow: 0px 0px 25px rgba(0,0,0,0.8) !important;
+    -webkit-box-shadow: 0px 0px 25px rgba(0,0,0,0.8) !important;
+    -moz-box-shadow: 0px 0px 25px rgba(0,0,0,0.8) !important;
+    -o-box-shadow: 0px 0px 25px rgba(0,0,0,0.8) !important;
+}
+
+.coverflow-right {
+    -webkit-transform: rotateY(-40deg) rotateX(10deg) scale(0.7);
+}
+
+.coverflow-left {
+    -webkit-transform: rotateY(40deg) rotateX(10deg) scale(0.7);
+}
+
+.coverflow-top {                
+    -webkit-transform: rotateY(0deg) scale(1);
+    -webkit-transition: all 1.2s ease-in-out 0.5s;
+   transition: all 1.2s ease-in-out 0.5s;
+}
+
+.coverflow-top ul.level-0 > li {
+    margin: 9px;
+}
+
+.coverflow-top ul.level-1 > li {
+    margin: 6px;
+}
+
+.coverflow-top ul.level-2 > li {
+    margin: 3px;
+}
+
+.coverflow-top ul li:last-child {
+    margin-right: 0 !important;
+}
+
+.coverflow-top ul.level-2 > li {
+    margin: 3px;
+}
+
+.coverflow-top a {
+    box-shadow: 0px 0px 4px 4px #8cadd5, 10px 30px 50px -15px rgba(0,0,0,0.4) !important;
+}
+
+/* coverflow status styles*/
+/*
+.coverflow-top a.done::before {
+    content: "\2713 ";
+    display: block;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+}
+.coverflow-top a.pending::before {
+    content: "i ";
+    display: block;
+    font-size: 24px;
+    font-weight: bold;
+    border: 1px solid;
+    width: 33px;
+    height: 33px;
+    border-radius: 33px;
+    position: relative;
+    left: 32%;
+}
+*/
+.coverflow-top a:hover,
+.coverflow-top a:visited,
+.coverflow-top a:active,
+.coverflow-top a:link{
+    text-decoration: none;
+}
+/*
+.coverflow-top a:active {
+    background: #666 !important;
+}
+*/
+
+span.status-text {
+    position: absolute;
+    display: inline-block;
+    font-size: 10px;
+    bottom: -22px;
+    color: #666;
+    width: 70%;
+    right: 18px;
+}
+
+span.status-symbol {
+    position: absolute;
+    display: inline-block;
+    top: 6%;
+    left: 38%;
+    font-size: 2em;
+}

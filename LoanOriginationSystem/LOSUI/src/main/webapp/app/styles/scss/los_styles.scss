@@ -1,0 +1,204 @@
+@import 'reset';
+@import 'mixins';
+@import 'timeline_styles';
+@import 'variables';
+
+body {
+    /*common body styles*/
+    /*font-family: $font-family;*/
+    a{
+        &:hover, &:link {
+            text-decoration: none;
+        }
+    }
+    
+    .form-control {
+        @include border-radius(0);
+    }
+    div {
+        &.login-page { 
+            /*login page styles*/
+            height: 100vh;
+            background: url(#{$image_url}login_bg1.jpg) no-repeat center center fixed;     
+            @include background-size(cover);
+            
+            a {
+                &.navbar-brand {
+                    background: url(#{$image_url}/jpmc_logo_blk.png) no-repeat;
+                    width: 350px;
+                    margin: 10px;
+                }
+            }
+
+            .login-panel {
+                /*login panel styles*/
+                opacity: 0.9;
+                margin-top:30px;
+                
+                .form-group {
+                    &.last {
+                        margin-bottom:0px; 
+                    }
+                }
+            }
+            
+            footer {
+                /*footer styles*/
+                width: 100%;
+                min-height: 100px;
+                padding: $padding-x;
+                position: absolute;
+                bottom: 0;
+            }
+        }
+        
+        &.application-pages {
+            /*logged in page styles - other than login just to keep header footer separate*/
+            background: url(#{$image_url}loggedin_bg3.jpg) no-repeat center center fixed;     
+            @include background-size(cover);
+            .container-fluid {
+                background: $white;
+                width: 80%;
+            }
+            nav.navbar {
+                /*top navbar styles - customized*/
+                .container-fluid {
+                    background: $jpmc-brown;
+                    color: $white;
+                    a {
+                        &.navbar-brand {
+                            background: url(#{$image_url}/jpmc_logo.png) no-repeat;
+                            width: 385px;
+                            padding: 0;
+                        }
+                    }
+                    .login-panel {
+                        a {
+                            color: $white;
+                            &:hover {
+                                color: $jpmc-brown;
+                            }
+                        }
+                        .login-info {
+                            border-left: 1px solid $light-grey;
+                            header {
+                                padding: 9px;
+                                h4, h6 {
+                                    padding: 0;
+                                    margin: 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            /* home page container*/
+            .home-page-container {
+                height: 100vh;
+                padding-top: 120px;
+                a {
+                    &.home-btn {
+                        display: inline-block;
+                        border: 1px solid $jpmc-grey;
+                        background: $jpmc-blue;
+                        color: $white;
+                        margin: 30px 10px 0px;
+                        width: 200px;
+                        height: 200px;
+                        padding: 50px;
+                        i {
+                            font-size: 5em;
+                            color: $white;
+                        }
+                        &:hover {
+                            @include box-shadow(0, 0, 10px, rgba(0,0,0,0.5));
+                        }
+                    }
+                }
+            }
+            
+            .list-page-container, .detail-page-container{
+                height: 100vh;
+                padding-top: 70px;
+                
+                .dropdown-menu {
+                    li {
+                        padding: 10px;
+                        a {
+                            color: $white;
+                            &:hover {
+                                background: $jpmc-blue;
+                            }
+                        }
+                    }
+                }
+                /* TODO: apply sassy here */
+                /* loan thumbnail styles */
+                /* loan list row styles*/
+                .loan-list-row {
+                    padding: 10px 0;
+                    border-bottom: 1px dotted #999;
+                }
+
+                /* prop image styles */
+
+                .prop-panel img {
+                    width: 200px;
+                    height: 160px;
+                }
+
+                .prop-panel .figure{
+                    position: relative;
+                }
+
+                .prop-panel .figure-caption {
+                    position: absolute;
+                    bottom: 0;
+                    color: #fff;
+                    background: #000;
+                    opacity: 0.75;
+                    min-width: 200px;
+                }
+
+                .prop-panel h3 {
+                    margin: 0;
+                    font-size: 16px;
+                    padding: 10px 10px 0;
+                }
+
+                .prop-address-panel {
+                }
+
+                .prop-address-panel address {
+                    margin: 0;
+                    padding: 10px 0 5px 10px;
+                    font-size: 12px;
+                    display: inline-block;
+                    text-overflow: ellipsis;
+                    width: 110px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                }
+
+                .prop-actions-panel {
+                    display: inline-block;
+                    padding: 0;
+                    float: right;
+                    margin: 10px 10px 0 0;
+                }
+
+                .prop-actions-panel a {
+                    padding: 0 3px;
+                }
+
+                .prop-actions-panel a:hover {
+                    text-decoration: none;
+                    color: #666;
+                }
+
+
+            }
+        }
+    }
+}

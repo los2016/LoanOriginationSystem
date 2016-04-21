@@ -10,6 +10,7 @@ import org.kie.api.runtime.process.ProcessInstance;
 import org.kie.api.task.TaskService;
 import org.kie.api.task.model.Status;
 import org.kie.api.task.model.TaskSummary;
+import org.kie.api.task.model.User;
 
 import com.myorg.losworkflow.helpers.LosRuntimeManager;
 import com.myorg.losworkflow.services.WorkFlowService;
@@ -39,6 +40,19 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 	
 	public List<Long> getTaskByProcessInstanceId(Long processId) {
         return taskService.getTasksByProcessInstanceId(processId);
+    }
+	
+	public TaskSummary getTaskByProcessUserTaskName(long processInstanceId, String user, String taskName) {
+		List<TaskSummary> taskSummaryList = taskService.getTasksAssignedAsPotentialOwner(user, "en-UK");
+		for(TaskSummary taskSummary : taskSummaryList){
+			if(processInstanceId == taskSummary.getProcessInstanceId() && taskName.equals(taskSummary.getName())) {
+				User taskOwner = taskSummary.getActualOwner();
+				String userId = null == taskOwner ? null : taskOwner.getId();
+				List<String> potentialTaskOwnerList = taskSummary.getPotentialOwners();
+				return taskSummary;
+			}
+		}
+		return null;
     }
 	
 	public List<TaskSummary> getTaskForUser(String user) {

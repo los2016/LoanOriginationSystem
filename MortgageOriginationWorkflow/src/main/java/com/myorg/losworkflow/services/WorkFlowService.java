@@ -58,6 +58,15 @@ public interface WorkFlowService {
 	public List<TaskSummary> getTaskOfUserByStatus(String user, List<Status> statuslist);
 	
 	/**
+	 * Get Task by user id, process instance id, task type
+	 * @param processInstanceId
+	 * @param user
+	 * @param taskName
+	 * @return
+	 */
+	public TaskSummary getTaskByProcessUserTaskName(long processInstanceId, String user, String taskName) ;
+	
+	/**
 	 * Claim a task for which user is not owner but is in his team's tasks
 	 * @param taskId
 	 * @param user

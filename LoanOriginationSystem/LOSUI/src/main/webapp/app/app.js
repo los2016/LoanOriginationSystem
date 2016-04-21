@@ -1,1 +1,4 @@
-var module = angular.module("mainModule",[]);
+var app_module = angular.module("mainModule",[]);
+
+
+

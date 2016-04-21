@@ -2,12 +2,23 @@
 <html ng-app="mainModule">
 <head>
 	<title>LOS - POC</title>
+
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
 	<script type="text/javascript" src="/app/app.js"></script>
+	<script type="text/javascript" src="/app/services/httpConnector.js"></script>
+	<script type="text/javascript" src="/app/components/login/ng-component.js"></script>
+	<script type="text/javascript" src="/app/components/customer/ng-component.js"></script>
+	<!--
+	<script type="text/javascript" src="/app/app.js"></script>
+	<script type="text/javascript" src="/app/app.js"></script>
+	<script type="text/javascript" src="/app/app.js"></script>
+	-->
 
-</head>
 </head>
 <body>
-
+	<!-- include header-->
+	{{"Hello Angular"}}
+	<app-login></app-login>
+	<!-- include footer-->
 </body>
 </html>

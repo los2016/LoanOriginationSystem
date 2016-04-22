@@ -2,7 +2,6 @@ package com.myorg.document.rest;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -36,6 +35,7 @@ import com.myorg.document.models.DocumentPayLoad;
 import com.myorg.document.models.LoanDocument;
 import com.myorg.document.models.LoanDocumentDao;
 import com.myorg.document.models.LoanDocumentPK;
+import com.myorg.document.upload.BoxUpload;
 
 @Component
 @Path("/document")
@@ -49,6 +49,9 @@ public class DocumentService {
 	
 	@Autowired
 	private LoanDocumentDao _loanDocumentDao;
+	
+	@Autowired
+	private BoxUpload _boxUpload;
 
 	@GET
 	@Path("/documentlist")
@@ -114,6 +117,9 @@ public class DocumentService {
 		upload(copy, filepath);
 		String output = "File uploaded to : " + filepath;
 		System.out.println(output);
+		
+		_boxUpload.upload(mortgageApplicationID, copy, filename);
+		System.out.println("Uploaded Successfully.");
 		return Response.status(200).entity(output).build();
 	}
 	
@@ -137,24 +143,6 @@ public class DocumentService {
 		return Response.ok(stream, MediaType.APPLICATION_OCTET_STREAM).header("content-disposition","attachment; filename ="+ loanDocument.getDocumentMetadata().getDocumentName()).build();
 	}
 	
-
-	// save uploaded file to new location
-	private void upload(InputStream uploadedInputStream, String uploadedFileLocation) {
-		try {
-			OutputStream out = new FileOutputStream(new File(uploadedFileLocation));
-			int read = 0;
-			byte[] bytes = new byte[1024];
-
-			out = new FileOutputStream(new File(uploadedFileLocation));
-			while ((read = uploadedInputStream.read(bytes)) != -1) {
-				out.write(bytes, 0, read);
-			}
-			out.flush();
-			out.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	private void upload(byte[] byteArray, String uploadedFileLocation) {
 		try {

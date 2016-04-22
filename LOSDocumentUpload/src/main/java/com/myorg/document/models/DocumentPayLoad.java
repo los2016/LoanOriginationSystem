@@ -1,10 +1,6 @@
 package com.myorg.document.models;
 
-import java.io.InputStream;
 import java.io.Serializable;
-
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 
 public class DocumentPayLoad implements Serializable{
 	

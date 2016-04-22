@@ -5,24 +5,28 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.log4j.Logger;
+import org.drools.core.base.DefaultKnowledgeHelper;
+import org.drools.core.beliefsystem.ModedAssertion;
 import org.kie.api.cdi.KReleaseId;
 import org.kie.api.cdi.KSession;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.StatelessKieSession;
-import org.kie.api.runtime.rule.FactHandle;
 import org.springframework.stereotype.Component;
 
 import com.myorg.losmodel.model.Answer;
 import com.myorg.losmodel.model.LoanInfo;
 import com.myorg.losmodel.model.Question;
+import com.myorg.losmodel.model.ValidateQuestionRequest;
 import com.myorg.losmodel.model.ValidateQuestionResponse;
-import com.myorg.losmodel.model.client.PBEntityClient;
-import com.myorg.losmodel.model.client.PBIndividualClient;
 import com.myorg.losmodel.util.ModelUtils;
 import com.myorg.losservices.core.QNAServices;
 
+
 @Component
 public class QNAServicesImpl implements QNAServices {
+	
+	Logger logger = Logger.getLogger(QNAServicesImpl.class);
 	
 	@KSession("defaultKieSession")
 	@KReleaseId( groupId = "com.myorg", artifactId = "LOSRules", version = "1.0")
@@ -31,11 +35,6 @@ public class QNAServicesImpl implements QNAServices {
 	@KSession("defaultStatelessKieSession")
 	@KReleaseId( groupId = "com.myorg", artifactId = "LOSRules", version = "1.0")
 	private StatelessKieSession kieSessionStateLess;
-
-	
-	private static final PBIndividualClient client = new PBIndividualClient();
-	
-	private static FactHandle facthandle = null;
 
 
 	@Override
@@ -180,22 +179,35 @@ public class QNAServicesImpl implements QNAServices {
 	}
 
 	@Override
-	public ValidateQuestionResponse validateQuestion(String questionId, PBEntityClient entityClient, PBIndividualClient indvlClient) {
+	public ValidateQuestionResponse validateQuestion(ValidateQuestionRequest request) {
+		
+		logger.info("Starting ValidateQuestionResponse ....");
 		
 		ValidateQuestionResponse resp = null;
 		
 		ModelUtils.cleanDisableqnsIdList();
 		ModelUtils.cleanEnableqnsIdList();
 		
-		if(entityClient != null && indvlClient == null) {
+		
+		//kieSessionStateLess.execute(request);
+		
+		
+		
+		kieSession.insert(request);
+		
+		
+		/*
+		if(request.getPbEntityClient() != null && request.getPbIndividualClient() == null) {
 			
-			//kieSession.insert(entityClient);
-			kieSessionStateLess.execute(entityClient);
+			//kieSession.insert(entityClient);			
+			kieSessionStateLess.execute(request.getPbEntityClient());
 		}
-		else if(indvlClient != null && entityClient == null) {
+		else if(request.getPbIndividualClient() != null && request.getPbEntityClient() == null) {
 			
 			//kieSession.insert(indvlClient);			
-			//kieSessionStateLess.execute(indvlClient);							
+			kieSessionStateLess.execute(request.getPbIndividualClient());	
+			
+			/*
 				
 			client.setEmployerName(indvlClient.getEmployerName());
 			client.setMartialStatus(indvlClient.getMartialStatus());
@@ -210,11 +222,12 @@ public class QNAServicesImpl implements QNAServices {
 				kieSession.update(facthandle, client);
 			}
 			
-		
+			*/
 			
-			
+		/*	
 			
 		}
+		
 		else {
 			
 			resp = new ValidateQuestionResponse();
@@ -224,8 +237,10 @@ public class QNAServicesImpl implements QNAServices {
 			return resp;
 		}		
 		
+		*/
+	
 		
-		int noOfRulefired = kieSession.fireAllRules();
+		int noOfRulefired = kieSession.fireAllRules();		
 		
 		if(noOfRulefired == 0 ) {
 			

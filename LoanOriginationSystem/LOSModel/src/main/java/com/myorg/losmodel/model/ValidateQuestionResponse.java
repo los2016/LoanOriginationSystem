@@ -4,19 +4,19 @@ import java.util.List;
 
 public class ValidateQuestionResponse extends LOSResponse {
 	
-	private List<String> enableFields;
-	private List<String> disableFields;
+	private List<Integer> enableFields;
+	private List<Integer> disableFields;
 	
-	public List<String> getEnableFields() {
+	public List<Integer> getEnableFields() {
 		return enableFields;
 	}
-	public void setEnableFields(List<String> enableFields) {
+	public void setEnableFields(List<Integer> enableFields) {
 		this.enableFields = enableFields;
 	}
-	public List<String> getDisableFields() {
+	public List<Integer> getDisableFields() {
 		return disableFields;
 	}
-	public void setDisableFields(List<String> disableFields) {
+	public void setDisableFields(List<Integer> disableFields) {
 		this.disableFields = disableFields;
 	}	
 

@@ -15,7 +15,7 @@
 							http://www.springframework.org/schema/util/spring-util-4.0.xsd">
 
   
-  	<kie:import releaseId-ref="namedKieSession" enableScanner="true" scannerInterval="1000"/>
+  	<kie:import releaseId-ref="namedKieSession" enableScanner="true" scannerInterval="10000"/>
   	<kie:releaseId id="namedKieSession" groupId="com.myorg" artifactId="LOSRules" version="1.0"/>    
   	
   	<bean id="kiePostProcessor" class="org.kie.spring.annotations.KModuleAnnotationPostProcessor"/>

@@ -20,28 +20,31 @@ Class-Path: spring-context-4.1.6.RELEASE.jar spring-aop-4.1.6.RELEASE.
  on-module-jaxb-annotations-2.3.1.jar commons-collections-3.2.2.jar co
  mmons-lang3-3.4.jar drools-compiler-6.3.0.Final.jar drools-core-6.3.0
  .Final.jar mvel2-2.2.6.Final.jar kie-api-6.3.0.Final.jar slf4j-api-1.
- 7.2.jar kie-internal-6.3.0.Final.jar commons-codec-1.4.jar antlr-runt
- ime-3.5.jar ecj-4.3.1.jar xstream-1.4.7.jar xmlpull-1.1.3.1.jar xpp3_
- min-1.1.4c.jar protobuf-java-2.5.0.jar kie-spring-6.3.0.Final.jar jbp
- m-flow-6.3.0.Final.jar joda-time-1.6.2.jar drools-decisiontables-6.3.
- 0.Final.jar drools-templates-6.3.0.Final.jar poi-ooxml-3.10.1.jar poi
- -3.10.1.jar poi-ooxml-schemas-3.10.1.jar xmlbeans-2.6.0.jar stax-api-
- 1.0.1.jar dom4j-1.6.1.jar xml-apis-1.0.b2.jar kie-ci-6.3.0.Final.jar 
- maven-artifact-3.2.2.jar plexus-utils-3.0.17.jar maven-core-3.2.2.jar
-  maven-model-3.2.2.jar maven-settings-3.2.2.jar maven-settings-builde
- r-3.2.2.jar plexus-interpolation-1.19.jar plexus-component-annotation
- s-1.5.5.jar plexus-sec-dispatcher-1.3.jar plexus-cipher-1.4.jar maven
- -repository-metadata-3.2.2.jar maven-plugin-api-3.2.2.jar org.eclipse
- .sisu.plexus-0.0.0.M5.jar cdi-api-1.0.jar jsr250-api-1.0.jar guava-10
- .0.1.jar jsr305-1.3.9.jar sisu-guice-3.1.0-no_aop.jar org.eclipse.sis
- u.inject-0.0.0.M5.jar plexus-classworlds-2.5.1.jar maven-model-builde
- r-3.2.2.jar maven-aether-provider-3.2.2.jar aether-api-1.0.0.v2014051
- 8.jar aether-spi-1.0.0.v20140518.jar aether-util-1.0.0.v20140518.jar 
- aether-impl-1.0.0.v20140518.jar maven-compat-3.2.2.jar wagon-provider
- -api-1.0.jar aether-connector-basic-1.0.0.v20140518.jar aether-transp
- ort-wagon-1.0.0.v20140518.jar aether-transport-file-1.0.0.v20140518.j
- ar aether-transport-http-1.0.0.v20140518.jar httpclient-4.2.6.jar htt
- pcore-4.3.3.jar jcl-over-slf4j-1.6.2.jar ant-1.8.2.jar ant-launcher-1
- .8.2.jar wagon-http-2.0.jar wagon-http-shared4-2.0.jar jsoup-1.6.1.ja
- r commons-io-2.0.1.jar LOSModel.jar
+ 7.10.jar kie-internal-6.3.0.Final.jar commons-codec-1.4.jar antlr-run
+ time-3.5.jar ecj-4.3.1.jar xstream-1.4.7.jar xmlpull-1.1.3.1.jar xpp3
+ _min-1.1.4c.jar protobuf-java-2.5.0.jar kie-spring-6.3.0.Final.jar jb
+ pm-flow-6.3.0.Final.jar joda-time-1.6.2.jar drools-decisiontables-6.3
+ .0.Final.jar drools-templates-6.3.0.Final.jar poi-ooxml-3.10.1.jar po
+ i-3.10.1.jar poi-ooxml-schemas-3.10.1.jar xmlbeans-2.6.0.jar stax-api
+ -1.0.1.jar dom4j-1.6.1.jar xml-apis-1.0.b2.jar kie-ci-6.3.0.Final.jar
+  maven-artifact-3.2.2.jar plexus-utils-3.0.17.jar maven-core-3.2.2.ja
+ r maven-model-3.2.2.jar maven-settings-3.2.2.jar maven-settings-build
+ er-3.2.2.jar plexus-interpolation-1.19.jar plexus-component-annotatio
+ ns-1.5.5.jar plexus-sec-dispatcher-1.3.jar plexus-cipher-1.4.jar mave
+ n-repository-metadata-3.2.2.jar maven-plugin-api-3.2.2.jar org.eclips
+ e.sisu.plexus-0.0.0.M5.jar cdi-api-1.0.jar jsr250-api-1.0.jar guava-1
+ 0.0.1.jar jsr305-1.3.9.jar sisu-guice-3.1.0-no_aop.jar org.eclipse.si
+ su.inject-0.0.0.M5.jar plexus-classworlds-2.5.1.jar maven-model-build
+ er-3.2.2.jar maven-aether-provider-3.2.2.jar aether-api-1.0.0.v201405
+ 18.jar aether-spi-1.0.0.v20140518.jar aether-util-1.0.0.v20140518.jar
+  aether-impl-1.0.0.v20140518.jar maven-compat-3.2.2.jar wagon-provide
+ r-api-1.0.jar aether-connector-basic-1.0.0.v20140518.jar aether-trans
+ port-wagon-1.0.0.v20140518.jar aether-transport-file-1.0.0.v20140518.
+ jar aether-transport-http-1.0.0.v20140518.jar httpclient-4.2.6.jar ht
+ tpcore-4.3.3.jar jcl-over-slf4j-1.7.10.jar ant-1.8.2.jar ant-launcher
+ -1.8.2.jar wagon-http-2.0.jar wagon-http-shared4-2.0.jar jsoup-1.6.1.
+ jar commons-io-2.0.1.jar LOSModel-1.1-SNAPSHOT.jar logback-classic-1.
+ 1.2.jar logback-core-1.1.2.jar testng-6.8.8.jar bsh-2.0b4.jar jcomman
+ der-1.27.jar jul-to-slf4j-1.7.10.jar xmlunit-1.5.jar log4j-over-slf4j
+ -1.7.10.jar
 

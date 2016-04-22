@@ -7,8 +7,8 @@ import java.util.List;
 
 public class ModelUtils {
 	
-	private static List<String> enableqnsIdList = new ArrayList<String>();
-	private static List<String> disableqnsIdList = new ArrayList<String>();
+	private static List<Integer> enableqnsIdList = new ArrayList<Integer>();
+	private static List<Integer> disableqnsIdList = new ArrayList<Integer>();
 	
 	private static List<String> qnsIdList = new ArrayList<String>();
 	
@@ -22,7 +22,7 @@ public class ModelUtils {
 		
 	}
 	
-	public static void addQnsIdToEnableList(String qnsId) {
+	public static void addQnsIdToEnableList(Integer qnsId) {
 		
 		//if(!StringUtils.isEmpty(qnsId)) {
 		if(enableqnsIdList != null) {
@@ -32,7 +32,7 @@ public class ModelUtils {
 		
 	}
 	
-	public static void addQnsIdToDisableList(String qnsId) {
+	public static void addQnsIdToDisableList(Integer qnsId) {
 		
 		//if(!StringUtils.isEmpty(qnsId)) {
 		if(disableqnsIdList != null) {
@@ -79,11 +79,11 @@ public class ModelUtils {
 		return qnsIdList;
 	}
 	
-	public static List<String> getEnableqnsIdList() {
+	public static List<Integer> getEnableqnsIdList() {
 		return enableqnsIdList;
 	}
 	
-	public static List<String> getDisableqnsIdList() {
+	public static List<Integer> getDisableqnsIdList() {
 		return disableqnsIdList;
 	}
 	

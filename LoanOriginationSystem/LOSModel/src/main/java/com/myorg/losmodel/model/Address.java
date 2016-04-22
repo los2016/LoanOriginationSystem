@@ -2,7 +2,7 @@ package com.myorg.losmodel.model;
 
 import java.io.Serializable;
 
-public abstract class Address implements Serializable {
+public class Address implements Serializable {
 	
 	static final long serialVersionUID = 1L;
 	

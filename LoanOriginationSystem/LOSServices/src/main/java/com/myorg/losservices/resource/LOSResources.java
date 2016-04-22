@@ -51,7 +51,7 @@ public class LOSResources {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ValidateQuestionResponse validateQuestion(ValidateQuestionRequest request) {
 		
-		ValidateQuestionResponse resp = qnaServices.validateQuestion(request.getQuestionId(), request.getPbEntityClient(), request.getPbIndividualClient());
+		ValidateQuestionResponse resp = qnaServices.validateQuestion(request);
 		
 		return resp;
 	}

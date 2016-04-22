@@ -25,6 +25,7 @@ public class DocumentApplication {
     public ServletRegistrationBean jerseyServlet() {
         ServletRegistrationBean registration = new ServletRegistrationBean(new ServletContainer(), "/rest/*");
         registration.addInitParameter(ServletProperties.JAXRS_APPLICATION_CLASS, JerseyConfig.class.getName());
+        registration.setLoadOnStartup(1);
         return registration;
     }
 }

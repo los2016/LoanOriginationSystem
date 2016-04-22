@@ -1,5 +1,6 @@
 package com.myorg.document.rest;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -14,18 +15,20 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.myorg.document.models.Document;
 import com.myorg.document.models.DocumentDao;
@@ -61,7 +64,7 @@ public class DocumentService {
 	@GET
 	@Path("/retrieveDocumentList/{mortgageApplicationID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getDocumentList(@PathVariable("mortgageApplicationID") long mortgageApplicationID) {
+	public Response getDocumentList(@PathParam("mortgageApplicationID") Long mortgageApplicationID) {
 		GenericEntity<List<DocumentPayLoad>> entity;
 		List<LoanDocument> documents = _loanDocumentDao.getByLoanId(mortgageApplicationID);
 		System.out.println("For loanId ["+mortgageApplicationID+"] List of documents by loan Id:" + documents);
@@ -74,6 +77,7 @@ public class DocumentService {
 				payLoad.setDocumentTypeId(document.getLoanDocumentComposite().getDocumentTypeId());
 				payLoad.setDocumentDescription(document.getDocumentMetadata().getDocumentDescription());
 				payLoad.setDocumentDownloadLink("/downloadDocument/"+mortgageApplicationID+"/"+document.getLoanDocumentComposite().getDocumentTypeId());
+				uploadedDocuments.add(payLoad);
 			}
 		}
 		entity = new GenericEntity<List<DocumentPayLoad>>(uploadedDocuments) {};
@@ -96,7 +100,9 @@ public class DocumentService {
 		
 		LoanDocument loanDocument = new LoanDocument();
 		loanDocument.setLoanDocumentComposite(loanDocumentComposite);
-		loanDocument.setDocumentPayload(IOUtils.toByteArray(uploadedInputStream));
+		byte[] original = IOUtils.toByteArray(uploadedInputStream);
+		byte[] copy = original.clone();
+		loanDocument.setDocumentPayload(original);
 		_loanDocumentDao.saveDocument(loanDocument);
 		
 		// Get the filename and build the local file path
@@ -105,21 +111,22 @@ public class DocumentService {
 		String filepath = Paths.get(directory, filename).toString();
 
 		// save it
-		upload(uploadedInputStream, filepath);
+		upload(copy, filepath);
 		String output = "File uploaded to : " + filepath;
+		System.out.println(output);
 		return Response.status(200).entity(output).build();
 	}
 	
-	/*@GET
+	@GET
 	@Path("/downloadDocument/{mortgageApplicationID}/{documentTypeId}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public Response downloadDocument(@PathVariable("mortgageApplicationID") final long mortgageApplicationID, final @PathVariable("documentTypeId") long documentTypeId) {
+	public Response downloadDocument(@PathParam("mortgageApplicationID") final long mortgageApplicationID, final @PathParam("documentTypeId") long documentTypeId) {
+		 final LoanDocument loanDocument = _loanDocumentDao.getDocument(mortgageApplicationID, documentTypeId, 1);;
 		 StreamingOutput stream =  new StreamingOutput() {
 			@Override
 			public void write(OutputStream arg0) throws IOException{
 				BufferedOutputStream bus = new BufferedOutputStream(arg0);
 				try {
-					LoanDocument loanDocument = _loanDocumentDao.getDocument(mortgageApplicationID, documentTypeId, 1);
 					byte[] bufferPayLoad = loanDocument.getDocumentPayload();
 					bus.write(bufferPayLoad);
 				} catch (Exception e) {
@@ -127,8 +134,8 @@ public class DocumentService {
 				}
 			}
 		};
-		return Response.ok(stream).build();
-	}*/
+		return Response.ok(stream, MediaType.APPLICATION_OCTET_STREAM).header("content-disposition","attachment; filename ="+ loanDocument.getDocumentMetadata().getDocumentName()).build();
+	}
 	
 
 	// save uploaded file to new location
@@ -144,6 +151,14 @@ public class DocumentService {
 			}
 			out.flush();
 			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void upload(byte[] byteArray, String uploadedFileLocation) {
+		try {
+			FileUtils.writeByteArrayToFile(new File(uploadedFileLocation), byteArray);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

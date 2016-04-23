@@ -47,4 +47,8 @@ public class LoanDocumentDao {
 	public void saveDocument(LoanDocument loanDocument) {
 		getSession().save(loanDocument);
 	}
+	
+	public void deleteDocument(LoanDocument loanDocument) {
+		getSession().delete(loanDocument);
+	}
 }

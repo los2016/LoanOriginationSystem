@@ -79,7 +79,7 @@ public class DocumentService {
 				payLoad.setMortgageApplicationID(document.getLoanDocumentComposite().getMortgageApplicationID());
 				payLoad.setDocumentTypeId(document.getLoanDocumentComposite().getDocumentTypeId());
 				payLoad.setDocumentDescription(document.getDocumentMetadata().getDocumentDescription());
-				payLoad.setDocumentDownloadLink("/downloadDocument/"+mortgageApplicationID+"/"+document.getLoanDocumentComposite().getDocumentTypeId());
+				payLoad.setDocumentDownloadLink("/document/downloadDocument/"+mortgageApplicationID+"/"+document.getLoanDocumentComposite().getDocumentTypeId());
 				uploadedDocuments.add(payLoad);
 			}
 		}
@@ -96,6 +96,11 @@ public class DocumentService {
 			@FormDataParam("documentTypeId") Long documentTypeId) throws Throwable {
 		
 		System.out.println("mortgageApplicationID="+mortgageApplicationID+", documentTypeId="+documentTypeId);
+		// Get the filename and build the local file path
+		String filename = fileDetail.getFileName();
+		String directory = env.getProperty("mortgage.paths.uploadedFiles");
+		String filepath = Paths.get(directory, filename).toString();
+
 		LoanDocumentPK loanDocumentComposite = new LoanDocumentPK();
 		loanDocumentComposite.setMortgageApplicationID(mortgageApplicationID);
 		loanDocumentComposite.setDocumentTypeId(documentTypeId);
@@ -106,19 +111,19 @@ public class DocumentService {
 		byte[] original = IOUtils.toByteArray(uploadedInputStream);
 		byte[] copy = original.clone();
 		loanDocument.setDocumentPayload(original);
+		loanDocument.setDocumentPath(filepath);
 		_loanDocumentDao.saveDocument(loanDocument);
 		
-		// Get the filename and build the local file path
-		String filename = fileDetail.getFileName();
-		String directory = env.getProperty("mortgage.paths.uploadedFiles");
-		String filepath = Paths.get(directory, filename).toString();
 
 		// save it
 		upload(copy, filepath);
 		String output = "File uploaded to : " + filepath;
 		System.out.println(output);
-		
-		_boxUpload.upload(mortgageApplicationID, copy, filename);
+		try {
+			_boxUpload.upload(mortgageApplicationID, copy, filename);
+		} catch (Throwable t) {
+			System.err.println("Unable to upload to BOX. Cause :"+t.getMessage()+"\n");
+		}
 		System.out.println("Uploaded Successfully.");
 		return Response.status(200).entity(output).build();
 	}
@@ -140,7 +145,16 @@ public class DocumentService {
 				}
 			}
 		};
-		return Response.ok(stream, MediaType.APPLICATION_OCTET_STREAM).header("content-disposition","attachment; filename ="+ loanDocument.getDocumentMetadata().getDocumentName()).build();
+		return Response.ok(stream, MediaType.APPLICATION_OCTET_STREAM).header("content-disposition","attachment; filename ="+ loanDocument.getDocumentMetadata().getDocumentName()+".pdf").build();
+	}
+	
+	@POST
+	@Path("/deleteDocument/{mortgageApplicationID}/{documentTypeId}")
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	public Response deleteDocument(@PathParam("mortgageApplicationID") final long mortgageApplicationID, final @PathParam("documentTypeId") long documentTypeId) {
+		 final LoanDocument loanDocument = _loanDocumentDao.getDocument(mortgageApplicationID, documentTypeId, 1);;
+		 _loanDocumentDao.deleteDocument(loanDocument);
+		return Response.status(200).entity("Deleted Successfully.").build();
 	}
 	
 	

@@ -19,7 +19,10 @@ import com.jpmorgan.awm.pb.mortgageorigination.request.MortgageApplicationReques
 import com.jpmorgan.awm.pb.mortgageorigination.response.CoverageResponse;
 import com.jpmorgan.awm.pb.mortgageorigination.response.MortgageApplicationResponse;
 import com.jpmorgan.awm.pb.mortgageorigination.response.UserDetailsResponse;
+import com.jpmorgan.awm.pb.mortgageorigination.service.QNAServices;
 import com.myorg.losmodel.model.LOSResponse;
+import com.myorg.losmodel.model.ValidateQuestionRequest;
+import com.myorg.losmodel.model.ValidateQuestionResponse;
 
 @RestController
 public class MortgageRestController {
@@ -32,6 +35,9 @@ public class MortgageRestController {
 
 	@Autowired
 	private CoverageDAO coverageAO;
+	
+	@Autowired
+	private QNAServices qnaServices;
 
 	@RequestMapping(value = "/authenticateUser", method = RequestMethod.GET)
 	public ResponseEntity<UserDetailsResponse> authenticateUser(@RequestParam String userId,
@@ -82,5 +88,15 @@ public class MortgageRestController {
 		return new ResponseEntity<List<MortgageApplicationResponse>>(mortgageApplicationList, HttpStatus.OK);
 
 	}
-
+	
+	
+	@RequestMapping(value = "/validateQuestion", method = RequestMethod.POST)
+	public ResponseEntity<ValidateQuestionResponse> validateQuestion(@RequestBody ValidateQuestionRequest request) {
+		
+		ValidateQuestionResponse resp = qnaServices.validateQuestion(request);
+		
+		return new ResponseEntity<ValidateQuestionResponse>(resp, HttpStatus.OK);		
+		
+	}
+	
 }

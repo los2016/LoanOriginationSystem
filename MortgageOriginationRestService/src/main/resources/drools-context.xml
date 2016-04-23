@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  						   
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:kie="http://drools.org/schema/kie-spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+							http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+							http://www.springframework.org/schema/context
+							http://www.springframework.org/schema/context/spring-context-4.0.xsd
+							http://drools.org/schema/kie-spring 
+							classpath:org/kie/spring/kie-spring-6.0.0.xsd							
+							http://www.springframework.org/schema/util 
+							http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+  
+  	<kie:import releaseId-ref="namedKieSession" enableScanner="true" scannerInterval="10000"/>
+  	<kie:releaseId id="namedKieSession" groupId="com.myorg" artifactId="LOSRules" version="1.0"/>    
+  	
+  	<bean id="kiePostProcessor" class="org.kie.spring.annotations.KModuleAnnotationPostProcessor"/>
+  	
+  	
+  
+  </beans>

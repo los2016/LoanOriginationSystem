@@ -13,8 +13,6 @@
 		<org.springframework.version>4.1.6.RELEASE</org.springframework.version>
 		<org.drools.version>6.3.0.Final</org.drools.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-
 	</properties>
 
 	<dependencies>

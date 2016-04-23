@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chat</title>
+<script src="sockjs-0.3.4.js"></script>
+<script src="stomp.js"></script>
+<script src="jquery-2.1.0.min.js"></script>
+<link href="chat.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<table>
+  <tr>
+    <td>From </td>
+    <td><input type="text" id="fromuser" name="fromuser" disabled="disabled"></td>
+  </tr>
+  <tr>
+    <td>To </td>
+    <td><input type="text" id="touser" name="touser"></td>
+    <!-- <td><button id="conbutton">connect</button> </td> -->
+  </tr>
+  <tr>
+    <td>Field 1 </td>
+    <td><input type="text" id="message1" name="message1"></td>
+  </tr>
+  <tr>
+    <td>Field 2</td>
+    <td><input type="text" id="message2" name="message2"></td>
+  </tr>
+  
+</table> 
+<br><br>
+connected users :
+<div id="userlis"></div>
+ 
+  <script type="text/javascript">
+      var stompClient = null;
+      var socket = null;
+      var whoami = null;
+      var pageId = null;
+      
+      function connect() {
+        socket = new SockJS('http://localhost:8080/glass/chat');
+        stompClient = Stomp.over(socket);
+        stompClient.connect('', '', function(frame) {
+          //whoami = frame.headers['user-name'];
+          console.log(frame);
+          console.log('Connected: ' + whoami);
+          stompClient.subscribe('/user/queue/messages', function(message) {
+            showMessage(JSON.parse(message.body));
+          });
+          stompClient.subscribe('/topic/active', function(activeMembers) {
+            showActive(activeMembers);
+          });
+        });
+      }
+      
+      function showActive(activeMembers) {
+        stompClient.send('/app/activeUsers', {}, JSON.stringify({
+            'sender' : whoami
+          }));
+        console.log(activeMembers.body);
+        $('#userlis').html(activeMembers.body);
+      }
+      
+      function disconnect() {
+        stompClient.disconnect();
+        console.log("Disconnected");
+      }
+
+      function sendMessageTo(user, chatInput, isGlass) {
+        var message = $(chatInput).val();
+        if (!message) {
+        	message = '';
+        }
+        stompClient.send("/app/chat", {}, JSON.stringify({
+          'recipient': user,
+          'targetElement' : $(chatInput).attr('name'),
+          'message' : message,
+          'sender' : whoami,
+          'targetPageId' : pageId,
+          'glass' : isGlass
+        }));
+      }
+      
+      
+      function showMessage(message) {
+    	  console.log(message);
+    	  if(message.recipient == whoami) {
+    		  var targetElement = '#' + message.targetElement;
+    		  //glass true means trnasfer form
+    		  if($(targetElement) && message.targetPageId == pageId && message.glass) {
+    		  	$(targetElement).val(message.message)
+    		  }
+    		  if(!message.glass) { //work as a chat
+    			  console.log("message sent : " + message.message);
+    		  }
+    	  }
+      }
+      
+     
+      function getUrlParameter(sParam) {
+   	    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+   	        sURLVariables = sPageURL.split('&'),
+   	        sParameterName,
+   	        i;
+
+   	    for (i = 0; i < sURLVariables.length; i++) {
+   	        sParameterName = sURLVariables[i].split('=');
+
+   	        if (sParameterName[0] === sParam) {
+   	            return sParameterName[1] === undefined ? true : sParameterName[1];
+   	        }
+   	    }
+      }
+      $(document).ready(function() {
+    	  whoami = getUrlParameter("user");
+    	  pageId = getUrlParameter("pageId");
+    	  $('#fromuser').val(whoami);
+        connect(); 
+        
+        /* $("#conbutton" ).click(function() {
+        	connect(); 
+		    });
+ 				*/
+                
+        $( "#message1" ).keyup(function() {
+        	console.debug('sending ' + $('#touser').val());
+        	sendMessageTo($('#touser').val(), this, true);
+        });
+        
+        $( "#message2" ).keyup(function() {
+        	console.debug('sending ' + $('#touser').val());
+        	sendMessageTo($('#touser').val(), this, true);
+        });
+        
+      });
+  </script>
+</body>
+</html>

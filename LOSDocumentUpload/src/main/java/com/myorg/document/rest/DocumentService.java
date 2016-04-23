@@ -93,11 +93,15 @@ public class DocumentService {
 	public Response uploadFile(@FormDataParam("documentPayload") InputStream uploadedInputStream,
 			@FormDataParam("documentPayload") FormDataContentDisposition fileDetail,
 			@FormDataParam("mortgageApplicationID") Long mortgageApplicationID,
-			@FormDataParam("documentTypeId") Long documentTypeId) throws Throwable {
+			@FormDataParam("documentTypeId") Integer documentTypeId) throws Throwable {
 		
 		System.out.println("mortgageApplicationID="+mortgageApplicationID+", documentTypeId="+documentTypeId);
 		// Get the filename and build the local file path
+		Document documentMetaData = _documentDao.getDocumentDetails(documentTypeId);
 		String filename = fileDetail.getFileName();
+		if (documentMetaData != null) {
+			filename = documentMetaData.getDocumentName() + ".pdf";
+		}
 		String directory = env.getProperty("mortgage.paths.uploadedFiles");
 		String filepath = Paths.get(directory, filename).toString();
 
@@ -120,6 +124,7 @@ public class DocumentService {
 		String output = "File uploaded to : " + filepath;
 		System.out.println(output);
 		try {
+			
 			_boxUpload.upload(mortgageApplicationID, copy, filename);
 		} catch (Throwable t) {
 			System.err.println("Unable to upload to BOX. Cause :"+t.getMessage()+"\n");
@@ -150,7 +155,7 @@ public class DocumentService {
 	
 	@POST
 	@Path("/deleteDocument/{mortgageApplicationID}/{documentTypeId}")
-	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteDocument(@PathParam("mortgageApplicationID") final long mortgageApplicationID, final @PathParam("documentTypeId") long documentTypeId) {
 		 final LoanDocument loanDocument = _loanDocumentDao.getDocument(mortgageApplicationID, documentTypeId, 1);;
 		 _loanDocumentDao.deleteDocument(loanDocument);

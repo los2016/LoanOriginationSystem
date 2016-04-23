@@ -42,6 +42,11 @@
       	alert("Both mortgageApplicationID and Document Type are mandatory.");
       	return;
       }
+      
+      /*if(!check_file()){
+      	return;
+      }*/
+      
       $.ajax({
         url: "/rest/document/upload",
         type: "POST",
@@ -118,11 +123,11 @@
 	function deleteDocument() {
 		mortgageApplicationID = $("#mortgageApplicationID").val();
 	    documentTypeId = $("#rowDocumentTypeId").html();
-	  
 	  $.ajax({
         url: "/rest/document/deleteDocument/"+mortgageApplicationID+"/"+documentTypeId,
         type: "POST",
         dataType: 'json',
+        cache: false,
         success: function (result) {
           getDocumentsAlreadyUploaded();
         },
@@ -131,6 +136,19 @@
         }
       });
 	}
+	
+	function check_file(){
+        str=document.getElementById('documentPayload').value.toUpperCase();
+        suffix=".PDF";
+        suffix2=".pdf";
+        if(str.indexOf(suffix, str.length - suffix.length) == -1||
+                       str.indexOf(suffix2, str.length - suffix2.length) == -1){
+        	alert('File type not allowed,\nAllowed file: *.pdf');
+            document.getElementById('documentPayload').value='';
+            return false;
+        }
+        return true;
+    }
     
 </script>
 </html>

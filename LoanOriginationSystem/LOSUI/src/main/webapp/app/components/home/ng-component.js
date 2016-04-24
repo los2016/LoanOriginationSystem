@@ -1,10 +1,14 @@
-"use strict";
+(function(angular)
+{
+	"use strict";
 
-function homeController () {
+	function homeController($scope, $element, $attrs,HTTPInterfaceProvider)
+	{
+		
+	}
 
-}
-
-angular.module("mainModule").component("appHome",{
-	templateUrl:"/app/components/home/ng-template.html",
-	controller: homeController
-});
+	angular.module("mainModule").component("appHome",{
+		templateUrl:"/app/components/home/ng-template.html",
+		controller:homeController,
+	});
+})(window.angular);

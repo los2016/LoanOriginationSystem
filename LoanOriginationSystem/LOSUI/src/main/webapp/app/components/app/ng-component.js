@@ -18,12 +18,12 @@
 			},
 			{
 				path:"/loanSummary/...",
-				name:"loanSummary",
+				name:"LoanSummary",
 				component:"appLoanSummary"
 			},
 			{
 				path:"/loanDetail/...",
-				name:"loanDetail",
+				name:"LoanDetail",
 				component:"appLoanDetail"
 			}]
 	});

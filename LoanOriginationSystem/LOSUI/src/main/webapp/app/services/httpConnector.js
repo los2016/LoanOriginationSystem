@@ -1,43 +1,43 @@
-"use strict";
+(function(angular){
 
-angular.module("mainModule").service("HTTPInterfaceProvider",["$rootScope","$http","$q",function($rootScope,$http,$q)
-{
+	"use strict";
 
-	this.initHTTPConnection = function(HTTP_SERVICE_INDICATOR, HTTP_REQUEST,HTTP_DATA)
+	angular.module("mainModule").service("HTTPInterfaceProvider",["$rootScope","$http","$q",function($rootScope,$http,$q)
 	{
 
-		var SERVICE_URL="";
-		
-		switch(HTTP_SERVICE_INDICATOR)
+		this.initHTTPConnection = function(HTTP_SERVICE_INDICATOR, HTTP_REQUEST,HTTP_DATA)
 		{
-			case "AUTH_USER":
-			SERVICE_URL = "http://google.com";
-			break;
 
-		}
+			var SERVICE_URL="";
+			
+			switch(HTTP_SERVICE_INDICATOR)
+			{
+				case "AUTH_USER":
+				SERVICE_URL = "http://google.com";
+				break;
 
-		return makeHTTPRequest(SERVICE_URL,HTTP_REQUEST,HTTP_DATA);
+			}
 
-	};
-
-
-	function makeHTTPRequest(SERVICE_URL,HTTP_REQUEST,HTTP_DATA)
-	{
-		var deferred = $q.defer();
-		
-		$http({
-			method:HTTP_REQUEST,
-			url:SERVICE_URL,
-			data:HTTP_DATA,
-			headers:"Content-Type:'application/json'"
-		}).then(function successCallback(RESPONSE){
-				return deferred.resolve(RESPONSE);
-			},
-			function errorCallback(RESPONSE){
-				return deferred.reject(RESPONSE);
-			});
-	};
+			return makeHTTPRequest(SERVICE_URL,HTTP_REQUEST,HTTP_DATA);
+		};
 
 
-
-}]);
+		function makeHTTPRequest(SERVICE_URL,HTTP_REQUEST,HTTP_DATA)
+		{
+			var deferred = $q.defer();
+			
+			$http({
+				method:HTTP_REQUEST,
+				url:SERVICE_URL,
+				data:HTTP_DATA,
+				headers:"Content-Type:'application/json'"
+			}).then(function successCallback(RESPONSE){
+					return deferred.resolve(RESPONSE);
+				},
+				function errorCallback(RESPONSE){
+					return deferred.reject(RESPONSE);
+				});
+		};
+	}]);
+	
+})(window.angular);

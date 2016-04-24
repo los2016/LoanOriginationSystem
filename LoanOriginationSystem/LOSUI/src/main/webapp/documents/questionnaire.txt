@@ -1,0 +1,61 @@
+HTTP POST:
+
+{
+	"userType" : "C/A",
+	"userID" : "BillG"
+}
+
+HTTP Response Based on userType and userID, The components should be listed based on the sequence of order to be displayed.
+
+{
+	"Questionnaire": [{
+		"section": {
+			"Name":"Mortagage Advisor",
+			"components": [{
+						"questionID": "1000",
+						"question": "Who is the Client?",
+						"type": "Choice/Radio/Multi-Choice/Text",
+						"data": [],
+						"mandatory": true,
+						"questionContext": "Individual/Entity/Both",
+						"whoAnswers": "Internal/Borrower"
+			}],
+			"subSection": [{
+				"Name": "Mortgage Advisor Question 2",
+				"components": [{
+					"questionID": "1000",
+					"question": "Who is the Client?",
+					"type": "Choice/Radio/Multi-Choice/Text",
+					"data": [],
+					"mandatory": true,
+					"questionContext": "Individual/Entity/Both",
+					"whoAnswers": "Internal/Borrower"
+				}]
+			}, 
+			{
+				"Name": "Mortgage Advisor Question 3",
+				"components": [{
+					"questionID": "1000",
+					"question": "Who is the Client?",
+					"type": "Choice/Radio/Multi-Choice/Text",
+					"data": [],
+					"mandatory": true,
+					"questionContext": "Individual/Entity/Both",
+					"whoAnswers": "Internal/Borrower"
+				}],
+				"subSection": [{
+					"Name": "Mortgage Advisor Question 3.1",
+					"components": [{
+						"questionID": "1000",
+						"question": "Who is the Client?",
+						"type": "Choice/Radio/Multi-Choice/Text",
+						"data": [],
+						"mandatory": true,
+						"questionContext": "Individual/Entity/Both",
+						"whoAnswers": "Internal/Borrower"
+					}]
+				}]
+			}]
+		}
+	}]
+}

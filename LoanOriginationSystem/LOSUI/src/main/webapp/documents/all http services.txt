@@ -1,0 +1,7 @@
+1. Service for login and receving the customer/advisor meta data. (authenticateUser - service) 
+2. Service to get the summary of all loans for the customer or advisor as an array. (? Need to discuss)
+3. Service to get the timeline information of the loan (new/existing). (? Need to discuss)
+4. Service to get the saved loan information (Questions filled with existing answers entered by the actor) (getMortgageQuestionsMetaData - service + getMortgageApplicationsDetails - service).
+5. Service to map the question with Rule(getRuleforquestions - service).
+5. Service to run the Drool validation (validateQuestion - service).
+6. Service to save and submit the loan (saveMortgageApplication -service).

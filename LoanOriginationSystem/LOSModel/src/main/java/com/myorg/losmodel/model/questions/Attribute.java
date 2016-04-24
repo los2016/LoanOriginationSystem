@@ -3,9 +3,6 @@ package com.myorg.losmodel.model.questions;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-import com.myorg.losmodel.model.questions.DataType;
-import com.myorg.losmodel.model.questions.LookupListOfValues;
-
 public class Attribute implements Comparable<Attribute> {
 
 	protected int attributeId;
@@ -25,6 +22,8 @@ public class Attribute implements Comparable<Attribute> {
 	protected int sequenceNo;
 
 	protected TreeSet<LookupListOfValues> listOfValues = new TreeSet<LookupListOfValues>();
+
+	private String objectAttrFQN;
 
 	public TreeSet<LookupListOfValues> getListOfValues() {
 		return listOfValues;
@@ -142,6 +141,14 @@ public class Attribute implements Comparable<Attribute> {
 		sb.append("}\n");
 
 		return sb.toString();
+	}
+
+	public String getObjectAttrFQN() {
+		return objectAttrFQN;
+	}
+
+	public void setObjectAttrFQN(String objectAttrFQN) {
+		this.objectAttrFQN = objectAttrFQN;
 	}
 
 }

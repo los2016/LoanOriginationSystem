@@ -2,6 +2,8 @@ package com.jpmorgan.awm.pb.mortgageorigination.controller;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jpmorgan.awm.pb.mortgageorigination.dao.CoverageDAO;
 import com.jpmorgan.awm.pb.mortgageorigination.dao.MortgageDAO;
+import com.jpmorgan.awm.pb.mortgageorigination.dao.QuestionMetaDataDAO;
 import com.jpmorgan.awm.pb.mortgageorigination.dao.UserDAO;
 import com.jpmorgan.awm.pb.mortgageorigination.request.MortgageApplicationRequest;
 import com.jpmorgan.awm.pb.mortgageorigination.response.CoverageResponse;
@@ -23,6 +26,7 @@ import com.jpmorgan.awm.pb.mortgageorigination.service.QNAServices;
 import com.myorg.losmodel.model.LOSResponse;
 import com.myorg.losmodel.model.ValidateQuestionRequest;
 import com.myorg.losmodel.model.ValidateQuestionResponse;
+import com.myorg.losmodel.model.questions.Section;
 
 @RestController
 public class MortgageRestController {
@@ -35,9 +39,12 @@ public class MortgageRestController {
 
 	@Autowired
 	private CoverageDAO coverageAO;
-	
+
 	@Autowired
 	private QNAServices qnaServices;
+
+	@Autowired
+	private QuestionMetaDataDAO questionMetaData;
 
 	@RequestMapping(value = "/authenticateUser", method = RequestMethod.GET)
 	public ResponseEntity<UserDetailsResponse> authenticateUser(@RequestParam String userId,
@@ -88,15 +95,31 @@ public class MortgageRestController {
 		return new ResponseEntity<List<MortgageApplicationResponse>>(mortgageApplicationList, HttpStatus.OK);
 
 	}
-	
-	
+
 	@RequestMapping(value = "/validateQuestion", method = RequestMethod.POST)
 	public ResponseEntity<ValidateQuestionResponse> validateQuestion(@RequestBody ValidateQuestionRequest request) {
-		
+
 		ValidateQuestionResponse resp = qnaServices.validateQuestion(request);
-		
-		return new ResponseEntity<ValidateQuestionResponse>(resp, HttpStatus.OK);		
-		
+
+		return new ResponseEntity<ValidateQuestionResponse>(resp, HttpStatus.OK);
+
 	}
-	
+
+	@RequestMapping(value = "/getMortgageQuestionsMetaData", method = RequestMethod.GET)
+	public ResponseEntity<Set<Section>> getMortgageQuestionsMetaData(@RequestParam String questionBank,
+			@RequestParam String userCode) {
+
+		Set<Section> sections = new TreeSet<Section>();
+		try {
+			sections = questionMetaData.questionDAOMethod(questionBank, userCode);
+		} catch (SQLException e) {
+			LOSResponse response = new LOSResponse();
+			response.setReturnMsg("Application Failed to Fetch getMortgageQuestionsMetaData");
+			response.setReturnType("Error");
+			e.printStackTrace();
+		}
+		return new ResponseEntity<Set<Section>>(sections, HttpStatus.OK);
+
+	}
+
 }

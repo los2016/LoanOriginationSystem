@@ -1,6 +1,6 @@
 package com.jpmorgan.awm.pb.mortgageorigination.dao.impl;
 
-import java.sql.DriverManager;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jpmorgan.awm.pb.mortgageorigination.dao.QuestionMetaDataDAO;
+import com.jpmorgan.awm.pb.mortgageorigination.utils.DatabaseService;
 import com.myorg.losmodel.model.questions.Attribute;
 import com.myorg.losmodel.model.questions.DataType;
 import com.myorg.losmodel.model.questions.LookupListOfValues;
@@ -22,6 +23,7 @@ import com.myorg.losmodel.model.questions.Question;
 import com.myorg.losmodel.model.questions.QuestionContext;
 import com.myorg.losmodel.model.questions.Role;
 import com.myorg.losmodel.model.questions.Section;
+import com.myorg.losmodel.util.ModelUtils;
 
 @Service
 public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
@@ -46,15 +48,12 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 	 */
 	public Set<Section> questionDAOMethod(String languageCd, String userCd) throws SQLException {
 
-		Class.forName("oracle.jdbc.driver.OracleDriver");
-		java.sql.Connection conn = null;
+		Connection conn = null;
 		// Question question = null;
+		TreeSet<Section> sectionSet = new TreeSet<Section>();
 
 		try {
-
-			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "mortgage", "password");
-
-			TreeSet<Section> sectionSet = new TreeSet<Section>();
+			conn = DatabaseService.getConnection();
 			conn.setAutoCommit(false);
 
 			PreparedStatement questionPS = null;
@@ -337,6 +336,10 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 					questionFromSet.addAttribute(attrFromResultSet);
 					attrFromResultSet.setColName(attrRs.getString("col_nm"));
 
+					// Added by Gagan as per Vaibhav Model
+					String attrFQNColName = ModelUtils.getDbAttributeToObjectNamesMap().get(attrRs.getString("col_nm"));
+					attrFromResultSet.setObjectAttrFQN(attrFQNColName);
+
 					String attrDescI18N = attrRs.getNString("col_desc_i18n");
 					String attrDesc = attrRs.getString("col_desc");
 					if (!((attrDescI18N == null) || ("".equals(attrDescI18N)))) {
@@ -418,6 +421,152 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 		}
 
 		return sectionSet;
+
+	}
+
+	/**
+	 * Finds and returns an object from a given set
+	 * 
+	 * @param objToFind
+	 * @param setToSearch
+	 * @return
+	 */
+	public static Section findSectionInSet(Section objToFind, Set<Section> setToSearch) {
+		Section foundObject = null;
+		Iterator<Section> it = setToSearch.iterator();
+		while (it.hasNext()) {
+			Section o = it.next();
+			if (o.equals(objToFind)) {
+				foundObject = o;
+			}
+
+		}
+		return foundObject;
+	}
+
+	public static Question findQuestionInSet(Question questionToFind, Set<Question> setToSearch) {
+		Question foundObject = null;
+		Iterator<Question> it = setToSearch.iterator();
+		while (it.hasNext()) {
+			Question o = it.next();
+			if (o.equals(questionToFind)) {
+				foundObject = o;
+			}
+
+		}
+		return foundObject;
+	}
+
+	public static void computeChildrenForQuestion(Set<Question> questionSet) {
+
+		Iterator<Question> childIterator = questionSet.iterator();
+		while (childIterator.hasNext()) {
+			Question child = childIterator.next();
+			Question parent = child.getParentQuestion();
+			if (parent == null) {
+				// Top level question
+			} else {
+				// I do have a parent - I need to add myself to parent
+				parent.addChildQuestion(child);
+				// System.out.println("Parent"+parent.getSectionId()+"
+				// child:"+child.getSectionId());
+
+			}
+		}
+
+	}
+
+	/**
+	 * Computes the children and depth
+	 */
+	public static void computeChildrenAndLevelsForSection(Set<Section> sectionSet) {
+
+		Iterator<Section> childIterator = sectionSet.iterator();
+		while (childIterator.hasNext()) {
+			Section child = childIterator.next();
+			Section parent = child.getParentSection();
+			if (parent == null) {
+				// I don't have a parent. I am at level 1
+				child.setSectionLevel(1);
+				// System.out.println("No Parent"+"
+				// child:"+child.getSectionId());
+			} else {
+				// I do have a parent - I need to add myself to parent
+				parent.addChildSection(child);
+				// System.out.println("Parent"+parent.getSectionId()+"
+				// child:"+child.getSectionId());
+
+			}
+		}
+
+		// When I am here all parents at level 1 have a level set as 1 however
+		// the children have not.
+		// Myself and my siblings are now attached to a parent
+
+		boolean completed = false;
+		// Task will be completed when all sections will have a level associated
+		// with it
+		int currentLevel = 1;
+
+		while (!completed) {
+
+			// System.out.println("Currently in level"+currentLevel);
+			Iterator<Section> levelIterator = sectionSet.iterator();
+
+			while (levelIterator.hasNext()) {
+				Section levelSetSection = levelIterator.next();
+				Section parentSetSection = levelSetSection.getParentSection();
+
+				if ((parentSetSection != null)) {
+					// System.out.println("Parents current
+					// level:"+parentSetSection.getSectionLevel());
+					if ((parentSetSection.getSectionLevel() == currentLevel)) {
+
+						// System.out.println("My parent is at level
+						// :"+parentSetSection.getSectionLevel());
+						levelSetSection.setSectionLevel(currentLevel + 1);
+
+					} else {
+
+					}
+				}
+				// Let's print out section_id and level
+				// System.out.println("Section
+				// Id:"+levelSetSection.getSectionId()+"
+				// Level:"+levelSetSection.getSectionLevel());
+
+			}
+			currentLevel++;
+
+			// How to determine completed?? - This task would only complete when
+			// every section has a level assigned
+			Iterator<Section> checkIterator = sectionSet.iterator();
+			completed = true;
+			while (checkIterator.hasNext()) {
+				Section checkLevelNo = checkIterator.next();
+				if (checkLevelNo.getSectionLevel() == -1) {
+					// We still have a -1 not completed
+					completed = false;
+					break;
+				}
+			}
+
+			Iterator<Section> p = sectionSet.iterator();
+			while (p.hasNext()) {
+				Section ps = p.next();
+				// System.out.print("My id is"+ps.getSectionId()+" Some of us
+				// need to be at level 1: :"+ps.getSectionLevel());
+				if (ps.getParentSection() == null) {
+					// System.out.println(" I dont have a parent");;
+				} else {
+					// System.out.println(" Myparent is at
+					// "+ps.getParentSection().getSectionLevel()+" level with id
+					// "+ps.getParentSection().getSectionId());
+				}
+
+			}
+
+		}
 
 	}
 

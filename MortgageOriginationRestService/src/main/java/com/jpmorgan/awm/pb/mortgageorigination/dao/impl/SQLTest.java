@@ -21,6 +21,7 @@ import com.myorg.losmodel.model.questions.Question;
 import com.myorg.losmodel.model.questions.QuestionContext;
 import com.myorg.losmodel.model.questions.Role;
 import com.myorg.losmodel.model.questions.Section;
+import com.myorg.losmodel.util.ModelUtils;
 
 public class SQLTest {
 
@@ -72,6 +73,13 @@ public class SQLTest {
 
 	public boolean upsert(Connection conn, Map<String, Object> attributeMap, int tranId, String statusCd,
 			String jsonObject, String clientPartyId) throws SQLException {
+
+		// Vaibhav added some code.. in Model..
+		// For this DAO method ModelUtils.java ->
+		// getObjectToDbAttributeMapping(MortgageApplication)
+		// Also need to pass JSON String in jsonObject - > MortgageApplication
+		// Object
+
 		boolean ret = true;
 		conn.setAutoCommit(false);
 		int transactionId = tranId;
@@ -201,6 +209,8 @@ public class SQLTest {
 	 * @throws SQLException
 	 */
 	public Set<Section> questionDAOMethod(Connection conn, String languageCd, String userCd) throws SQLException {
+
+		// TODO
 
 		// Question question = null;
 		TreeSet<Section> sectionSet = new TreeSet<Section>();
@@ -485,7 +495,16 @@ public class SQLTest {
 					}
 
 					questionFromSet.addAttribute(attrFromResultSet);
+
+					// TODO -> dbAttributeToObjectNamesMap -> need to get from
+					// getter
+					// Do a lookup with col_nm
+					// call the setter of objectAttrFQN
+
 					attrFromResultSet.setColName(attrRs.getString("col_nm"));
+
+					String attrFQNColName = ModelUtils.getDbAttributeToObjectNamesMap().get(attrRs.getString("col_nm"));
+					attrFromResultSet.setObjectAttrFQN(attrFQNColName);
 
 					String attrDescI18N = attrRs.getNString("col_desc_i18n");
 					String attrDesc = attrRs.getString("col_desc");

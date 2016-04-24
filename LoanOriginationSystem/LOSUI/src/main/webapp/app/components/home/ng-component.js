@@ -9,6 +9,6 @@
 
 	angular.module("mainModule").component("appHome",{
 		templateUrl:"/app/components/home/ng-template.html",
-		controller:homeController,
+		controller:homeController
 	});
 })(window.angular);

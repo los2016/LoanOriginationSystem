@@ -6,6 +6,8 @@ public final class ContactInfo implements Serializable{
 	
 	static final long serialVersionUID = 1L;
 	
+	public static final String NEW_PROPERTY_CONTACT  = "workphone=BUILDING_CONTACT_PHONE_NO_DESC";
+	
 	private String homephone;
 	
 	private String workphone;

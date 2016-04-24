@@ -6,102 +6,143 @@ public final class MortgageDetails implements Serializable{
 	
 	static final long serialVersionUID = 1L;
 	
+	@DBEntityMapping(attributeName="PRIMARY_RES_FL")
 	private char intentToOccupyAsPrimaryResidence;
 	
+	@DBEntityMapping(attributeName=Property.LOAN_PROPERTY_DETAILS)
 	private Property propertyDetails;
 			
+	@DBEntityMapping(attributeName=Loan.NEW_LOAN_DETAILS)
 	private Loan loanDetails;
 		
+	@DBEntityMapping(attributeName="REG_W_FL")
 	private char isRegWTransaction;
 	
+	@DBEntityMapping(attributeName="LOAN_TYPE_CD")
 	private String loanType; // Purchase, Refinance, Modify a loan
 	
+	@DBEntityMapping(attributeName="CURRENT_LOAN_BANK_CD")
 	private String institutionNameHoldingCurrentLoan;
 	
+	@DBEntityMapping(attributeName=Loan.REFINANCE_LOAN_DETAILS)
 	private Loan refinanceLoanDetails;
 	
+	@DBEntityMapping(attributeName="EXPECTED_USE_PROCEEDS_CD")
 	private String useOfProceeds;
 	
+	@DBEntityMapping(attributeName="HELOC_PROOCEEDS_TO_PURCHASE_PROP_FL")
 	private char isLoanUsedToPurchaseDwelling;
 	
+	@DBEntityMapping(attributeName="HELOC_PROOCEEDS_TO_PAYOFF_SECURED_LOAN_FL")
 	private char isLoanUsedForPayoff;
 	
+	@DBEntityMapping(attributeName="NEW_LOAN_PRODUCT_CD")
 	private String mortgageProductSelection;
 	
+	@DBEntityMapping(attributeName="EST_PROPERTY_VALUATION_AMOUNT")
 	private double estiamtedPropertyValue;
 	
+	@DBEntityMapping(attributeName="BROKER_INVOLVEMENT_FL")
 	private char isMortgageBrokerInvolved;
 	
+	@DBEntityMapping(attributeName="RECENT_MTG_APPLIED_FL")
 	private char appliedForMortgageBefore;
 	
+	@DBEntityMapping(attributeName="TAX_ESCROW_FL")
 	private char isEscrowForRealEstateTaxes;
 	
+	@DBEntityMapping(attributeName="HOMEOWNERS_INSURANCE_ESCROW_FL")
 	private char isEscrowForHomeOwnersInsurance;
 	
+	@DBEntityMapping(attributeName=Person.KEY_CONTACT)
 	private Person keyContactOfThisTransaction;
 	
+	@DBEntityMapping(attributeName=Person.APRAISAL_CONTACT)
 	private Person contactForAppraisal;
 	
 	private Income income;
 	
+	@DBEntityMapping(attributeName=Person.BUSINESS_MANAGER_CONTACT)
 	private Person marketBusinessManager;
 	
 	private Person capitalAdvisor;
 	
 	private Person bankerOrAdvisor;
 	
+	@DBEntityMapping(attributeName="CAPITAL_ADVISOR_SID_CD")
 	private String advisorCostCenter;
 		
+	@DBEntityMapping(attributeName="MTG_ADVISOR_NMLS_ID")
 	private String mortgageAdvisorNMLSId;
+	
 	
 	private Person attorneyDetails;
 	
 	private Person mortgageAnalyst;
 	
+	@DBEntityMapping(attributeName="MLO_DIFFERENT_FROM_MTG_ADVISOR_FL")
 	private char isMLODiffThanAdvisor;
 	
+	@DBEntityMapping(attributeName="MLO_LIC_STATUS_CD")
 	private char MLOLicenseStatus;
 	
 	private Person mortgageLoanOriginator;
 	
+	@DBEntityMapping(attributeName="MLO_NMLS_ID")
 	private String MLONMSid;
 	
+	@DBEntityMapping(attributeName="MLO_STATUS_VALID_FL")
 	private char isMLOStatusValidated;
 	
+	@DBEntityMapping(attributeName="TITLE_HOLD_CD")
 	private String titleHoldPlan;
 		
+	@DBEntityMapping(attributeName=Person.INSURANCE_AGENT_CONTACT)
 	private Person insuranceAgent;
 	
+	@DBEntityMapping(attributeName="NON_JPMC_ASSET_AM")
 	private double valueOfNonJPMCAssets;
 	
+	@DBEntityMapping(attributeName="TOTAL_DEBT_OUTSTANDING_AM")
 	private double totalOutandingDebt;
 	
+	@DBEntityMapping(attributeName="MONTHLY_DEBT_PAYMENT_AM")
 	private double monthlyPaymentAgainstDebt;
 	
+	@DBEntityMapping(attributeName="TRAVEL_FL")
 	private char planForTravel;
 	
+	@DBEntityMapping(attributeName="TRAVEL_FROM_DT")
 	private String travelDates;
 	
+	@DBEntityMapping(attributeName="BORROWER_JPMC_RELATIONSHIP")
 	private String borrowerRelationshipToJPMC;
 	
+	@DBEntityMapping(attributeName="LOAN_GUARANTEE_FL")
 	private char loanGurantorPresent;
 	
 	private byte[] guranteeDocument;
 	
+	@DBEntityMapping(attributeName="PREV_YR_UNDERWRITING_FL")
 	private char lastYearUnderwritingStatus;
 	
+	@DBEntityMapping(attributeName="POWER_OF_ATTORNEY_FL")
 	private char planToUsePOA;
 	
 	private byte[] POADocument;
 	
+	@DBEntityMapping(attributeName="THIRD_PARTY_GUARANTOR_CREDIT_FACILITY_FL")
 	private char isGurantorForCreditFacilities;
 	
+	@DBEntityMapping(attributeName="UNSATISFIED_JDGMT_TAX_LIEN_FL")
 	private char isSubjectToTaxJudgements;
 	
+	@DBEntityMapping(attributeName="LAST_ALL_TAX_FILING_YEAR_NO")
 	private int lastYearofTaxFiling;
 	
 	private Person taxPreparer;
 	
+	@DBEntityMapping(attributeName="IRS_AUDIT_FL")
 	private char isReturnAudited;
 
 	public char getIntentToOccupyAsPrimaryResidence() {

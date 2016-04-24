@@ -6,58 +6,82 @@ public abstract class Individual extends Customer {
 	
 	static final long serialVersionUID = 1L;
 	
+	@DBEntityMapping(attributeName="COUNTRY_OF_NATIONALITY_ISO2_CD")
 	private String nationality;
 	
+	@DBEntityMapping(attributeName="EMPLOYER_NM")
 	private String employerName;
 	
+	@DBEntityMapping(attributeName="OCCUPATION_NM")
 	private String occupation;
 	
+	@DBEntityMapping(attributeName="JOB_TITLE_NM")
 	private String jobTitle;
 	
+	@DBEntityMapping(attributeName="YEARS_IN_OCCUPATION_NO")
 	private int yearsInOccupation;
 	
 	private byte[] employmentVerificationDocument;
 	
 	private byte[] payStub;
 	
+	@DBEntityMapping(attributeName="MARITAL_STATUS_CD")
 	private String martialStatus;
 	
+	@DBEntityMapping(attributeName="ALIMONY_PAY_OBLIGATION_FL")
 	private char obligationToSupport;
 	
 	private byte[] divorceDecree;
 	
+	@DBEntityMapping(attributeName="INCLUDE_ALIMONY_FL")
 	private char divorceIncomeFlag;
 	
+	@DBEntityMapping(attributeName="INCLUDE_SPOUSE_COBORROWER_FL")
 	private char isSpouseBorrower;
 	
+	@DBEntityMapping(attributeName="GENDER_CD")
 	private String gender;
 	
+	@DBEntityMapping(attributeName="BIRTH_DT")
 	private String dateOfBirth;
 	
+	@DBEntityMapping(attributeName=Address.WORK_ADDRESS)
 	private Address workAddress;
 	
+	@DBEntityMapping(attributeName="ETHNICITY_CD")
 	private String ethinicity;	
 	
+	@DBEntityMapping(attributeName="RACE_CD")
 	private List<String> race;
 	
+	@DBEntityMapping(attributeName="EMPLOYEE_CLIENT_FL")
 	private char isJPMCEmployee;
 	
+	@DBEntityMapping(attributeName="FIRSTTIME_HOMEBUYER_FL")
 	private char isFirstTimeHomeBuyer;
 	
+	@DBEntityMapping(attributeName="REG_O_OFFICER_FL")
 	private char isRegOOfficer;
 	
+	@DBEntityMapping(attributeName="CURRENT_RES_STATUS_CD")
 	private String residencyStatus;
 	
+	@DBEntityMapping(attributeName="NO_OF_YRS_AT_CURR_RES_DESC")
 	private int noOfYearsAtThisResidence;
 	
+	@DBEntityMapping(attributeName="MILITARY_FL")
 	private char inActiveMilitaryService;
 	
+	@DBEntityMapping(attributeName="GENERAL_PARTNER_FL")
 	private char generalPartnerinPartnership;
 	
+	@DBEntityMapping(attributeName="PUBLIC_STOCK_CONTROL_FL")
 	private char isPublicStockOwner;
 	
+	@DBEntityMapping(attributeName="EXECUTED_WILL_FL")
 	private char isExecutedWillPresent;
 	
+	@DBEntityMapping(attributeName="OWN_LIFE_INSURANCE_FL")
 	private char ownLifeInsurance;
 		
 	

@@ -6,6 +6,8 @@ public final class Property implements Serializable {
 	
 		static final long serialVersionUID = 1L;
 		
+		public static final String LOAN_PROPERTY_DETAILS="propertyType=PROPERTY_TYPE_CD|isthsRecognizedCoOp=UNRECOGNIZED_COOP_FL|" + Address.NEW_PROPERTY_DETAILS ;
+				
 		private String propertyType;
 		
 		private String occupancyType;

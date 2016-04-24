@@ -12,6 +12,12 @@ public class MortgageApplication {
 
 	private long bpmProcessId;
 
+	private PBEntityClient entityClient;
+
+	private PBIndividualClient individualClient;
+
+	private MortgageDetails mtgDetails;
+
 	public String getClientPartyId() {
 		return clientPartyId;
 	}
@@ -35,12 +41,6 @@ public class MortgageApplication {
 	public void setBpmProcessId(long bpmProcessId) {
 		this.bpmProcessId = bpmProcessId;
 	}
-
-	private PBEntityClient entityClient;
-
-	private PBIndividualClient individualClient;
-
-	private MortgageDetails mtgDetails;
 
 	public long getApplicationID() {
 		return applicationID;

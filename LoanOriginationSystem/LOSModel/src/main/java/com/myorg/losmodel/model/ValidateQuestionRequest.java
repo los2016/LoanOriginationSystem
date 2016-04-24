@@ -1,5 +1,7 @@
 package com.myorg.losmodel.model;
 
+import com.myorg.losmodel.model.client.MortgageApplication;
+
 public class ValidateQuestionRequest extends LOSRequest {	
 	
 	private Integer questionId;

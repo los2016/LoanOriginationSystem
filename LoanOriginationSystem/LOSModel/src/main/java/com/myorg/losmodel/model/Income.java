@@ -7,10 +7,13 @@ public final class Income implements Serializable {
 	
 	static final long serialVersionUID = 1L;
 	
+	@DBEntityMapping(attributeName="ANNUAL_INCOME_AM")	
 	private double annualIncome;
 	
+	@DBEntityMapping(attributeName="PRIMARY_INCOME_SRC_CD")
 	private List<String> incomeSources;
 	
+	@DBEntityMapping(attributeName="CONSISTENT_YOY_INCOME_FL")
 	private char incomeConsistentOverYears;
 
 	public double getAnnualIncome() {

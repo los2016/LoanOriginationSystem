@@ -2,72 +2,105 @@ package com.myorg.losmodel.model;
 
 import java.io.Serializable;
 
+import com.myorg.losmodel.model.DBEntityMapping;
+
 public abstract class Customer implements Serializable {
 	
 	static final long serialVersionUID = 1L;
 	
+	@DBEntityMapping(attributeName = "ECI_CD")
 	private long ECI;
 	
+	@DBEntityMapping(attributeName = "HIGH_SENSITIVE_FL")
 	private char isHighlySensitive; // 'Y', 'N'
 	
+	@DBEntityMapping(attributeName = "CONFIDENTIAL_NAME_FL")
 	private char isHighlyConfidential; // 'Y', 'N'
 	
-	private String fullName;	
+	@DBEntityMapping(attributeName = Person.CLIENT_NAME)
+	private Person fullName;	
 	
+	@DBEntityMapping(attributeName = "COUNTRY_OF_ASSET_ISO2_CD")
 	private String primaryCountryOfAssets;
 	
 	private String uniqueIdentifierType; // SSN, TIN or EIN
 	
+	@DBEntityMapping(attributeName = "TAX_IDENTIFICATION_DESC")
 	private String uniqueIdentifier;
 	
+	@DBEntityMapping(attributeName = "SPONSOR_SID_CD")
 	private String clientSponsorName; // internal Banker name
 	
+	@DBEntityMapping(attributeName = "CLIENT_PROSPECT_FL")
 	private char isClientOrProspect; // "C" - Client , "P" - prospect
 	
+	@DBEntityMapping(attributeName = "WITHHOLD_FED_STATUS_CD")
 	private char witholdingFederalStatus; // 'Y'
 	
+	@DBEntityMapping(attributeName = "NET_WORTH_CCY_CD")
 	private double netWorth;
 	
+	@DBEntityMapping(attributeName=Address.MAILING_ADDRESS)
 	private Address legalAddress;
 	
+	@DBEntityMapping(attributeName = "MODE_OF_REQUEST_CD")
 	private String creditRequestCaptureMode;
 	
+	@DBEntityMapping(attributeName = "OUTSTANDING_JUDDGEMENT_FL")
 	private char anyOutstandingJudgements; // 'Y' / 'N'
 	
+	@DBEntityMapping(attributeName = "BANKRUPT_FL")
 	private char bankruptcyDuringLast7years; // 'Y' / 'N'
 	
+	@DBEntityMapping(attributeName = "FORECLOSURE_FL")
 	private char forclosureDuringLast7years; // 'Y' / 'N'
 	
+	@DBEntityMapping(attributeName = "PARTY_TO_LAWSUIT_FL")
 	private char partyToLawsuit; // 'Y' / 'N'
 	
+	@DBEntityMapping(attributeName = "OBLIGOR_FL")
 	private char obligationToOtherLoans; // 'Y' / 'N'
 	
+	@DBEntityMapping(attributeName = "DEFAULTED_FL")
 	private char delinquencyOrDefaultStatus; // 'Y' / 'N'
 	
+	@DBEntityMapping(attributeName = "BORROWED_DOWNPAYMENT_FL")
 	private char isPartOfDownPaymentBorrowed; // 'Y' / 'N'
 	
+	@DBEntityMapping(attributeName = "DOWNPMT_SRC_CD")
 	private String sourceOfDownPayment;
 	
+	@DBEntityMapping(attributeName = "NOTE_ENDORSE_COMAKER_FL")
 	private char comakerOrEndoreser;
 	
+	@DBEntityMapping(attributeName = "US_CITIZEN_FL")
 	private char isUSCitizen;  // 'Y' / 'N'
 	
+	@DBEntityMapping(attributeName = "US_RES_ALIEN_FL")
 	private char isPermenantResident; // 'Y' / 'N'
 	
+	@DBEntityMapping(attributeName = "OWNERSHIP_INTEREST_FL")
 	private char hadOwnershipInterestinProperty;
 	
+	@DBEntityMapping(attributeName = "CURRENT_PROPERTY_OWNERSHIP_CD")
 	private String typeOfProperty;
 	
+	@DBEntityMapping(attributeName = "CURRENT_PROPERTY_OWNERSHIP_TYPE_CD")
 	private String howWasTitleHold;
 	
+	@DBEntityMapping(attributeName = "APPLICATION_SUBMITTED_TS")
 	private String whenWasApplicationSubmitted;
 	
+	@DBEntityMapping(attributeName = "JPMS_CLIENT_FL")
 	private char isJPMSClient;
 	
+	@DBEntityMapping(attributeName = "MTG_DOC_MAIL_DIFF_ADDRESS_FL")
 	private char mortgageDocumentMailedToResidence;
 	
+	@DBEntityMapping(attributeName=Address.HOME_ADDRESS)
 	private Address homeAddress;
 	
+	@DBEntityMapping(attributeName = "INTERNATIONAL_CLIENT_FL")
 	private char isInternationalClient;
 
 	public long getECI() {
@@ -94,11 +127,11 @@ public abstract class Customer implements Serializable {
 		this.isHighlyConfidential = isHighlyConfidential;
 	}
 
-	public String getFullName() {
+	public Person getFullName() {
 		return fullName;
 	}
 
-	public void setFullName(String fullName) {
+	public void setFullName(Person fullName) {
 		this.fullName = fullName;
 	}
 

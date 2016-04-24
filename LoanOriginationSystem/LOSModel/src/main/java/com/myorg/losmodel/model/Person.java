@@ -6,6 +6,18 @@ public final class Person implements Serializable {
 	
 	static final long serialVersionUID = 1L;
 	
+	public static final String KEY_CONTACT = "firstName=KEY_CONTACT_FIRST_NM|middleName=MIDDLE_NM|lastName=LAST_NM";
+	
+	public static final String APRAISAL_CONTACT = "firstName=PROPERTY_ACCESS_CONTACT_FIRST_NM|middleName=PROPERTY_ACCESS_CONTACT_MIDDLE_NM|lastName=PROPERTY_ACCESS_CONTACT_LAST_NM";
+	
+	public static final String BUSINESS_MANAGER_CONTACT = "";
+	
+	public static final String INSURANCE_AGENT_CONTACT = "firstName=PROPERTY_ACCESS_CONTACT_FIRST_NM|middleName=PROPERTY_ACCESS_CONTACT_MIDDLE_NM|lastName=PROPERTY_ACCESS_CONTACT_LAST_NM";
+	
+	public static final String ACCOUNT_CONTACT = "firstName=ACCOUNTING_FIRM_CD|middleName=ACCOUNTANT_MIDDLE_NM|lastName=ACCOUNTANT_LAST_NM";
+	
+	public static final String CLIENT_NAME = "firstName=CLIENT_LOOKUP_FIRST_NM|middleName=CLIENT_LOOKUP_MIDDLE_NM|lastName=CLIENT_LOOKUP_LAST_NM";
+	
 	private String firstName;
 	
 	private String middleName;

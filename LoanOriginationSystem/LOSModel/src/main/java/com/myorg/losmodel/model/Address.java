@@ -6,6 +6,14 @@ public class Address implements Serializable {
 	
 	static final long serialVersionUID = 1L;
 	
+	public static final String HOME_ADDRESS = "address1=HOME_ADDRESS_LINE_1_DESC|address2=HOME_ADDRESS_LINE_2_DESC|address3=HOME_ADDRESS_LINE_3_DESC|city=HOME_ADDRESS_CITY_NM|state=HOME_ADDRESS_STATE_CD|zip=HOME_ADDRESS_ZIP_CD";
+
+	public static final String WORK_ADDRESS = "address1=WORK_ADDRESS_LINE_1_DESC|address2=WORK_ADDRESS_LINE_2_DESC|address3=WORK_ADDRESS_LINE_3_DESC|city=WORK_ADDRESS_CITY_NM|state=WORK_ADDRESS_STATE_CD|zip=WORK_ADDRESS_ZIP_CD";
+	
+	public static final String MAILING_ADDRESS = "address1=MAILING_ADDRESS_LINE_1_DESC|address2=MAILING_ADDRESS_LINE_2_DESC|address3=MAILING_ADDRESS_LINE_3_DESC|city=MAILING_ADDRESS_CITY_NM|state=MAILING_ADDRESS_STATE_CD|zip=MAILING_ADDRESS_ZIP_CD";
+	
+	public static final String NEW_PROPERTY_DETAILS = "address1=PROPERTY_ADDRESS_LINE_1_DESC|address2=PROPERTY_ADDRESS_LINE_2_DESC|address3=PROPERTY_ADDRESS_LINE_3_DESC|city=PROPERTY_ADDRESS_CITY_NM|state=PROPERTY_ADDRESS_STATE_CD|zip=PROPERTY_ADDRESS_ZIP_CD|";
+	
 	private int number;
 	
 	private String address1;
@@ -18,7 +26,8 @@ public class Address implements Serializable {
 	
 	private String state;
 	
-	private String zip; // Kept String because it can include PO Box and special chars
+	private String zip; // Kept String because it can include PO Box and special
+						// chars
 	
 	private ContactInfo contactInfo;
 	

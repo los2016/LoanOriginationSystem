@@ -27,7 +27,18 @@ public class MortgageConfiguration {
 	}
 
 	@Bean
-	public JdbcTemplate jdbcTemplate(DataSource dataSource) {
-		return new JdbcTemplate(dataSource);
+	public DataSource dataSourceOracle() {
+		DriverManagerDataSource dataSource = new DriverManagerDataSource();
+		dataSource.setDriverClassName("oracle.jdbc.driver.OracleDriver");
+		dataSource.setUrl("jdbc:oracle:thin:@localhost:1521:XE");
+		dataSource.setUsername("mortgage");
+		dataSource.setPassword("password");
+		return dataSource;
 	}
+
+	@Bean
+	public JdbcTemplate jdbcTemplate(DataSource dataSourceOracle) {
+		return new JdbcTemplate(dataSourceOracle);
+	}
+
 }

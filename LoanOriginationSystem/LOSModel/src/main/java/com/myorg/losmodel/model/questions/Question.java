@@ -7,10 +7,20 @@ import java.util.TreeSet;
 
 public class Question implements Comparable<Question> {
 
-	Set<Attribute> attributes = new TreeSet();
+	Set<Attribute> attributes = new TreeSet<Attribute>();
 	protected HashSet<Question> childQuestions;
 	protected String mandatoryCd;
-	protected Question parentQuestion;
+	
+	//Changed - having both parent and child is getting into an infinite recursive loop
+	protected int parentQuestionId;
+
+	public int getParentQuestionId() {
+		return parentQuestionId;
+	}
+
+	public void setParentQuestionId(int parentQuestionId) {
+		this.parentQuestionId = parentQuestionId;
+	}
 
 	protected QuestionContext questionContext;
 	protected int questionId;
@@ -60,9 +70,7 @@ public class Question implements Comparable<Question> {
 		return mandatoryCd;
 	}
 
-	public Question getParentQuestion() {
-		return parentQuestion;
-	}
+
 
 	public QuestionContext getQuestionContext() {
 		return questionContext;
@@ -96,9 +104,7 @@ public class Question implements Comparable<Question> {
 		this.mandatoryCd = mandatoryCd;
 	}
 
-	public void setParentQuestion(Question parentQuestion) {
-		this.parentQuestion = parentQuestion;
-	}
+
 
 	public void setQuestionContext(QuestionContext questionContext) {
 		this.questionContext = questionContext;
@@ -120,6 +126,7 @@ public class Question implements Comparable<Question> {
 		this.section = section;
 	}
 
+	
 	@Override
 	public int compareTo(Question o) {
 		int ret;

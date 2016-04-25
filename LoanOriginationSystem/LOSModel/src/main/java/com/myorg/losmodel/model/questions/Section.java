@@ -7,23 +7,21 @@ import java.util.TreeSet;
 
 public class Section implements Comparable<Section> {
 
-	protected String activeLanguage = "";
+	//protected String activeLanguage = "";
 	protected Set<Section> childSections = new TreeSet<Section>();
-	protected HashMap<String, String> futureSectionNm = new HashMap<String, String>();
-	protected Section parentSection = null;
-	protected HashMap<String, String> pastSectionNm = new HashMap<String, String>();
-
-	public Set<Question> getQuestions() {
-		return questions;
-	}
+	
+	//protected Section parentSection = null;
+	//Shubhrajit - This is creating an infinite recursion and so changed to contain only the id
+	protected int parentSectionId;
+	//protected HashMap<String, String> pastSectionNm = new HashMap<String, String>();
+	//protected HashMap<String, String> futureSectionNm = new HashMap<String, String>();
+	//protected HashMap<String, String> presentSectionNm = new HashMap<String, String>();
+	
+	protected String presentSectionNm = "";
+	protected String pastSectionNm = "";
+	protected String futureSectionNm = "";
 
 	protected Set<Question> questions = new TreeSet<Question>();
-
-	public void addQuestion(Question q) {
-		questions.add(q);
-	}
-
-	protected HashMap<String, String> presentSectionNm = new HashMap<String, String>();
 
 	protected int sectionId;
 
@@ -34,6 +32,10 @@ public class Section implements Comparable<Section> {
 
 	public void addChildSection(Section child) {
 		this.childSections.add(child);
+	}
+
+	public void addQuestion(Question q) {
+		questions.add(q);
 	}
 
 	@Override
@@ -57,49 +59,37 @@ public class Section implements Comparable<Section> {
 		return ret;
 	}
 
-	public String getActiveLanguage() {
-		return activeLanguage;
-	}
+
 
 	public Set<Section> getChildSections() {
 		return childSections;
 	}
 
 	public String getFutureSectionNm() {
-		return futureSectionNm.get(activeLanguage);
+		return futureSectionNm;
 	}
 
-	public String getFutureSectionNm(String language) {
-		if (language == null || "".equals(language)) {
-			language = "en";
-		}
-		return futureSectionNm.get(language);
-	}
+	
 
-	public Section getParentSection() {
-		return parentSection;
+	public int getParentSectionId() {
+		return parentSectionId;
 	}
 
 	public String getPastSectionNm() {
-		return pastSectionNm.get(activeLanguage);
+		return pastSectionNm;
 	}
 
-	public String getPastSectionNm(String language) {
-		if (language == null || "".equals(language)) {
-			language = "en";
-		}
-		return pastSectionNm.get(language);
-	}
+
+
 
 	public String getPresentSectionNm() {
-		return presentSectionNm.get(activeLanguage);
+		return presentSectionNm;
 	}
 
-	public String getPresentSectionNm(String language) {
-		if (language == null || "".equals(language)) {
-			language = "en";
-		}
-		return presentSectionNm.get(language);
+
+
+	public Set<Question> getQuestions() {
+		return questions;
 	}
 
 	public int getSectionId() {
@@ -118,33 +108,25 @@ public class Section implements Comparable<Section> {
 		return this.getSectionId() % 10;
 	}
 
-	public void setActiveLanguage(String activeLanguage) {
-		this.activeLanguage = activeLanguage;
+	
+	public void setFutureSectionNm(String futureSectionNm) {
+		
+		this.futureSectionNm = futureSectionNm;
 	}
 
-	public void setFutureSectionNm(String language, String futureSectionNm) {
-		if (language == null || "".equals(language)) {
-			language = "en";
-		}
-		this.futureSectionNm.put(language, futureSectionNm);
+	public void setParentSectionId(int parentSectionId) {
+		this.parentSectionId = parentSectionId;
 	}
 
-	public void setParentSection(Section parentSection) {
-		this.parentSection = parentSection;
+
+
+	public void setPastSectionNm(String pastSectionNm) {
+			this.pastSectionNm=pastSectionNm;
 	}
 
-	public void setPastSectionNm(String language, String pastSectionNm) {
-		if (language == null || "".equals(language)) {
-			language = "en";
-		}
-		this.pastSectionNm.put(language, pastSectionNm);
-	}
-
-	public void setPresentSectionNm(String language, String presentSectionNm) {
-		if (language == null || "".equals(language)) {
-			language = "en";
-		}
-		this.presentSectionNm.put(language, presentSectionNm);
+	public void setPresentSectionNm(String presentSectionNm) {
+	
+		this.presentSectionNm = presentSectionNm;
 	}
 
 	public void setSectionId(int sectionId) {

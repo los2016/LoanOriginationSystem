@@ -68,17 +68,22 @@ public class MortgageDAOImpl implements MortgageDAO {
 				ObjectMapper mapper = new ObjectMapper();
 
 				String jsonMortgageApplication = mapper.writeValueAsString(mortgageApplication);
-				int transId = (int) mortgageApplication.getApplicationID();
+				long transId =  mortgageApplication.getApplicationID();
 				String statusCd = mortgageApplicationRequest.getSaveType();
-				upsert(attributeMap, transId, statusCd, jsonMortgageApplication,
+				transId = upsert(attributeMap, transId, statusCd, jsonMortgageApplication,
 						mortgageApplication.getClientPartyId());
 
+				if(transId < 1){
+					throw new Exception("Dao layer failed to save the mortgage");
+				}
 				response.setReturnMsg("Application Saved Sucessfully");
 				response.setReturnType("Success");
 				mortgageApplicationResponse.setResponse(response);
-				mortgageApplicationResponse.setMortgageId(23444345243l);
+				mortgageApplicationResponse.setMortgageId(transId);
+				//Commented by Shubhrjit - Hard coded
+				//mortgageApplicationResponse.setMortgageId(23444345243l);
 
-			} catch (JsonProcessingException e) {
+			} catch (Exception e) {
 				response.setReturnMsg("Error in Saving the Application");
 				response.setReturnType("Error");
 				mortgageApplicationResponse.setResponse(response);
@@ -89,18 +94,24 @@ public class MortgageDAOImpl implements MortgageDAO {
 		return mortgageApplicationResponse;
 	}
 
-	public boolean upsert(Map<String, Object> attributeMap, int tranId, String statusCd, String jsonObject,
+	//Shubhrajit - 25/4
+	public long upsert(Map<String, Object> attributeMap, long tranId, String statusCd, String jsonObject,
 			String clientPartyId) throws SQLException {
 
+		
+		//Forcing a commit
+		
+		
 		// Vaibhav added some code.. in Model..
 		// For this DAO method ModelUtils.java ->
 		// getObjectToDbAttributeMapping(MortgageApplication)
 		// Also need to pass JSON String in jsonObject - > MortgageApplication
 		// Object
 		Connection conn = DatabaseService.getConnection();
-		boolean ret = true;
+		//Shubhrajit - 25/4
+		long ret = -1;
 		conn.setAutoCommit(false);
-		int transactionId = tranId;
+		long transactionId = tranId;
 		PreparedStatement ps1 = conn.prepareStatement(
 				"insert into transaction(transaction_id,status_cd,complete_tran_obj,party_id) values (?,?,?,?)");
 		PreparedStatement ps2 = conn.prepareStatement(
@@ -119,7 +130,7 @@ public class MortgageDAOImpl implements MortgageDAO {
 		PreparedStatement ps5 = conn.prepareStatement("delete transaction_data_item" + " where transaction_id = ?");
 
 		// PreparedStatement ps6 =
-
+		
 		try {
 			if (transactionId <= 0) { // New transaction
 
@@ -127,10 +138,10 @@ public class MortgageDAOImpl implements MortgageDAO {
 				CallableStatement ps0 = conn.prepareCall("{? = call get_last_key_id('TRANSACTION_ID')}");
 				ps0.registerOutParameter(1, Types.DOUBLE);
 				ps0.executeUpdate();
-				transactionId = ps0.getInt(1);
+				transactionId = ps0.getLong(1);
 
 				// Executing insert to transaction
-				ps1.setInt(1, transactionId);
+				ps1.setLong(1, transactionId);
 				ps1.setString(2, statusCd);
 				ps1.setString(3, jsonObject);
 				ps1.setString(4, clientPartyId);
@@ -146,8 +157,8 @@ public class MortgageDAOImpl implements MortgageDAO {
 
 			// In the case of transaction data item we always delete and
 			// re-insert
-
-			ps5.setInt(1, transactionId);
+			ret = transactionId;
+			ps5.setLong(1, transactionId);
 			ps5.execute();
 
 			Iterator<String> it = attributeMap.keySet().iterator();
@@ -157,7 +168,7 @@ public class MortgageDAOImpl implements MortgageDAO {
 
 				if (value instanceof String) {
 					// Scaler value
-					ps3.setInt(1, transactionId);
+					ps3.setLong(1, transactionId);
 					ps3.setString(2, (String) value);
 					ps3.setNull(3, Types.CLOB);
 					ps3.setInt(4, 1);
@@ -167,7 +178,7 @@ public class MortgageDAOImpl implements MortgageDAO {
 
 				} else if (value instanceof byte[]) {
 					// BLOB
-					ps3.setInt(1, transactionId);
+					ps3.setLong(1, transactionId);
 					ps3.setNull(2, Types.VARCHAR);
 					ps3.setNull(3, Types.CLOB);
 					ps3.setInt(4, 1);
@@ -182,7 +193,7 @@ public class MortgageDAOImpl implements MortgageDAO {
 					while (mul.hasNext()) {
 
 						String scalerMultiValue = (String) mul.next();
-						ps3.setInt(1, transactionId);
+						ps3.setLong(1, transactionId);
 						ps3.setString(2, scalerMultiValue);
 						ps3.setNull(3, Types.CLOB);
 						ps3.setInt(4, seq++);
@@ -200,7 +211,7 @@ public class MortgageDAOImpl implements MortgageDAO {
 		} catch (Exception ee) {
 			try {
 				conn.rollback();
-				ret = false;
+				ret = -1;
 			} catch (Exception e) {
 				throw new SQLException("ROLLBACK FAILLED", e);
 

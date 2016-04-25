@@ -26,7 +26,7 @@ public class Question implements Comparable<Question> {
 	protected int questionId;
 	protected String questionLongDesc;
 	protected Role role;
-	protected Section section;
+	//protected Section section;
 	protected int sequenceNo;
 	protected String toolTip;
 
@@ -88,9 +88,9 @@ public class Question implements Comparable<Question> {
 		return role;
 	}
 
-	public Section getSection() {
-		return section;
-	}
+	//public Section getSection() {
+		//return section;
+	//}
 
 	public int hashCode() {
 		return this.getQuestionId() % 25;
@@ -122,9 +122,9 @@ public class Question implements Comparable<Question> {
 		this.role = role;
 	}
 
-	public void setSection(Section section) {
-		this.section = section;
-	}
+	//public void setSection(Section section) {
+		//this.section = section;
+	//}
 
 	
 	@Override

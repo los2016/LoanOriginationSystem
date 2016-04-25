@@ -78,7 +78,7 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 
 			}
 
-			
+			System.out.println("LANGUAGE CODE IS SET TO:-"+languageCd);
 			
 			
 			if("en".equals(languageCd)){
@@ -191,16 +191,8 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 
 			
 
-			//Iterator<Section> i = sectionSet.iterator();
-			/*
-			 * while(i.hasNext()){ Section check = i.next();
-			 * System.out.println("Section"+check.getSectionId()); Section
-			 * parent = check.getParentSection(); if (parent == null){
-			 * System.out.println("Parent is null"); }else{ System.out.println(
-			 * "Parent is "+parent.getSectionId()); }
-			 * 
-			 * }
-			 */
+			
+			
 			// When we are here all the sections know who is their parent, but
 			// we also need to know the level
 			// and list of children
@@ -210,7 +202,13 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 			computeChildrenAndLevelsForSection(sectionSet);
 			// Now we have the sections
 
+			Iterator<Section> i = sectionSet.iterator();
+			
+			while(i.hasNext()){ 
+				Section check = i.next();
+				System.out.println("SECTION:"+check.getSectionId()+ "PARENT SECTION ID : "+check.getParentSectionId()+" NO OF CHILDREN: "+check.getChildSections().size());
 
+			}
 
 
 			if ("en".equals(languageCd)) {
@@ -267,7 +265,7 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 
 				Section questionSectionFromSet = findSectionInSet(questionSectionFromRS, sectionSet);
 				//questionSectionFromSet.setActiveLanguage(languageCd);
-				q.setSection(questionSectionFromSet);
+				//q.setSection(questionSectionFromSet);
 				questionSectionFromSet.addQuestion(q);
 				int parentQuestionId = questionRs.getInt("parent_question_id");
 				
@@ -316,6 +314,12 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 
 				// All questions read
 
+				Iterator<Question> qi =  questions.iterator();
+				while(qi.hasNext()){
+					Question qqi = qi.next();
+					System.out.println("QUESTION ID:"+qqi.getQuestionId()+"Question DESC:"+qqi.getQuestionLongDesc()+"No of attributes:"+qqi.getAttributes().size());
+				}
+				
 				// Now let get the attributes and add them to the questions
 				PreparedStatement attrPs = null;
 				if (!"en".equals(languageCd)) {
@@ -526,8 +530,7 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 				// I do have a parent - I need to add myself to parent
 				Section parent = findSectionInSet(parentStub,sectionSet);
 				parent.addChildSection(child);
-				// System.out.println("Parent"+parent.getSectionId()+"
-				// child:"+child.getSectionId());
+				System.out.println("Parent"+parent.getSectionId()+" child:"+child.getSectionId());
 
 			}
 		}
@@ -549,28 +552,30 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 			while (levelIterator.hasNext()) {
 				Section levelSetSection = levelIterator.next();
 				int parentSetSectionId = levelSetSection.getParentSectionId();
-				Section parentSetSectionStub = new Section();
-				parentSetSectionStub.setSectionId(parentSetSectionId);
-				Section parentSetSection = findSectionInSet(parentSetSectionStub,sectionSet);
-				if ((parentSetSectionId <= 0)) {
-					// System.out.println("Parents current
-					// level:"+parentSetSection.getSectionLevel());
+
+				
+				if ((parentSetSectionId > 0)) {
+
+					Section parentSetSectionStub = new Section();
+					parentSetSectionStub.setSectionId(parentSetSectionId);
+					Section parentSetSection = findSectionInSet(parentSetSectionStub,sectionSet);
+					System.out.println("PARENT SET SECTION ID" +parentSetSectionId);
+					
 					if ((parentSetSection.getSectionLevel() == currentLevel)) {
 
-						// System.out.println("My parent is at level
-						// :"+parentSetSection.getSectionLevel());
-						levelSetSection.setSectionLevel(currentLevel + 1);
+							levelSetSection.setSectionLevel(currentLevel + 1);
 
 					} else {
+
 
 					}
 				}
 				// Let's print out section_id and level
-				// System.out.println("Section
-				// Id:"+levelSetSection.getSectionId()+"
-				// Level:"+levelSetSection.getSectionLevel());
+				System.out.println("Section Id:"+levelSetSection.getSectionId()+" Level:"+levelSetSection.getSectionLevel());
 
 			}
+
+			
 			currentLevel++;
 
 			// How to determine completed?? - This task would only complete when

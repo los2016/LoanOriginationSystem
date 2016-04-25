@@ -1,7 +1,6 @@
 package com.jpmorgan.awm.pb.mortgageorigination.controller;
 
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -87,13 +86,14 @@ public class MortgageRestController {
 	}
 
 	@RequestMapping(value = "/getMortgageApplicationsDetails", method = RequestMethod.GET)
-	public ResponseEntity<List<MortgageApplicationResponse>> getMortgageApplicationsDetails(
-			@RequestParam String clientOrAdvisor, @RequestParam long clientOrAdvisorPartyId) {
+	public ResponseEntity<MortgageApplicationResponse> getMortgageApplicationsDetails(
+			@RequestParam String clientOrAdvisor, @RequestParam long clientOrAdvisorPartyId,
+			@RequestParam long mortgageId) {
 
-		List<MortgageApplicationResponse> mortgageApplicationList = mortgageDAO.getMortgageDetails(clientOrAdvisor,
-				clientOrAdvisorPartyId);
+		MortgageApplicationResponse mortgageApplicationList = mortgageDAO.getMortgageDetails(clientOrAdvisor,
+				clientOrAdvisorPartyId, mortgageId);
 
-		return new ResponseEntity<List<MortgageApplicationResponse>>(mortgageApplicationList, HttpStatus.OK);
+		return new ResponseEntity<MortgageApplicationResponse>(mortgageApplicationList, HttpStatus.OK);
 
 	}
 

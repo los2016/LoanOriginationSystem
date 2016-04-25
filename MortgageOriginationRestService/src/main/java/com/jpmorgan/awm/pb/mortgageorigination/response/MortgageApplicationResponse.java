@@ -1,12 +1,13 @@
 package com.jpmorgan.awm.pb.mortgageorigination.response;
 
+import java.util.List;
+
 import com.myorg.losmodel.model.LOSResponse;
 import com.myorg.losmodel.model.client.MortgageApplication;
 
 public class MortgageApplicationResponse {
 
-	private long mortgageId;
-	private MortgageApplication mortgageApplication;
+	private List<MortgageApplication> mortgageApplications;
 	private LOSResponse response;
 
 	public LOSResponse getResponse() {
@@ -17,22 +18,12 @@ public class MortgageApplicationResponse {
 		this.response = response;
 	}
 
-	public long getMortgageId() {
-		return mortgageId;
+	public List<MortgageApplication> getMortgageApplications() {
+		return mortgageApplications;
 	}
 
-	public void setMortgageId(long mortgageId) {
-		this.mortgageId = mortgageId;
+	public void setMortgageApplications(List<MortgageApplication> mortgageApplications) {
+		this.mortgageApplications = mortgageApplications;
 	}
-
-	public MortgageApplication getMortgageApplication() {
-		return mortgageApplication;
-	}
-
-	
-	public void setMortgageApplication(MortgageApplication mortgageApplication) {
-		this.mortgageApplication = mortgageApplication;
-	}
-	
 
 }

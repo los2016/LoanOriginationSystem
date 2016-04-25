@@ -11,6 +11,8 @@ import java.util.TreeSet;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +33,8 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 	@Autowired
 	private DataSource dataSource;
 
+	Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
+
 	/**
 	 * Method to get the sections / questions / attributes / LOVS for a user
 	 * based on specified language or default language if language is not
@@ -48,6 +52,8 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 	 */
 	public Set<Section> questionDAOMethod(String languageCd, String userCd) throws SQLException {
 
+		logger.info("questionDAOMethod :: Entry::  languageCd: {} userCd {} ", languageCd, userCd);
+
 		Connection conn = null;
 		// Question question = null;
 		TreeSet<Section> sectionSet = new TreeSet<Section>();
@@ -60,7 +66,6 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 
 			PreparedStatement sectionPS = null;
 
-			
 			PreparedStatement languageCdPS = conn
 					.prepareStatement("select default_language_cd from mortgage.users where user_cd = ?");
 
@@ -72,35 +77,31 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 				}
 
 			}
-			
+
 			if (languageCd == null) {
 				languageCd = "en";
 
 			}
 
-			
-			
-			
-			if("en".equals(languageCd)){
+			if ("en".equals(languageCd)) {
 				sectionPS = conn.prepareStatement(
-					"select s.section_id,s.present_section_nm, s.past_section_nm, s.future_section_nm, s.sequence_no,"
-							+ " s.parent_section_id as parent_id,"
-							+ " null as i18n_present_nm, null as i18N_past_nm,null as i18n_future_nm "
-							+ " from mortgage.section_metadata s"
-							
+						"select s.section_id,s.present_section_nm, s.past_section_nm, s.future_section_nm, s.sequence_no,"
+								+ " s.parent_section_id as parent_id,"
+								+ " null as i18n_present_nm, null as i18N_past_nm,null as i18n_future_nm "
+								+ " from mortgage.section_metadata s"
+
 				);
-			}else{
-				
+			} else {
+
 				sectionPS = conn.prepareStatement(
 						"select s.section_id,s.present_section_nm, s.past_section_nm, s.future_section_nm, s.sequence_no,"
 								+ " s.parent_section_id as parent_id,"
 								+ " sin.present_section_nm as i18n_present_nm, sin.past_section_nm as i18N_past_nm,sin.future_section_nm as i18n_future_nm "
 								+ " from mortgage.section_metadata s"
 								+ " left outer join mortgage.section_metadata_i18n sin on sin.section_id = s.section_id"
-								+ " where sin.language_iso2_cd = ?"
-				);
-				sectionPS.setString(1,languageCd);
-			
+								+ " where sin.language_iso2_cd = ?");
+				sectionPS.setString(1, languageCd);
+
 			}
 			ResultSet sectionRS = sectionPS.executeQuery();
 
@@ -130,31 +131,30 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 				String enPresentNm = sectionRS.getString("present_section_nm");
 				String enPastNm = sectionRS.getString("past_section_nm");
 				String enFutureNm = sectionRS.getString("future_section_nm");
-				
+
 				String i18NPresentNm = sectionRS.getNString("i18n_present_nm");
 				String i18NPastNm = sectionRS.getNString("i18n_past_nm");
 				String i18NFutureNm = sectionRS.getNString("i18n_future_nm");
 
 				// Since we have an outer join it can come as null. We do not
 				// want to add nulls in the object
-				
-					if (i18NPresentNm != null) {
-						enPresentNm = i18NPresentNm;
-					}
-					if (i18NPastNm != null) {
-						
-						enPastNm = i18NPastNm;
-					}
-					if (i18NFutureNm != null) {
-						enFutureNm = i18NFutureNm;
-					}
-					sectionFromCollection.setPresentSectionNm(enPresentNm);
-					sectionFromCollection.setPastSectionNm(enPastNm);
-					sectionFromCollection.setFutureSectionNm(enFutureNm);	
-			
+
+				if (i18NPresentNm != null) {
+					enPresentNm = i18NPresentNm;
+				}
+				if (i18NPastNm != null) {
+
+					enPastNm = i18NPastNm;
+				}
+				if (i18NFutureNm != null) {
+					enFutureNm = i18NFutureNm;
+				}
+				sectionFromCollection.setPresentSectionNm(enPresentNm);
+				sectionFromCollection.setPastSectionNm(enPastNm);
+				sectionFromCollection.setFutureSectionNm(enFutureNm);
 
 				int sequenceNo = sectionRS.getInt("sequence_no");
-			
+
 				sectionFromCollection.setSequenceNo(sequenceNo);
 
 				int parentSectionId = sectionRS.getInt("parent_id");
@@ -164,34 +164,33 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 				// initially we would try to know the parent. Later on we will
 				// do it upside down to get
 				// the levels and the children
-				
-				//Section parentFromResultSetStub = null;
 
-				//if (parentSectionId > 0) {
-					//parentFromResultSetStub = new Section();
-					//parentFromResultSetStub.setSectionId(parentSectionId);
-				//}
+				// Section parentFromResultSetStub = null;
+
+				// if (parentSectionId > 0) {
+				// parentFromResultSetStub = new Section();
+				// parentFromResultSetStub.setSectionId(parentSectionId);
+				// }
 				// If the parent is not already in the collection. create it.
 				// Take advantage of the equals method
 
-				//Section parentFromSet = null;
-				//if (parentFromResultSet != null) {
-					//parentFromSet = this.findSectionInSet(parentFromResultSet, sectionSet);
-				//}
-				//if (parentFromSet == null) {
-					//parentFromSet = parentFromResultSet;
-					//if (parentFromSet != null) {
-						//sectionSet.add(parentFromSet);
-					//}
-				//}
-			
+				// Section parentFromSet = null;
+				// if (parentFromResultSet != null) {
+				// parentFromSet = this.findSectionInSet(parentFromResultSet,
+				// sectionSet);
+				// }
+				// if (parentFromSet == null) {
+				// parentFromSet = parentFromResultSet;
+				// if (parentFromSet != null) {
+				// sectionSet.add(parentFromSet);
+				// }
+				// }
+
 				sectionFromCollection.setParentSectionId(parentSectionId);
 
-				}
+			}
 
-			
-
-			//Iterator<Section> i = sectionSet.iterator();
+			// Iterator<Section> i = sectionSet.iterator();
 			/*
 			 * while(i.hasNext()){ Section check = i.next();
 			 * System.out.println("Section"+check.getSectionId()); Section
@@ -209,9 +208,6 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 
 			computeChildrenAndLevelsForSection(sectionSet);
 			// Now we have the sections
-
-
-
 
 			if ("en".equals(languageCd)) {
 				questionPS = conn.prepareStatement(
@@ -266,31 +262,32 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 				questionSectionFromRS.setSectionId(questionRs.getInt("section_id"));
 
 				Section questionSectionFromSet = findSectionInSet(questionSectionFromRS, sectionSet);
-				//questionSectionFromSet.setActiveLanguage(languageCd);
+				// questionSectionFromSet.setActiveLanguage(languageCd);
 				q.setSection(questionSectionFromSet);
 				questionSectionFromSet.addQuestion(q);
 				int parentQuestionId = questionRs.getInt("parent_question_id");
-				
+
 				q.setParentQuestionId(parentQuestionId);
-				//Question parentQuestionFromResultSet = null;
+				// Question parentQuestionFromResultSet = null;
 				//
-				//if (parentQuestionId > 0) {
-					//parentQuestionFromResultSet = new Question();
-					//parentQuestionFromResultSet.setQuestionId(parentQuestionId);
-				//}
+				// if (parentQuestionId > 0) {
+				// parentQuestionFromResultSet = new Question();
+				// parentQuestionFromResultSet.setQuestionId(parentQuestionId);
+				// }
 				// If the parent is not already in the collection. create it.
 				// Take advantage of the equals method
 
-				//Question parentQuestionFromSet = null;
-				//if (parentQuestionFromResultSet != null) {
-					//parentQuestionFromSet = findQuestionInSet(parentQuestionFromResultSet, questions);
-				//}
-				//if (parentQuestionFromSet == null) {
-					//parentQuestionFromSet = parentQuestionFromResultSet;
-					//if (parentQuestionFromSet != null) {
-						//questions.add(parentQuestionFromSet);
-					//}
-				//}
+				// Question parentQuestionFromSet = null;
+				// if (parentQuestionFromResultSet != null) {
+				// parentQuestionFromSet =
+				// findQuestionInSet(parentQuestionFromResultSet, questions);
+				// }
+				// if (parentQuestionFromSet == null) {
+				// parentQuestionFromSet = parentQuestionFromResultSet;
+				// if (parentQuestionFromSet != null) {
+				// questions.add(parentQuestionFromSet);
+				// }
+				// }
 
 				Role r = new Role();
 				r.setRoleId(questionRs.getInt("role_id"));
@@ -440,11 +437,13 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 			try {
 				conn.rollback();
 			} catch (Exception e) {
+				logger.error("questionDAOMethod :: Rolling Back");
 				throw new SQLException("ROLLBACK FAILLED", e);
 
 			}
 			throw new SQLException("ROLLED BACK DUE TO EXCEPTION", ee);
 		}
+		logger.info("questionDAOMethod :: Exit::  languageCd: {} userCd {} ", languageCd, userCd);
 
 		return sectionSet;
 
@@ -495,7 +494,7 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 				// Top level question
 			} else {
 				// I do have a parent - I need to add myself to parent
-				Question parentQuestion = findQuestionInSet(parentStub,questionSet);
+				Question parentQuestion = findQuestionInSet(parentStub, questionSet);
 				parentQuestion.addChildQuestion(child);
 				// System.out.println("Parent"+parent.getSectionId()+"
 				// child:"+child.getSectionId());
@@ -514,17 +513,17 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 		while (childIterator.hasNext()) {
 			Section child = childIterator.next();
 			int parentSectionId = child.getParentSectionId();
-			
+
 			Section parentStub = new Section();
 			parentStub.setSectionId(parentSectionId);
-			if (parentSectionId <=0 ) {
+			if (parentSectionId <= 0) {
 				// I don't have a parent. I am at level 1
 				child.setSectionLevel(1);
 				// System.out.println("No Parent"+"
 				// child:"+child.getSectionId());
 			} else {
 				// I do have a parent - I need to add myself to parent
-				Section parent = findSectionInSet(parentStub,sectionSet);
+				Section parent = findSectionInSet(parentStub, sectionSet);
 				parent.addChildSection(child);
 				// System.out.println("Parent"+parent.getSectionId()+"
 				// child:"+child.getSectionId());
@@ -551,7 +550,7 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 				int parentSetSectionId = levelSetSection.getParentSectionId();
 				Section parentSetSectionStub = new Section();
 				parentSetSectionStub.setSectionId(parentSetSectionId);
-				Section parentSetSection = findSectionInSet(parentSetSectionStub,sectionSet);
+				Section parentSetSection = findSectionInSet(parentSetSectionStub, sectionSet);
 				if ((parentSetSectionId <= 0)) {
 					// System.out.println("Parents current
 					// level:"+parentSetSection.getSectionLevel());
@@ -587,25 +586,19 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 			}
 
 			/*
-			Iterator<Section> p = sectionSet.iterator();
-			while (p.hasNext()) {
-				Section ps = p.next();
-				// System.out.print("My id is"+ps.getSectionId()+" Some of us
-				// need to be at level 1: :"+ps.getSectionLevel());
-				if (ps.getParentSection() == null) {
-					// System.out.println(" I dont have a parent");;
-				} else {
-					// System.out.println(" Myparent is at
-					// "+ps.getParentSection().getSectionLevel()+" level with id
-					// "+ps.getParentSection().getSectionId());
-				}
-				*/
-
-			}
+			 * Iterator<Section> p = sectionSet.iterator(); while (p.hasNext())
+			 * { Section ps = p.next(); // System.out.print("My id is"
+			 * +ps.getSectionId()+" Some of us // need to be at level 1:
+			 * :"+ps.getSectionLevel()); if (ps.getParentSection() == null) { //
+			 * System.out.println(" I dont have a parent");; } else { //
+			 * System.out.println(" Myparent is at //
+			 * "+ps.getParentSection().getSectionLevel()+" level with id //
+			 * "+ps.getParentSection().getSectionId()); }
+			 */
 
 		}
 
-	
+	}
 
 	public DataSource getDataSource() {
 		return dataSource;

@@ -1,0 +1,641 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.omg.org/bpmn20" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:drools="http://www.jboss.org/drools" id="_JnC-sAqFEeaW-_tCvpZVSw" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd" exporter="jBPM Designer" exporterVersion="6.2.0" expressionLanguage="http://www.mvel.org/2.0" targetNamespace="http://www.omg.org/bpmn20" typeLanguage="http://www.java.com/javaTypes">
+  <bpmn2:itemDefinition id="_statusItem" structureRef="String"/>
+  <bpmn2:itemDefinition id="_UserTask_2_SkippableInputXItem" structureRef="Object"/>
+  <bpmn2:itemDefinition id="__jbpm-unique-3_LocaleInputXItem" structureRef="Object"/>
+  <bpmn2:itemDefinition id="__jbpm-unique-3_CommentInputXItem" structureRef="Object"/>
+  <bpmn2:itemDefinition id="__jbpm-unique-3_CreatedByInputXItem" structureRef="Object"/>
+  <bpmn2:itemDefinition id="__jbpm-unique-3_SkippableInputXItem" structureRef="Object"/>
+  <bpmn2:itemDefinition id="__jbpm-unique-3_GroupIdInputXItem" structureRef="Object"/>
+  <bpmn2:itemDefinition id="__jbpm-unique-161_internalStatusInputXItem" structureRef="String"/>
+  <bpmn2:itemDefinition id="__jbpm-unique-161_internalStatusOutputXItem" structureRef="String"/>
+  <bpmn2:itemDefinition id="__jbpm-unique-162_internalStatusInputXItem" structureRef="String"/>
+  <bpmn2:itemDefinition id="__jbpm-unique-162_internalStatusOutputXItem" structureRef="String"/>
+  <bpmn2:itemDefinition id="__jbpm-unique-170_internalStatusInputXItem" structureRef="String"/>
+  <bpmn2:itemDefinition id="__jbpm-unique-170_internalStatusOutputXItem" structureRef="String"/>
+  <bpmn2:itemDefinition id="__jbpm-unique-171_internalStatusInputXItem" structureRef="String"/>
+  <bpmn2:itemDefinition id="__jbpm-unique-171_internalStatusOutputXItem" structureRef="String"/>
+  <bpmn2:process id="Mortgage-Origination.MortgageProcessing" drools:packageName="org.jbpm" drools:version="1.0" name="MortgageProcessing" isExecutable="true">
+    <bpmn2:property id="status" itemSubjectRef="_statusItem"/>
+    <bpmn2:startEvent id="StartEvent_1" drools:selectable="true" color:background-color="#9acd32" color:border-color="#000000" color:color="#000000" name="Start">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Start]]></drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Start]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:outgoing>StartEvent_1-ScriptTask_2</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:scriptTask id="ScriptTask_2" drools:selectable="true" color:background-color="#fafad2" color:border-color="#000000" color:color="#000000" name="Start" scriptFormat="http://www.java.com/java">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Start]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>StartEvent_1-ScriptTask_2</bpmn2:incoming>
+      <bpmn2:outgoing>ScriptTask_2-_jbpm-unique-161</bpmn2:outgoing>
+      <bpmn2:script><![CDATA[
+System.out.println("Parent-process id = "+kcontext.getProcessInstance().getId());]]></bpmn2:script>
+    </bpmn2:scriptTask>
+    <bpmn2:userTask id="UserTask_2" drools:selectable="true" drools:scriptFormat="http://www.java.com/java" color:background-color="#fafad2" color:border-color="#000000" color:color="#000000" name="ConfirmIntent ">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[ConfirmIntent ]]></drools:metaValue>
+        </drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java">
+          <drools:script><![CDATA[System.out.println("Process id = "+kcontext.getProcessInstance().getId());
+status = status + ":" + kcontext.getNodeInstance().getNodeName() + "=Started";
+kcontext.setVariable("status",status);
+System.out.println(status);]]></drools:script>
+        </drools:onEntry-script>
+        <drools:onExit-script scriptFormat="http://www.java.com/java">
+          <drools:script><![CDATA[System.out.println("Process id = "+kcontext.getProcessInstance().getId());
+status = status.replace(kcontext.getNodeInstance().getNodeName() + "=Started", kcontext.getNodeInstance().getNodeName() + "=Completed");
+kcontext.setVariable("status",status);
+System.out.println(status);]]></drools:script>
+        </drools:onExit-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_jbpm-unique-161-UserTask_2</bpmn2:incoming>
+      <bpmn2:outgoing>UserTask_2-_jbpm-unique-162</bpmn2:outgoing>
+      <bpmn2:ioSpecification id="_JnC-sQqFEeaW-_tCvpZVSw">
+        <bpmn2:dataInput id="UserTask_2_TaskNameInputX" name="TaskName"/>
+        <bpmn2:dataInput id="UserTask_2_SkippableInputX" drools:dtype="Object" itemSubjectRef="_UserTask_2_SkippableInputXItem" name="Skippable"/>
+        <bpmn2:inputSet id="_JnC-sgqFEeaW-_tCvpZVSw">
+          <bpmn2:dataInputRefs>UserTask_2_SkippableInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>UserTask_2_TaskNameInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet id="_JnC-swqFEeaW-_tCvpZVSw"/>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation id="_JnC-tAqFEeaW-_tCvpZVSw">
+        <bpmn2:targetRef>UserTask_2_TaskNameInputX</bpmn2:targetRef>
+        <bpmn2:assignment id="_JnC-tQqFEeaW-_tCvpZVSw">
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression" id="_JnC-tgqFEeaW-_tCvpZVSw">Task2</bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression" id="_JnC-twqFEeaW-_tCvpZVSw">UserTask_2_TaskNameInputX</bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation id="_JnC-uAqFEeaW-_tCvpZVSw">
+        <bpmn2:targetRef>UserTask_2_SkippableInputX</bpmn2:targetRef>
+        <bpmn2:assignment id="_JnC-uQqFEeaW-_tCvpZVSw">
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression" id="_JnC-ugqFEeaW-_tCvpZVSw">true</bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression" id="_JnC-uwqFEeaW-_tCvpZVSw">UserTask_2_SkippableInputX</bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:potentialOwner id="_JnC-vAqFEeaW-_tCvpZVSw">
+        <bpmn2:resourceAssignmentExpression id="_JnC-vQqFEeaW-_tCvpZVSw">
+          <bpmn2:formalExpression id="_JnC-vgqFEeaW-_tCvpZVSw">krisv</bpmn2:formalExpression>
+        </bpmn2:resourceAssignmentExpression>
+      </bpmn2:potentialOwner>
+    </bpmn2:userTask>
+    <bpmn2:userTask id="_jbpm-unique-3" drools:selectable="true" drools:scriptFormat="http://www.java.com/java" color:background-color="#fafad2" color:border-color="#000000" color:color="#000000" name="Disburse Funds">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Disburse Funds]]></drools:metaValue>
+        </drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java">
+          <drools:script><![CDATA[System.out.println("Process id = "+kcontext.getProcessInstance().getId());
+status = status + ":" + kcontext.getNodeInstance().getNodeName() + "=Started";
+kcontext.setVariable("status",status);
+System.out.println(status);]]></drools:script>
+        </drools:onEntry-script>
+        <drools:onExit-script scriptFormat="http://www.java.com/java">
+          <drools:script><![CDATA[System.out.println("Process id = "+kcontext.getProcessInstance().getId());
+status = status.replace(kcontext.getNodeInstance().getNodeName() + "=Started", kcontext.getNodeInstance().getNodeName() + "=Completed");
+kcontext.setVariable("status",status);
+System.out.println(status);]]></drools:script>
+        </drools:onExit-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_jbpm-unique-171-_jbpm-unique-3</bpmn2:incoming>
+      <bpmn2:outgoing>_jbpm-unique-3-_jbpm-unique-4</bpmn2:outgoing>
+      <bpmn2:ioSpecification id="_JnC-vwqFEeaW-_tCvpZVSw">
+        <bpmn2:dataInput id="_jbpm-unique-3_TaskNameInputX" name="TaskName"/>
+        <bpmn2:dataInput id="_jbpm-unique-3_LocaleInputX" drools:dtype="Object" itemSubjectRef="__jbpm-unique-3_LocaleInputXItem" name="Locale"/>
+        <bpmn2:dataInput id="_jbpm-unique-3_CommentInputX" drools:dtype="Object" itemSubjectRef="__jbpm-unique-3_CommentInputXItem" name="Comment"/>
+        <bpmn2:dataInput id="_jbpm-unique-3_CreatedByInputX" drools:dtype="Object" itemSubjectRef="__jbpm-unique-3_CreatedByInputXItem" name="CreatedBy"/>
+        <bpmn2:dataInput id="_jbpm-unique-3_SkippableInputX" drools:dtype="Object" itemSubjectRef="__jbpm-unique-3_SkippableInputXItem" name="Skippable"/>
+        <bpmn2:dataInput id="_jbpm-unique-3_GroupIdInputX" drools:dtype="Object" itemSubjectRef="__jbpm-unique-3_GroupIdInputXItem" name="GroupId"/>
+        <bpmn2:inputSet id="_JnC-wAqFEeaW-_tCvpZVSw">
+          <bpmn2:dataInputRefs>_jbpm-unique-3_LocaleInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>_jbpm-unique-3_CommentInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>_jbpm-unique-3_CreatedByInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>_jbpm-unique-3_SkippableInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>_jbpm-unique-3_GroupIdInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>_jbpm-unique-3_TaskNameInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet id="_JnC-wQqFEeaW-_tCvpZVSw"/>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation id="_JnC-wgqFEeaW-_tCvpZVSw">
+        <bpmn2:targetRef>_jbpm-unique-3_TaskNameInputX</bpmn2:targetRef>
+        <bpmn2:assignment id="_JnC-wwqFEeaW-_tCvpZVSw">
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression" id="_JnC-xAqFEeaW-_tCvpZVSw">Task6</bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression" id="_JnC-xQqFEeaW-_tCvpZVSw">_jbpm-unique-3_TaskNameInputX</bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation id="_JnC-xgqFEeaW-_tCvpZVSw">
+        <bpmn2:targetRef>_jbpm-unique-3_GroupIdInputX</bpmn2:targetRef>
+        <bpmn2:assignment id="_JnC-xwqFEeaW-_tCvpZVSw">
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression" id="_JnC-yAqFEeaW-_tCvpZVSw"><![CDATA[ClosingAgent]]></bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression" id="_JnC-yQqFEeaW-_tCvpZVSw">_jbpm-unique-3_GroupIdInputX</bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation id="_JnC-ygqFEeaW-_tCvpZVSw">
+        <bpmn2:targetRef>_jbpm-unique-3_SkippableInputX</bpmn2:targetRef>
+        <bpmn2:assignment id="_JnC-ywqFEeaW-_tCvpZVSw">
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression" id="_JnC-zAqFEeaW-_tCvpZVSw">false</bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression" id="_JnC-zQqFEeaW-_tCvpZVSw">_jbpm-unique-3_SkippableInputX</bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation id="_JnC-zgqFEeaW-_tCvpZVSw">
+        <bpmn2:targetRef>_jbpm-unique-3_CommentInputX</bpmn2:targetRef>
+        <bpmn2:assignment id="_JnC-zwqFEeaW-_tCvpZVSw">
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression" id="_JnC-0AqFEeaW-_tCvpZVSw"><![CDATA[null]]></bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression" id="_JnC-0QqFEeaW-_tCvpZVSw">_jbpm-unique-3_CommentInputX</bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation id="_JnC-0gqFEeaW-_tCvpZVSw">
+        <bpmn2:targetRef>_jbpm-unique-3_LocaleInputX</bpmn2:targetRef>
+        <bpmn2:assignment id="_JnC-0wqFEeaW-_tCvpZVSw">
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression" id="_JnC-1AqFEeaW-_tCvpZVSw"><![CDATA[en-UK]]></bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression" id="_JnC-1QqFEeaW-_tCvpZVSw">_jbpm-unique-3_LocaleInputX</bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation id="_JnC-1gqFEeaW-_tCvpZVSw">
+        <bpmn2:targetRef>_jbpm-unique-3_CreatedByInputX</bpmn2:targetRef>
+        <bpmn2:assignment id="_JnDlwAqFEeaW-_tCvpZVSw">
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression" id="_JnDlwQqFEeaW-_tCvpZVSw"><![CDATA[null]]></bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression" id="_JnDlwgqFEeaW-_tCvpZVSw">_jbpm-unique-3_CreatedByInputX</bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:potentialOwner id="_JnDlwwqFEeaW-_tCvpZVSw">
+        <bpmn2:resourceAssignmentExpression id="_JnDlxAqFEeaW-_tCvpZVSw">
+          <bpmn2:formalExpression id="_JnDlxQqFEeaW-_tCvpZVSw">krisv</bpmn2:formalExpression>
+        </bpmn2:resourceAssignmentExpression>
+      </bpmn2:potentialOwner>
+    </bpmn2:userTask>
+    <bpmn2:scriptTask id="_jbpm-unique-4" drools:selectable="true" color:background-color="#fafad2" color:border-color="#000000" color:color="#000000" name="Script" scriptFormat="http://www.java.com/java">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Script]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_jbpm-unique-3-_jbpm-unique-4</bpmn2:incoming>
+      <bpmn2:outgoing>_jbpm-unique-4-_jbpm-unique-5</bpmn2:outgoing>
+      <bpmn2:script><![CDATA[long id = kcontext.getProcessInstance().getId();
+String log = "process " + id + " finished";
+System.out.println(log);]]></bpmn2:script>
+    </bpmn2:scriptTask>
+    <bpmn2:endEvent id="_jbpm-unique-5" drools:selectable="true" color:background-color="#ff6347" color:border-color="#000000" color:color="#000000" name="End">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[End]]></drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[End]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_jbpm-unique-4-_jbpm-unique-5</bpmn2:incoming>
+      <bpmn2:terminateEventDefinition id="_JnDlxgqFEeaW-_tCvpZVSw"/>
+    </bpmn2:endEvent>
+    <bpmn2:callActivity id="_jbpm-unique-161" drools:selectable="true" drools:independent="false" drools:waitForCompletion="true" color:background-color="#fafad2" color:border-color="#000000" color:color="#000000" name="Apply" calledElement="com.myorg.losworkflow.workflow.MortgageOriginationApplyProcess">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Apply]]></drools:metaValue>
+        </drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java">
+          <drools:script><![CDATA[System.out.println("Process id = "+kcontext.getProcessInstance().getId());
+status = "Apply=Started";
+kcontext.setVariable("status",status);
+System.out.println(status);]]></drools:script>
+        </drools:onEntry-script>
+        <drools:onExit-script scriptFormat="http://www.java.com/java">
+          <drools:script><![CDATA[System.out.println("Process id = "+kcontext.getProcessInstance().getId());
+status = status.replace(kcontext.getNodeInstance().getNodeName() + "=Started", kcontext.getNodeInstance().getNodeName() + "=Completed");
+kcontext.setVariable("status",status);
+System.out.println(status);]]></drools:script>
+        </drools:onExit-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>ScriptTask_2-_jbpm-unique-161</bpmn2:incoming>
+      <bpmn2:outgoing>_jbpm-unique-161-UserTask_2</bpmn2:outgoing>
+      <bpmn2:ioSpecification id="_JnDlxwqFEeaW-_tCvpZVSw">
+        <bpmn2:dataInput id="_jbpm-unique-161_internalStatusInputX" drools:dtype="String" itemSubjectRef="__jbpm-unique-161_internalStatusInputXItem" name="internalStatus"/>
+        <bpmn2:dataOutput id="_jbpm-unique-161_internalStatusOutputX" drools:dtype="String" itemSubjectRef="__jbpm-unique-161_internalStatusOutputXItem" name="internalStatus"/>
+        <bpmn2:inputSet id="_JnDlyAqFEeaW-_tCvpZVSw">
+          <bpmn2:dataInputRefs>_jbpm-unique-161_internalStatusInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet id="_JnDlyQqFEeaW-_tCvpZVSw">
+          <bpmn2:dataOutputRefs>_jbpm-unique-161_internalStatusOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation id="_JnDlygqFEeaW-_tCvpZVSw">
+        <bpmn2:sourceRef>status</bpmn2:sourceRef>
+        <bpmn2:targetRef>_jbpm-unique-161_internalStatusInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation id="_JnDlywqFEeaW-_tCvpZVSw">
+        <bpmn2:sourceRef>_jbpm-unique-161_internalStatusOutputX</bpmn2:sourceRef>
+        <bpmn2:targetRef>status</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:callActivity>
+    <bpmn2:callActivity id="_jbpm-unique-162" drools:selectable="true" drools:independent="false" drools:waitForCompletion="true" color:background-color="#fafad2" color:border-color="#000000" color:color="#000000" name="Collect Info" calledElement="com.myorg.losworkflow.workflow.MortgageOrigination.CollectInfo">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Collect Info]]></drools:metaValue>
+        </drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java">
+          <drools:script><![CDATA[System.out.println("Process id = "+kcontext.getProcessInstance().getId());
+status = status + ":" + kcontext.getNodeInstance().getNodeName() + "=Started";
+kcontext.setVariable("status",status);
+System.out.println(status);]]></drools:script>
+        </drools:onEntry-script>
+        <drools:onExit-script scriptFormat="http://www.java.com/java">
+          <drools:script><![CDATA[System.out.println("Process id = "+kcontext.getProcessInstance().getId());
+status = status.replace(kcontext.getNodeInstance().getNodeName() + "=Started", kcontext.getNodeInstance().getNodeName() + "=Completed");
+kcontext.setVariable("status",status);
+System.out.println(status);]]></drools:script>
+        </drools:onExit-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>UserTask_2-_jbpm-unique-162</bpmn2:incoming>
+      <bpmn2:outgoing>_jbpm-unique-162-_jbpm-unique-170</bpmn2:outgoing>
+      <bpmn2:ioSpecification id="_JnDlzAqFEeaW-_tCvpZVSw">
+        <bpmn2:dataInput id="_jbpm-unique-162_internalStatusInputX" drools:dtype="String" itemSubjectRef="__jbpm-unique-162_internalStatusInputXItem" name="internalStatus"/>
+        <bpmn2:dataOutput id="_jbpm-unique-162_internalStatusOutputX" drools:dtype="String" itemSubjectRef="__jbpm-unique-162_internalStatusOutputXItem" name="internalStatus"/>
+        <bpmn2:inputSet id="_JnDlzQqFEeaW-_tCvpZVSw">
+          <bpmn2:dataInputRefs>_jbpm-unique-162_internalStatusInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet id="_JnDlzgqFEeaW-_tCvpZVSw">
+          <bpmn2:dataOutputRefs>_jbpm-unique-162_internalStatusOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation id="_JnDlzwqFEeaW-_tCvpZVSw">
+        <bpmn2:sourceRef>status</bpmn2:sourceRef>
+        <bpmn2:targetRef>_jbpm-unique-162_internalStatusInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation id="_JnDl0AqFEeaW-_tCvpZVSw">
+        <bpmn2:sourceRef>_jbpm-unique-162_internalStatusOutputX</bpmn2:sourceRef>
+        <bpmn2:targetRef>status</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:callActivity>
+    <bpmn2:callActivity id="_jbpm-unique-170" drools:selectable="true" drools:independent="false" drools:waitForCompletion="true" color:background-color="#fafad2" color:border-color="#000000" color:color="#000000" name="Wait for approval" calledElement="com.myorg.losworkflow.workflow.MortgageOrigination.WaitForApproval">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Wait for approval]]></drools:metaValue>
+        </drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java">
+          <drools:script><![CDATA[System.out.println("Process id = "+kcontext.getProcessInstance().getId());
+status = status + ":" + kcontext.getNodeInstance().getNodeName() + "=Started";
+kcontext.setVariable("status",status);
+System.out.println(status);]]></drools:script>
+        </drools:onEntry-script>
+        <drools:onExit-script scriptFormat="http://www.java.com/java">
+          <drools:script><![CDATA[System.out.println("Process id = "+kcontext.getProcessInstance().getId());
+status = status.replace(kcontext.getNodeInstance().getNodeName() + "=Started", kcontext.getNodeInstance().getNodeName() + "=Completed");
+kcontext.setVariable("status",status);
+System.out.println(status);]]></drools:script>
+        </drools:onExit-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_jbpm-unique-162-_jbpm-unique-170</bpmn2:incoming>
+      <bpmn2:outgoing>_jbpm-unique-170-_jbpm-unique-171</bpmn2:outgoing>
+      <bpmn2:ioSpecification id="_JnDl0QqFEeaW-_tCvpZVSw">
+        <bpmn2:dataInput id="_jbpm-unique-170_internalStatusInputX" drools:dtype="String" itemSubjectRef="__jbpm-unique-170_internalStatusInputXItem" name="internalStatus"/>
+        <bpmn2:dataOutput id="_jbpm-unique-170_internalStatusOutputX" drools:dtype="String" itemSubjectRef="__jbpm-unique-170_internalStatusOutputXItem" name="internalStatus"/>
+        <bpmn2:inputSet id="_JnDl0gqFEeaW-_tCvpZVSw">
+          <bpmn2:dataInputRefs>_jbpm-unique-170_internalStatusInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet id="_JnDl0wqFEeaW-_tCvpZVSw">
+          <bpmn2:dataOutputRefs>_jbpm-unique-170_internalStatusOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation id="_JnDl1AqFEeaW-_tCvpZVSw">
+        <bpmn2:sourceRef>status</bpmn2:sourceRef>
+        <bpmn2:targetRef>_jbpm-unique-170_internalStatusInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation id="_JnDl1QqFEeaW-_tCvpZVSw">
+        <bpmn2:sourceRef>_jbpm-unique-170_internalStatusOutputX</bpmn2:sourceRef>
+        <bpmn2:targetRef>status</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:callActivity>
+    <bpmn2:callActivity id="_jbpm-unique-171" drools:selectable="true" drools:independent="false" drools:waitForCompletion="true" color:background-color="#fafad2" color:border-color="#000000" color:color="#000000" name="Targeting to close" calledElement="com.myorg.losworkflow.workflow.MortgageOrigination.TargetingToClose">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Targeting to close]]></drools:metaValue>
+        </drools:metaData>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java">
+          <drools:script><![CDATA[System.out.println("Process id = "+kcontext.getProcessInstance().getId());
+status = status + ":" + kcontext.getNodeInstance().getNodeName() + "=Started";
+kcontext.setVariable("status",status);
+System.out.println(status);]]></drools:script>
+        </drools:onEntry-script>
+        <drools:onExit-script scriptFormat="http://www.java.com/java">
+          <drools:script><![CDATA[System.out.println("Process id = "+kcontext.getProcessInstance().getId());
+status = status.replace(kcontext.getNodeInstance().getNodeName() + "=Started", kcontext.getNodeInstance().getNodeName() + "=Completed");
+kcontext.setVariable("status",status);
+System.out.println(status);]]></drools:script>
+        </drools:onExit-script>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_jbpm-unique-170-_jbpm-unique-171</bpmn2:incoming>
+      <bpmn2:outgoing>_jbpm-unique-171-_jbpm-unique-3</bpmn2:outgoing>
+      <bpmn2:ioSpecification id="_JnDl1gqFEeaW-_tCvpZVSw">
+        <bpmn2:dataInput id="_jbpm-unique-171_internalStatusInputX" drools:dtype="String" itemSubjectRef="__jbpm-unique-171_internalStatusInputXItem" name="internalStatus"/>
+        <bpmn2:dataOutput id="_jbpm-unique-171_internalStatusOutputX" drools:dtype="String" itemSubjectRef="__jbpm-unique-171_internalStatusOutputXItem" name="internalStatus"/>
+        <bpmn2:inputSet id="_JnDl1wqFEeaW-_tCvpZVSw">
+          <bpmn2:dataInputRefs>_jbpm-unique-171_internalStatusInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet id="_JnDl2AqFEeaW-_tCvpZVSw">
+          <bpmn2:dataOutputRefs>_jbpm-unique-171_internalStatusOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation id="_JnDl2QqFEeaW-_tCvpZVSw">
+        <bpmn2:sourceRef>status</bpmn2:sourceRef>
+        <bpmn2:targetRef>_jbpm-unique-171_internalStatusInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation id="_JnDl2gqFEeaW-_tCvpZVSw">
+        <bpmn2:sourceRef>_jbpm-unique-171_internalStatusOutputX</bpmn2:sourceRef>
+        <bpmn2:targetRef>status</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:callActivity>
+    <bpmn2:sequenceFlow id="StartEvent_1-ScriptTask_2" drools:selectable="true" color:background-color="#000000" color:border-color="#000000" color:color="#000000" sourceRef="StartEvent_1" targetRef="ScriptTask_2"/>
+    <bpmn2:sequenceFlow id="_jbpm-unique-161-UserTask_2" drools:selectable="true" color:background-color="#000000" color:border-color="#000000" color:color="#000000" sourceRef="_jbpm-unique-161" targetRef="UserTask_2"/>
+    <bpmn2:sequenceFlow id="_jbpm-unique-171-_jbpm-unique-3" drools:selectable="true" color:background-color="#000000" color:border-color="#000000" color:color="#000000" sourceRef="_jbpm-unique-171" targetRef="_jbpm-unique-3"/>
+    <bpmn2:sequenceFlow id="_jbpm-unique-3-_jbpm-unique-4" drools:selectable="true" color:background-color="#000000" color:border-color="#000000" color:color="#000000" sourceRef="_jbpm-unique-3" targetRef="_jbpm-unique-4"/>
+    <bpmn2:sequenceFlow id="_jbpm-unique-4-_jbpm-unique-5" drools:selectable="true" color:background-color="#000000" color:border-color="#000000" color:color="#000000" sourceRef="_jbpm-unique-4" targetRef="_jbpm-unique-5"/>
+    <bpmn2:sequenceFlow id="ScriptTask_2-_jbpm-unique-161" drools:selectable="true" color:background-color="#000000" color:border-color="#000000" color:color="#000000" sourceRef="ScriptTask_2" targetRef="_jbpm-unique-161"/>
+    <bpmn2:sequenceFlow id="UserTask_2-_jbpm-unique-162" drools:selectable="true" color:background-color="#000000" color:border-color="#000000" color:color="#000000" sourceRef="UserTask_2" targetRef="_jbpm-unique-162"/>
+    <bpmn2:sequenceFlow id="_jbpm-unique-162-_jbpm-unique-170" drools:selectable="true" color:background-color="#000000" color:border-color="#000000" color:color="#000000" sourceRef="_jbpm-unique-162" targetRef="_jbpm-unique-170"/>
+    <bpmn2:sequenceFlow id="_jbpm-unique-170-_jbpm-unique-171" drools:selectable="true" color:background-color="#000000" color:border-color="#000000" color:color="#000000" sourceRef="_jbpm-unique-170" targetRef="_jbpm-unique-171"/>
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="_JnDl2wqFEeaW-_tCvpZVSw">
+    <bpmndi:BPMNPlane id="_JnDl3AqFEeaW-_tCvpZVSw" bpmnElement="Mortgage-Origination.MortgageProcessing">
+      <bpmndi:BPMNShape id="_JnDl3QqFEeaW-_tCvpZVSw" bpmnElement="StartEvent_1">
+        <dc:Bounds height="30.0" width="30.0" x="16.0" y="269.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_JnDl3gqFEeaW-_tCvpZVSw" bpmnElement="ScriptTask_2">
+        <dc:Bounds height="50.0" width="95.0" x="90.0" y="270.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_JnDl3wqFEeaW-_tCvpZVSw" bpmnElement="UserTask_2">
+        <dc:Bounds height="50.0" width="110.0" x="413.0" y="268.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_JnDl4AqFEeaW-_tCvpZVSw" bpmnElement="_jbpm-unique-3">
+        <dc:Bounds height="48.0" width="125.0" x="1219.0" y="269.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_JnDl4QqFEeaW-_tCvpZVSw" bpmnElement="_jbpm-unique-4">
+        <dc:Bounds height="48.0" width="80.0" x="1405.0" y="269.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_JnDl4gqFEeaW-_tCvpZVSw" bpmnElement="_jbpm-unique-5">
+        <dc:Bounds height="28.0" width="28.0" x="1517.0" y="269.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_JnDl4wqFEeaW-_tCvpZVSw" bpmnElement="_jbpm-unique-161">
+        <dc:Bounds height="60.0" width="110.0" x="241.0" y="267.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_JnDl5AqFEeaW-_tCvpZVSw" bpmnElement="_jbpm-unique-162">
+        <dc:Bounds height="60.0" width="110.0" x="590.0" y="269.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_JnDl5QqFEeaW-_tCvpZVSw" bpmnElement="_jbpm-unique-170">
+        <dc:Bounds height="60.0" width="166.0" x="761.0" y="271.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_JnDl5gqFEeaW-_tCvpZVSw" bpmnElement="_jbpm-unique-171">
+        <dc:Bounds height="60.0" width="166.0" x="985.0" y="269.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="_JnDl5wqFEeaW-_tCvpZVSw" bpmnElement="StartEvent_1-ScriptTask_2">
+        <di:waypoint xsi:type="dc:Point" x="31.0" y="284.0"/>
+        <di:waypoint xsi:type="dc:Point" x="137.5" y="295.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_JnDl6AqFEeaW-_tCvpZVSw" bpmnElement="_jbpm-unique-161-UserTask_2">
+        <di:waypoint xsi:type="dc:Point" x="296.0" y="297.0"/>
+        <di:waypoint xsi:type="dc:Point" x="468.0" y="293.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_JnDl6QqFEeaW-_tCvpZVSw" bpmnElement="_jbpm-unique-171-_jbpm-unique-3">
+        <di:waypoint xsi:type="dc:Point" x="1068.0" y="299.0"/>
+        <di:waypoint xsi:type="dc:Point" x="1281.5" y="293.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_JnDl6gqFEeaW-_tCvpZVSw" bpmnElement="_jbpm-unique-3-_jbpm-unique-4">
+        <di:waypoint xsi:type="dc:Point" x="1281.5" y="293.0"/>
+        <di:waypoint xsi:type="dc:Point" x="1445.0" y="293.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_JnDl6wqFEeaW-_tCvpZVSw" bpmnElement="_jbpm-unique-4-_jbpm-unique-5">
+        <di:waypoint xsi:type="dc:Point" x="1445.0" y="293.0"/>
+        <di:waypoint xsi:type="dc:Point" x="1531.0" y="283.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_JnDl7AqFEeaW-_tCvpZVSw" bpmnElement="ScriptTask_2-_jbpm-unique-161">
+        <di:waypoint xsi:type="dc:Point" x="137.5" y="295.0"/>
+        <di:waypoint xsi:type="dc:Point" x="296.0" y="297.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_JnDl7QqFEeaW-_tCvpZVSw" bpmnElement="UserTask_2-_jbpm-unique-162">
+        <di:waypoint xsi:type="dc:Point" x="468.0" y="293.0"/>
+        <di:waypoint xsi:type="dc:Point" x="645.0" y="299.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_JnDl7gqFEeaW-_tCvpZVSw" bpmnElement="_jbpm-unique-162-_jbpm-unique-170">
+        <di:waypoint xsi:type="dc:Point" x="645.0" y="299.0"/>
+        <di:waypoint xsi:type="dc:Point" x="844.0" y="301.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_JnDl7wqFEeaW-_tCvpZVSw" bpmnElement="_jbpm-unique-170-_jbpm-unique-171">
+        <di:waypoint xsi:type="dc:Point" x="844.0" y="301.0"/>
+        <di:waypoint xsi:type="dc:Point" x="1068.0" y="299.0"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn2:relationship id="_JnDl8AqFEeaW-_tCvpZVSw" type="BPSimData">
+    <bpmn2:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario xsi:type="bpsim:Scenario" id="default" name="Simulationscenario">
+          <bpsim:ScenarioParameters xsi:type="bpsim:ScenarioParameters" baseTimeUnit="min"/>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="_jbpm-unique-162" id="_JnDl8QqFEeaW-_tCvpZVSw">
+            <bpsim:TimeParameters xsi:type="bpsim:TimeParameters">
+              <bpsim:ProcessingTime xsi:type="bpsim:Parameter">
+                <bpsim:UniformDistribution max="10.0" min="5.0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:CostParameters xsi:type="bpsim:CostParameters">
+              <bpsim:UnitCost xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="0.0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="UserTask_2" id="_JnDl8gqFEeaW-_tCvpZVSw">
+            <bpsim:TimeParameters xsi:type="bpsim:TimeParameters">
+              <bpsim:ProcessingTime xsi:type="bpsim:Parameter">
+                <bpsim:UniformDistribution max="10.0" min="5.0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters xsi:type="bpsim:ResourceParameters">
+              <bpsim:Availability xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="8.0"/>
+              </bpsim:Availability>
+              <bpsim:Quantity xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="1.0"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+            <bpsim:CostParameters xsi:type="bpsim:CostParameters">
+              <bpsim:UnitCost xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="0.0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="_jbpm-unique-161" id="_JnDl8wqFEeaW-_tCvpZVSw">
+            <bpsim:TimeParameters xsi:type="bpsim:TimeParameters">
+              <bpsim:ProcessingTime xsi:type="bpsim:Parameter">
+                <bpsim:UniformDistribution max="10.0" min="5.0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:CostParameters xsi:type="bpsim:CostParameters">
+              <bpsim:UnitCost xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="0.0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="_jbpm-unique-171" id="_JnDl9AqFEeaW-_tCvpZVSw">
+            <bpsim:TimeParameters xsi:type="bpsim:TimeParameters">
+              <bpsim:ProcessingTime xsi:type="bpsim:Parameter">
+                <bpsim:UniformDistribution max="10.0" min="5.0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:CostParameters xsi:type="bpsim:CostParameters">
+              <bpsim:UnitCost xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="0.0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="_jbpm-unique-161-UserTask_2" id="_JnEM0AqFEeaW-_tCvpZVSw">
+            <bpsim:ControlParameters xsi:type="bpsim:ControlParameters">
+              <bpsim:Probability xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="100.0"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="_jbpm-unique-4-_jbpm-unique-5" id="_JnEM0QqFEeaW-_tCvpZVSw">
+            <bpsim:ControlParameters xsi:type="bpsim:ControlParameters">
+              <bpsim:Probability xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="100.0"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="UserTask_2-_jbpm-unique-162" id="_JnEM0gqFEeaW-_tCvpZVSw">
+            <bpsim:ControlParameters xsi:type="bpsim:ControlParameters">
+              <bpsim:Probability xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="100.0"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="StartEvent_1-ScriptTask_2" id="_JnEM0wqFEeaW-_tCvpZVSw">
+            <bpsim:ControlParameters xsi:type="bpsim:ControlParameters">
+              <bpsim:Probability xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="100.0"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="_jbpm-unique-170-_jbpm-unique-171" id="_JnEM1AqFEeaW-_tCvpZVSw">
+            <bpsim:ControlParameters xsi:type="bpsim:ControlParameters">
+              <bpsim:Probability xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="100.0"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="_jbpm-unique-162-_jbpm-unique-170" id="_JnEM1QqFEeaW-_tCvpZVSw">
+            <bpsim:ControlParameters xsi:type="bpsim:ControlParameters">
+              <bpsim:Probability xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="100.0"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="ScriptTask_2" id="_JnEM1gqFEeaW-_tCvpZVSw">
+            <bpsim:TimeParameters xsi:type="bpsim:TimeParameters">
+              <bpsim:ProcessingTime xsi:type="bpsim:Parameter">
+                <bpsim:UniformDistribution max="10.0" min="5.0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:CostParameters xsi:type="bpsim:CostParameters">
+              <bpsim:UnitCost xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="0.0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="_jbpm-unique-4" id="_JnEM1wqFEeaW-_tCvpZVSw">
+            <bpsim:TimeParameters xsi:type="bpsim:TimeParameters">
+              <bpsim:ProcessingTime xsi:type="bpsim:Parameter">
+                <bpsim:UniformDistribution max="10.0" min="5.0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:CostParameters xsi:type="bpsim:CostParameters">
+              <bpsim:UnitCost xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="0.0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="_jbpm-unique-170" id="_JnEM2AqFEeaW-_tCvpZVSw">
+            <bpsim:TimeParameters xsi:type="bpsim:TimeParameters">
+              <bpsim:ProcessingTime xsi:type="bpsim:Parameter">
+                <bpsim:UniformDistribution max="10.0" min="5.0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:CostParameters xsi:type="bpsim:CostParameters">
+              <bpsim:UnitCost xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="0.0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="_jbpm-unique-3" id="_JnEM2QqFEeaW-_tCvpZVSw">
+            <bpsim:TimeParameters xsi:type="bpsim:TimeParameters">
+              <bpsim:ProcessingTime xsi:type="bpsim:Parameter">
+                <bpsim:UniformDistribution max="10.0" min="5.0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters xsi:type="bpsim:ResourceParameters">
+              <bpsim:Availability xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="8.0"/>
+              </bpsim:Availability>
+              <bpsim:Quantity xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="1.0"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+            <bpsim:CostParameters xsi:type="bpsim:CostParameters">
+              <bpsim:UnitCost xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="0.0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="_jbpm-unique-5" id="_JnEM2gqFEeaW-_tCvpZVSw">
+            <bpsim:TimeParameters xsi:type="bpsim:TimeParameters">
+              <bpsim:ProcessingTime xsi:type="bpsim:Parameter">
+                <bpsim:UniformDistribution max="10.0" min="5.0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="_jbpm-unique-171-_jbpm-unique-3" id="_JnEM2wqFEeaW-_tCvpZVSw">
+            <bpsim:ControlParameters xsi:type="bpsim:ControlParameters">
+              <bpsim:Probability xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="100.0"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="ScriptTask_2-_jbpm-unique-161" id="_JnEM3AqFEeaW-_tCvpZVSw">
+            <bpsim:ControlParameters xsi:type="bpsim:ControlParameters">
+              <bpsim:Probability xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="100.0"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="_jbpm-unique-3-_jbpm-unique-4" id="_JnEM3QqFEeaW-_tCvpZVSw">
+            <bpsim:ControlParameters xsi:type="bpsim:ControlParameters">
+              <bpsim:Probability xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="100.0"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="StartEvent_1" id="_JnEM3gqFEeaW-_tCvpZVSw">
+            <bpsim:TimeParameters xsi:type="bpsim:TimeParameters">
+              <bpsim:ProcessingTime xsi:type="bpsim:Parameter">
+                <bpsim:UniformDistribution max="10.0" min="5.0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ControlParameters xsi:type="bpsim:ControlParameters">
+              <bpsim:Probability xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="100.0"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn2:extensionElements>
+    <bpmn2:source>_JnC-sAqFEeaW-_tCvpZVSw</bpmn2:source>
+    <bpmn2:target>_JnC-sAqFEeaW-_tCvpZVSw</bpmn2:target>
+  </bpmn2:relationship>
+</bpmn2:definitions>

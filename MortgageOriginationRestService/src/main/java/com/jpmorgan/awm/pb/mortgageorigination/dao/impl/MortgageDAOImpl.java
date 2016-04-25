@@ -155,6 +155,8 @@ public class MortgageDAOImpl implements MortgageDAO {
 				ps2.setString(1, statusCd);
 				ps2.setString(2, jsonObject);
 				ps2.setString(3, clientPartyId);
+				ps2.setLong(4,transactionId);
+				ps2.execute();
 			}
 
 			// In the case of transaction data item we always delete and

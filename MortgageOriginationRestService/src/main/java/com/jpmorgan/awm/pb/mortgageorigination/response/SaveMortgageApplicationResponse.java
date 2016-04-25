@@ -3,10 +3,10 @@ package com.jpmorgan.awm.pb.mortgageorigination.response;
 import com.myorg.losmodel.model.LOSResponse;
 import com.myorg.losmodel.model.client.MortgageApplication;
 
-public class MortgageApplicationResponse {
+public class SaveMortgageApplicationResponse {
 
 	private long mortgageId;
-	private MortgageApplication mortgageApplication;
+	
 	private LOSResponse response;
 
 	public LOSResponse getResponse() {
@@ -25,14 +25,5 @@ public class MortgageApplicationResponse {
 		this.mortgageId = mortgageId;
 	}
 
-	public MortgageApplication getMortgageApplication() {
-		return mortgageApplication;
-	}
-
 	
-	public void setMortgageApplication(MortgageApplication mortgageApplication) {
-		this.mortgageApplication = mortgageApplication;
-	}
-	
-
 }

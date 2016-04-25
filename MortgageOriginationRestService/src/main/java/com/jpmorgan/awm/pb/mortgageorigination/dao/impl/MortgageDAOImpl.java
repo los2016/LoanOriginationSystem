@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jpmorgan.awm.pb.mortgageorigination.dao.MortgageDAO;
 import com.jpmorgan.awm.pb.mortgageorigination.request.MortgageApplicationRequest;
 import com.jpmorgan.awm.pb.mortgageorigination.response.MortgageApplicationResponse;
+import com.jpmorgan.awm.pb.mortgageorigination.response.SaveMortgageApplicationResponse;
 import com.jpmorgan.awm.pb.mortgageorigination.utils.DatabaseService;
 import com.myorg.losmodel.model.LOSResponse;
 import com.myorg.losmodel.model.client.MortgageApplication;
@@ -51,14 +52,14 @@ public class MortgageDAOImpl implements MortgageDAO {
 		return mortgageApplicationsList;
 	}
 
-	public MortgageApplicationResponse saveMortgageDetails(MortgageApplicationRequest mortgageApplicationRequest)
+	public SaveMortgageApplicationResponse saveMortgageDetails(MortgageApplicationRequest mortgageApplicationRequest)
 			throws SQLException {
-		MortgageApplicationResponse mortgageApplicationResponse = new MortgageApplicationResponse();
+		SaveMortgageApplicationResponse mortgageApplicationResponse = new SaveMortgageApplicationResponse();
 		LOSResponse response = new LOSResponse();
 
 		MortgageApplication mortgageApplication = null;
 		if (mortgageApplicationRequest != null && mortgageApplicationRequest.getMortgageApplication() != null) {
-
+			long transId = -1;
 			try {
 				mortgageApplication = mortgageApplicationRequest.getMortgageApplication();
 
@@ -68,7 +69,7 @@ public class MortgageDAOImpl implements MortgageDAO {
 				ObjectMapper mapper = new ObjectMapper();
 
 				String jsonMortgageApplication = mapper.writeValueAsString(mortgageApplication);
-				long transId =  mortgageApplication.getApplicationID();
+				transId =  mortgageApplication.getApplicationID();
 				String statusCd = mortgageApplicationRequest.getSaveType();
 				transId = upsert(attributeMap, transId, statusCd, jsonMortgageApplication,
 						mortgageApplication.getClientPartyId());
@@ -86,6 +87,7 @@ public class MortgageDAOImpl implements MortgageDAO {
 			} catch (Exception e) {
 				response.setReturnMsg("Error in Saving the Application");
 				response.setReturnType("Error");
+				mortgageApplicationResponse.setMortgageId(transId);
 				mortgageApplicationResponse.setResponse(response);
 				e.printStackTrace();
 			}

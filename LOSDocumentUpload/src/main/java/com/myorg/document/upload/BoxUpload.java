@@ -17,7 +17,8 @@ public class BoxUpload {
 	@Autowired
 	private BoxConnection _boxConnection;
 	
-	public void upload(long mortgageApplicationID, byte[] documentStream, String documentName) throws Throwable{
+	public String upload(long mortgageApplicationID, byte[] documentStream, String documentName) throws Throwable{
+		String downloadURL = null;
 		BoxAPIConnection apiConnection = _boxConnection.getAPIConnectionByDeveloperToken();
 		BoxFolder mortgageFolder = BoxConnection.getFolder(BoxFolder.getRootFolder(apiConnection), BoxConnection.BASE_MAX_DEPTH, _boxConnection.getBoxMortgageBasePath());
 		System.out.println("mortgageFolder info="+mortgageFolder);
@@ -30,7 +31,10 @@ public class BoxUpload {
 			fup.setContent(new ByteArrayInputStream(documentStream));
 			fup.setName(documentName);
 			BoxFile.Info newFileInfo = loanFolder.uploadFile(fup);
-			System.out.println("Uploaded file :"+newFileInfo.getName()+", against loanId:"+loanFolder.getInfo().getName());
+			downloadURL = newFileInfo.getResource().getDownloadURL().toString();
+			System.out.println("Uploaded file in BOX :"+newFileInfo.getName()+", against loanId:"+loanFolder.getInfo().getName()+""
+					+ "\n And downloadURL is :\n"+downloadURL);
 		}
+		return downloadURL;
 	}
 }

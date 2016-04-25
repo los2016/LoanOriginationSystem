@@ -94,16 +94,16 @@ public class DocumentService {
 			@FormDataParam("documentPayload") FormDataContentDisposition fileDetail,
 			@FormDataParam("mortgageApplicationID") Long mortgageApplicationID,
 			@FormDataParam("documentTypeId") Integer documentTypeId) throws Throwable {
-		
+		String filepath = null;
 		System.out.println("mortgageApplicationID="+mortgageApplicationID+", documentTypeId="+documentTypeId);
 		// Get the filename and build the local file path
 		Document documentMetaData = _documentDao.getDocumentDetails(documentTypeId);
 		String filename = fileDetail.getFileName();
 		if (documentMetaData != null) {
-			filename = documentMetaData.getDocumentName() + ".pdf";
+			String extension = filename.substring(filename.lastIndexOf("."), filename.length());
+			System.out.println("Extension ="+extension);
+			filename = documentMetaData.getDocumentName() + extension;
 		}
-		String directory = env.getProperty("mortgage.paths.uploadedFiles");
-		String filepath = Paths.get(directory, filename).toString();
 
 		LoanDocumentPK loanDocumentComposite = new LoanDocumentPK();
 		loanDocumentComposite.setMortgageApplicationID(mortgageApplicationID);
@@ -115,20 +115,34 @@ public class DocumentService {
 		byte[] original = IOUtils.toByteArray(uploadedInputStream);
 		byte[] copy = original.clone();
 		loanDocument.setDocumentPayload(original);
-		loanDocument.setDocumentPath(filepath);
-		_loanDocumentDao.saveDocument(loanDocument);
+		loanDocument.setDocumentName(filename);
 		
+		boolean boxUploaded = false;
+		try {
+			String downloadURL = _boxUpload.upload(mortgageApplicationID, copy, filename);
+			loanDocument.setDocumentPath(downloadURL);
+			boxUploaded = true;
+			filepath = loanDocument.getDocumentPath();
+		} catch (Exception t) {
+			System.err.println("Unable to upload to BOX. Cause :"+t.getMessage()+"\n. It will be saved in file system location");
+			t.printStackTrace();
+		}
+		
+		if(!boxUploaded) {
+			// save in file system
+			String directoryPath = env.getProperty("mortgage.paths.uploadedFiles") + File.separator + mortgageApplicationID + File.separator;
+			File directory = new File(directoryPath);
+			if (!directory.exists()) directory.mkdirs();
+			filepath = Paths.get(directoryPath, filename).toString();
 
-		// save it
-		upload(copy, filepath);
+			upload(copy, filepath);
+			loanDocument.setDocumentPath(filepath);
+		}
 		String output = "File uploaded to : " + filepath;
 		System.out.println(output);
-		try {
-			
-			_boxUpload.upload(mortgageApplicationID, copy, filename);
-		} catch (Throwable t) {
-			System.err.println("Unable to upload to BOX. Cause :"+t.getMessage()+"\n");
-		}
+
+		_loanDocumentDao.saveDocument(loanDocument);
+
 		System.out.println("Uploaded Successfully.");
 		return Response.status(200).entity(output).build();
 	}
@@ -150,7 +164,7 @@ public class DocumentService {
 				}
 			}
 		};
-		return Response.ok(stream, MediaType.APPLICATION_OCTET_STREAM).header("content-disposition","attachment; filename ="+ loanDocument.getDocumentMetadata().getDocumentName()+".pdf").build();
+		return Response.ok(stream, MediaType.APPLICATION_OCTET_STREAM).header("content-disposition","attachment; filename ="+ loanDocument.getDocumentName()).build();
 	}
 	
 	@POST

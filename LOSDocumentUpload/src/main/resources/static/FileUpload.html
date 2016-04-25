@@ -117,7 +117,7 @@
 	}
 	
 	function downloadDocument(anch) {
-		window.open(anch.innerHTML);
+		window.open(anch.innerHTML, "_blank");
 	}
 	
 	function deleteDocument() {
@@ -136,19 +136,6 @@
         }
       });
 	}
-	
-	function check_file(){
-        str=document.getElementById('documentPayload').value.toUpperCase();
-        suffix=".PDF";
-        suffix2=".pdf";
-        if(str.indexOf(suffix, str.length - suffix.length) == -1||
-                       str.indexOf(suffix2, str.length - suffix2.length) == -1){
-        	alert('File type not allowed,\nAllowed file: *.pdf');
-            document.getElementById('documentPayload').value='';
-            return false;
-        }
-        return true;
-    }
     
 </script>
 </html>

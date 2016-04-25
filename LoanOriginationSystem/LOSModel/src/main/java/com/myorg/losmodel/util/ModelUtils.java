@@ -184,8 +184,8 @@ public class ModelUtils {
 						listValue = (List<?>) field.get(obj);
 					else
 						listValue = new ArrayList<Object>();
-
-					addDbFieldVaulePrimitive(field, listValue.toArray().toString(), dbFieldValues, null,
+					//Shubhrajit Changed - 25th April
+					addDbFieldVaulePrimitive(field, listValue, dbFieldValues, null,
 							dbFieldToObjectModelMappings, parentClassName);
 				} else if (!field.getType().isArray()) {
 

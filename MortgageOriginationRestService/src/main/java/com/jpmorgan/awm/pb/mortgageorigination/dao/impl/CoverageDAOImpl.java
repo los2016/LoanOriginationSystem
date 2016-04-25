@@ -34,7 +34,7 @@ public class CoverageDAOImpl implements CoverageDAO {
 			sql = "select p.party_id as party_id from demo_client_team p where p.ADVISOR_PARTY_ID = ?";
 		}
 
-		List<Long> coverageList = jdbcTemplate.query(sql, new UsersRowMapper());
+		List<Long> coverageList = jdbcTemplate.query(sql,new Object[] { partyId },  new UsersRowMapper());
 		coverageResponse.setCoverageList(coverageList);
 
 		return coverageResponse;

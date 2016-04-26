@@ -1,34 +1,22 @@
 package com.myorg.losmodel.model;
 
-import java.util.List;
-
 public class Question {
 	
-	private String qnsId;
-	private String qnsDecs;
-	private List<Answer> answerList;
+	private Integer questionId;
+	private String rule;
 	
-	
-	public String getQnsId() {
-		return qnsId;
+	public Integer getQuestionId() {
+		return questionId;
 	}
-	public void setQnsId(String qnsId) {
-		this.qnsId = qnsId;
+	public void setQuestionId(Integer questionId) {
+		this.questionId = questionId;
 	}
-	public String getQnsDecs() {
-		return qnsDecs;
+	public String getRule() {
+		return rule;
 	}
-	public void setQnsDecs(String qnsDecs) {
-		this.qnsDecs = qnsDecs;
-	}
-	public List<Answer> getAnswerList() {
-		return answerList;
-	}
-	public void setAnswerList(List<Answer> answerList) {
-		this.answerList = answerList;
+	public void setRule(String rule) {
+		this.rule = rule;
 	}
 	
 	
-	
-
 }

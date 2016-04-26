@@ -7,6 +7,8 @@ public class ValidateQuestionResponse extends LOSResponse {
 	private List<Integer> enableFields;
 	private List<Integer> disableFields;
 	
+	private List<ValidateMesg> validateMesgList;
+	
 	public List<Integer> getEnableFields() {
 		return enableFields;
 	}
@@ -18,6 +20,14 @@ public class ValidateQuestionResponse extends LOSResponse {
 	}
 	public void setDisableFields(List<Integer> disableFields) {
 		this.disableFields = disableFields;
-	}	
+	}
+	public List<ValidateMesg> getValidateMesgList() {
+		return validateMesgList;
+	}
+	public void setValidateMesgList(List<ValidateMesg> validateMesgList) {
+		this.validateMesgList = validateMesgList;
+	}
+	
+	
 
 }

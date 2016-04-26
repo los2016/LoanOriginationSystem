@@ -11,7 +11,7 @@
 			if(loggedUser.isValid)
 			{
 				//TODO Code here
-				$scope.userProfile = loggedUser.getUserInformation();
+				//$scope.userProfile = loggedUser.getUserInformation();
 			}
 			else
 			{

@@ -4,8 +4,9 @@
 
 	function loanDocumentWorker($scope, $element, $attrs,HTTPInterfaceProvider,loggedUser)
 	{
+		
 		var $ctrl = this;
-		var $ctrl.LOAN_DOCUMENT_OBJ = {};
+		var LOAN_DOCUMENT_OBJ = {};
 
 		$ctrl.writeCustomerProperty = function(customer,property,newValue)
 		{
@@ -124,7 +125,7 @@
 				this.$router.navigate(['Login']);
 			}
 		}	
-
+	
 	}
 
 	angular.module("mainModule").component("appLoanDetail",{
@@ -132,6 +133,8 @@
 		controller:loanDocumentWorker,
 		bindings:{
 			$router: '<',
-			LOAN_ID:'<'}
+			LOAN_ID:'<'
+		}
 	});
+
 })(window.angular);

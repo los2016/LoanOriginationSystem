@@ -21,23 +21,23 @@
 				break;
 				
 				case "QUESTION_BANK":
-				SERVICE_URL = "";
+				SERVICE_URL = "http://localhost:8080/getMortgageQuestionsMetaData";
 				break;
 				
 				case "VALIDATE_QUESTION":
-				SERVICE_URL = "";
+				SERVICE_URL = "http://localhost:8080/validateQuestion";
 				break;
 
-				case "VALIDATE_LOAN":
-				SERVICE_URL = "";
+				case "GET_QUESTION_RULE":
+				SERVICE_URL = "http://localhost:8080/getRuleforquestions";
 				break;
 				
 				case "GET_MORTGAGE":
-				SERVICE_URL = "";
+				SERVICE_URL = "http://localhost:8080/getMortgageApplicationsDetails";
 				break;
 				
 				case "SAVE_MORTGAGE":
-				SERVICE_URL = "";
+				SERVICE_URL = "http://localhost:8080/saveMortgageApplication";
 				break;
 				
 				case "UPLOAD_FILE":

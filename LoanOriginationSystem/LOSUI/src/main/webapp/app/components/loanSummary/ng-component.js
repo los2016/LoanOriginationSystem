@@ -24,7 +24,7 @@
 		controller:loanSummaryController,
 		$routeConfig:[
 		{
-			path:"/timeline/",
+			path:"/list/",
 			name:"Timeline",
 			useAsDefault:true,
 			component:"appLoanTimeline"

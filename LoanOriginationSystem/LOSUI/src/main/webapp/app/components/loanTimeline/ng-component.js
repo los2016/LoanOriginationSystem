@@ -5,7 +5,7 @@
 	function loanTimeline($scope, $element, $attrs,HTTPInterfaceProvider,loggedUser)
 	{
 		var $ctrl = this;
-
+		
 		this.$routerOnActivate = function()
 		{
 			if(loggedUser.isValid)

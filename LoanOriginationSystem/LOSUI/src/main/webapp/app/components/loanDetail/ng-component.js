@@ -7,6 +7,8 @@
 		
 		var $ctrl = this;
 		var LOAN_DOCUMENT_OBJ = {};
+		var LOAN_QUESTIONS = {};
+		var LOAN_QUESTIONS_RULES = {};
 
 		$ctrl.writeCustomerProperty = function(customer,property,newValue)
 		{
@@ -69,6 +71,66 @@
 
 		}
 
+		$ctrl.loadQuestionRule = function()
+		{
+			var HTTP_POST={};
+			HTTP_POST.questionBank="mortgageLOS";
+
+			var Q_Obj = HTTPInterfaceProvider.initHTTPConnection("GET_QUESTION_RULE","POST",HTTP_POST);
+				
+			Q_Obj.then(function(RESPONSE_DATA){
+
+				if(RESPONSE_DATA.status==200 && RESPONSE_DATA.data.returnType=="success")
+				{
+					console.log("success - loanDetail");
+					LOAN_QUESTIONS_RULES = RESPONSE_DATA.data;
+				}
+				if(RESPONSE_DATA.status==200 && RESPONSE_DATA.data.returnType=="warning")
+				{
+					console.log("warning - loanDetail");
+				}
+				if(RESPONSE_DATA.status==200 && RESPONSE_DATA.data.returnType=="error")
+				{
+					console.log("error - loanDetail");
+				}
+				else
+				{
+					console.log("other error - loanDetail");
+				}
+
+			});
+
+		}
+
+		$ctrl.loadQuestionBank = function()
+		{
+			var HTTP_POST={};
+			HTTP_POST.questionBank="mortgageLOS";
+
+			var Q_Obj = HTTPInterfaceProvider.initHTTPConnection("QUESTION_BANK","POST",HTTP_POST);
+				
+			Q_Obj.then(function(RESPONSE_DATA){
+
+				if(RESPONSE_DATA.status==200 && RESPONSE_DATA.data.returnType=="success")
+				{
+					console.log("success - loanDetail");
+					LOAN_QUESTIONS = RESPONSE_DATA.data;
+				}
+				if(RESPONSE_DATA.status==200 && RESPONSE_DATA.data.returnType=="warning")
+				{
+					console.log("warning - loanDetail");
+				}
+				if(RESPONSE_DATA.status==200 && RESPONSE_DATA.data.returnType=="error")
+				{
+					console.log("error - loanDetail");
+				}
+				else
+				{
+					console.log("other error - loanDetail");
+				}
+
+			});
+		}
 
 		$ctrl.getClientType = function(TYPE)
 		{
@@ -88,29 +150,49 @@
 				$ctrl.LOAN_DOCUMENT_OBJ = result.data;
 			});
 		}
-		
-
-		$ctrl.loadQuestionBank = function()
-		{
-
-		}
 
 		$ctrl.getLoanDocument = function(LOAN_ID)
 		{
-			
+			// This will load the customer object entity or individual based on the getClientType()
+			var HTTP_POST = {};
+			HTTP_POST.clientOrAdvisor = "";
+			HTTP_POST.clientOrAdvisorId = "";
+
+
 		}
 
-		$ctrl.saveLoanDocument=function()
+		$ctrl.saveLoanDocument=function(DO_EVENT)
 		{
+			var HTTP_POST={};
+			HTTP_POST.questionBank="mortgageLOS";
+			HTTP_POST.saveType = DO_EVENT;
+			HTTP_POST.morgatgeApplicatioObject = LOAN_DOCUMENT_OBJ;
 
+			var Q_Obj = HTTPInterfaceProvider.initHTTPConnection("SAVE_MORTGAGE","POST",HTTP_POST);
+				
+			Q_Obj.then(function(RESPONSE_DATA){
 
+				if(RESPONSE_DATA.status==200 && RESPONSE_DATA.data.returnType=="success")
+				{
+					console.log("success - loanDetail");
+					LOAN_QUESTIONS = RESPONSE_DATA.data;
+				}
+				if(RESPONSE_DATA.status==200 && RESPONSE_DATA.data.returnType=="warning")
+				{
+					console.log("warning - loanDetail");
+				}
+				if(RESPONSE_DATA.status==200 && RESPONSE_DATA.data.returnType=="error")
+				{
+					console.log("error - loanDetail");
+				}
+				else
+				{
+					console.log("other error - loanDetail");
+				}
+
+			});
 		}
 
-		$ctrl.updateLoanDocument=function()
-		{
-
-			
-		}
 
 		$ctrl.$routerOnActivate = function()
 		{
@@ -133,7 +215,7 @@
 		controller:loanDocumentWorker,
 		$routeConfig:[
 		{
-			path:"/timeline/",
+			path:"/detail/",
 			name:"Timeline",
 			useAsDefault:true,
 			component:"appLoanTimeline"

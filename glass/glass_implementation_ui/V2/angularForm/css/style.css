@@ -1,0 +1,26 @@
+body {
+    margin: 10px;
+    padding: 10px;
+}
+form {
+    max-width: 480px;
+    margin: auto;
+}
+.form-group >[class*="col-"] + .ws-errorbox {
+    padding: 0 15px;
+}
+
+#connectedUsers{
+    height: 100px;
+    overflow-y: auto;
+}
+
+.form-group {
+    margin-bottom: 8px;
+}
+
+.glow {
+    outline: none;
+    border-color: #9ecaed;
+    box-shadow: 0 0 10px #9ecaed;
+}

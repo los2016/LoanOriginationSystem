@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+<title>Form</title>
+<script src="src/sockjs-0.3.4.js"></script>
+<script src="src/stomp.js"></script>
+<script type="text/javascript" src="src/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="src/bootstrap.min.js"></script>
+<script type="text/javascript" src="src/angular.min.js"></script>
+<script type="text/javascript" type="text/javascript" src="controllers/appModule.js"></script>
+<script type="text/javascript" type="text/javascript" src="services/appServices.js"></script>
+<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+<link href="css/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<form action="#" class="form-horizontal ws-validate"  ng-controller = "myCtrl">
+    <div class="form-group">
+        <label for="inputFrom" class="control-label">From</label>
+        <input type="text" ng-model="dataFrom" class="form-control" id="inputFrom" placeholder="From" disabled />
+		<!-- <label for="inputTo" class="control-label">To</label>
+        <input type="text" ng-model="dataTo" class="form-control" id="inputTo" placeholder="To" required /> -->
+    </div>
+	<div class="form-group">
+	  <label for="inputTo">To</label>
+	  <select ng-model="dataTo" class="form-control" id="inputTo" required>
+		<option>Choose Recipient</option>
+	  </select>
+	</div>
+	<div class="form-group">
+		<label for="inputQuery" class="control-label">Query</label>
+        <input type="text" ng-model="dataQuery" class="form-control" id="inputQuery" placeholder="Enter Query" required />
+        <label for="inputMessage" class="control-label">Message</label>
+		<textarea ng-model="dataMessage" class="form-control" rows="5" id="inputMessage" placeholder="Enter Message"></textarea>
+    </div>	
+	<div class="form-group">
+		<label for="inputContact" class="control-label">Contact Number</label>
+        <input type="text" ng-model="dataContact" class="form-control" id="inputContact" placeholder="Mobile Number" />
+        <label for="inputEmail" class="control-label">Email</label>
+        <input type="text" ng-model="dataEmail" class="form-control" id="inputEmail" placeholder="Email" />
+    </div>
+	<div class="form-group">
+<label class="control-label">Connected Users</label>
+<ul class="list-group" id="connectedUsers">
+</ul>
+</div>
+</form>
+</body>

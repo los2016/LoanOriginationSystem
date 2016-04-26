@@ -2,22 +2,45 @@
 {
 	"use strict";
 
-	function authenticateUser($scope, $element, $attrs,HTTPInterfaceProvider)
+	function authenticateUser($scope, $element, $attrs,HTTPInterfaceProvider,loggedUser)
 	{
-		this.authenticateLogin = function()
+
+		var $ctrl = this;
+
+		this.$routerOnActivate = function()
 		{
-			var HTTP_POST={};
 
-			HTTP_POST.userid = $scope.userName;
-			HTTP_POST.password = $scope.userPassword;
+			if(loggedUser.isValid)
+			{
+				this.$router.navigate(['Home']);				
+			}
 
-			this.$router.navigate(['Home']);
-			/*var Q_Obj = HTTPInterfaceProvider.initHTTPConnection("AUTH_USER","POST",HTTP_POST);
-			Q_Obj.then(function(RESPONSE_DATA){
+			$ctrl.authenticateLogin = function()
+			{
+				var HTTP_POST={};
 
-			});
-			*/
-		}
+				HTTP_POST.userid = $scope.userName;
+				HTTP_POST.password = $scope.userPassword;
+				
+				var Q_Obj = HTTPInterfaceProvider.initHTTPConnection("AUTH_USER","POST",HTTP_POST);
+				
+				Q_Obj.then(function(RESPONSE_DATA){
+
+					if(RESPONSE_DATA.status==200 && RESPONSE_DATA.data.returnType=="success")
+					{
+						loggedUser.setUserInformation(RESPONSE_DATA.data);
+						loggedUser.isValid=true;
+						this.$router.navigate(['Home']);
+					}
+					else
+					{
+						console.log("error in login");
+					}
+
+				});
+				
+			};
+		}	
 	}
 
 	angular.module("mainModule").component("appLogin",{

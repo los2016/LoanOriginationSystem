@@ -1,83 +1,137 @@
-"use strict";
-
-function Customer([])
+(function(angular)
 {
+	"use strict";
 
-	this.getCustomerProfile=function()
+	function loanDocumentWorker($scope, $element, $attrs,HTTPInterfaceProvider,loggedUser)
 	{
-		
-		
-		
-		
-	}
+		var $ctrl = this;
+		var $ctrl.LOAN_DOCUMENT_OBJ = {};
 
-
-	var j = "@entityClient@legalAddress@contactInfo@workemail";
-	var k = "@applicationID";
-	var l = "@entityClient@isHighlySensitive";
-
-this.writeCustomerProperty = function(customer,property,newValue)
-{
-	var tmp="";
-	var a = property.split("@");
-
-	if(a.length>2)
-	{
-		var n = a.length-1;
-
-		for(ctr=1;ctr<n;ctr++)
+		$ctrl.writeCustomerProperty = function(customer,property,newValue)
 		{
-			if(tmp=="")
+			var tmp="";
+			var a = property.split("@");
+
+			if(a.length>2)
 			{
-				tmp = customer[a[ctr]];
+				var n = a.length-1;
+
+				for(ctr=1;ctr<n;ctr++)
+				{
+					if(tmp=="")
+					{
+						tmp = customer[a[ctr]];
+					}
+					else
+					{
+						tmp = tmp[a[ctr]];
+					}
+				}
+				tmp[a[n]]= newValue;
 			}
 			else
 			{
-				tmp = tmp[a[ctr]];
+				customer[a[1]]=newValue;
 			}
+
 		}
-		tmp[a[n]]= newValue;
-	}
-	else
-	{
-		customer[a[1]]=newValue;
-	}
 
-}
-
-this.readCustomerProperty = function(customer,property)
-{
-	var tmp="";
-	var a = property.split("@");
-	var returnValue ="";
-
-	if(a.length>2)
-	{
-		var n = a.length;
-
-		for(ctr=1;ctr<n;ctr++)
+		$ctrl.readCustomerProperty = function(customer,property)
 		{
-			if(tmp=="")
+			var tmp="";
+			var a = property.split("@");
+			var returnValue ="";
+
+			if(a.length>2)
 			{
-				tmp = customer[a[ctr]];
+				var n = a.length;
+
+				for(ctr=1;ctr<n;ctr++)
+				{
+					if(tmp=="")
+					{
+						tmp = customer[a[ctr]];
+					}
+					else
+					{
+						tmp = tmp[a[ctr]];
+					}
+				}
+				returnValue = tmp;
 			}
 			else
 			{
-				tmp = tmp[a[ctr]];
+				returnValue = customer[a[1]];
 			}
+
+			return returnValue;
+
 		}
-		returnValue = tmp;
+
+
+		$ctrl.getClientType = function(TYPE)
+		{
+			var JSON_URL=""
+			
+			if(TYPE=="ENTITY")
+			{
+				JSON_URL = "entityClient.json";
+			}
+			else if(TYPE=="INDIVIDUAL")
+			{
+				JSON_URL = "individualClient.json";
+			}
+
+			$.getJSON(JSON_URL, function(result)
+			{
+				$ctrl.LOAN_DOCUMENT_OBJ = result.data;
+			});
+		}
+		
+
+		$ctrl.loadQuestionBank = function()
+		{
+
+		}
+
+		$ctrl.getLoanDocument = function(LOAN_ID)
+		{
+			
+		}
+
+		$ctrl.saveLoanDocument=function()
+		{
+
+
+		}
+
+		$ctrl.updateLoanDocument=function()
+		{
+
+			
+		}
+
+		$ctrl.$routerOnActivate = function()
+		{
+			if(loggedUser.isValid)
+			{
+				//TODO Code here
+				LOAN_DOCUMENT_OBJ = $ctrl.getLoanDocument($ctrl.LOAN_ID);
+				$ctrl.loadQuestionBank();
+			}
+			else
+			{
+				this.$router.navigate(['Login']);
+			}
+		}	
+
 	}
-	else
-	{
-		returnValue = customer[a[1]];
-	}
 
-	return returnValue;
-
-}
-
-this.writeCustomerProperty(abc,k,600);
-console.log(this.readCustomerProperty(abc,k));
-
-}
+	angular.module("mainModule").component("appLoanDetail",{
+		templateUrl:"/app/components/loanDetail/ng-template.html",
+		controller:loanDocumentWorker,
+		bindings:{
+			$router: '<',
+			LOAN_ID:'<'}
+	});
+})(window.angular);

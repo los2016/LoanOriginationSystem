@@ -1,87 +1,35 @@
 {
-  "applicationID": 0,
-  "clientPartyId": "",
-  "advisorPartyId": "",
-  "bpmProcessId": 0,
-  "entityClient": {
-    "isHighlySensitive": "",
-    "isHighlyConfidential": "",
-    "fullName": "",
-    "primaryCountryOfAssets": "",
-    "uniqueIdentifierType": "",
-    "uniqueIdentifier": "",
-    "clientSponsorName": "",
-    "isClientOrProspect": "",
-    "witholdingFederalStatus": "",
-    "netWorth": 0.0,
-    "legalAddress": {
-      "number": 0,
-      "address1": "",
-      "address2": "",
-      "address3": "",
-      "city": "",
-      "state": "",
-      "zip": "",
-      "contactInfo": {
-        "homephone": "",
-        "workphone": "",
-        "mobileno": "",
-        "personalemail": "",
-        "workemail": ""
-      }
-    },
-    "creditRequestCaptureMode": "",
-    "anyOutstandingJudgements": "",
-    "bankruptcyDuringLast7years": "",
-    "forclosureDuringLast7years": "",
-    "partyToLawsuit": "",
-    "obligationToOtherLoans": "",
-    "delinquencyOrDefaultStatus": "",
-    "isPartOfDownPaymentBorrowed": "",
-    "sourceOfDownPayment": "",
-    "comakerOrEndoreser": "",
-    "isUSCitizen": "",
-    "isPermenantResident": "",
-    "hadOwnershipInterestinProperty": "",
-    "typeOfProperty": "",
-    "howWasTitleHold": "",
-    "whenWasApplicationSubmitted": "",
-    "isJPMSClient": "",
-    "mortgageDocumentMailedToResidence": "",
-    "homeAddress": {
-      "number": 0,
-      "address1": "",
-      "address2": "",
-      "address3": "",
-      "city": "",
-      "state": "",
-      "zip": "",
-      "contactInfo": {
-        "homephone": "",
-        "workphone": "",
-        "mobileno": "",
-        "personalemail": "",
-        "workemail": ""
-      }
-    },
-    "isInternationalClient": "",
-    "entityDocument": null,
-    "eci": 0
-  },
-  "mtgDetails": {
-    "intentToOccupyAsPrimaryResidence": "",
-    "propertyDetails": {
-      "propertyType": "",
-      "occupancyType": "",
-      "buildingContact": {
-        "homephone": "",
-        "workphone": "",
-        "mobileno": "",
-        "personalemail": "",
-        "workemail": ""
+  "saveType": "I",
+  "mortgageApplication": {
+    "applicationID": 0,
+    "clientPartyId": "",
+    "advisorPartyId": "",
+    "bpmProcessId": 0,
+    "entityClient": {
+      "isHighlySensitive": "",
+      "isHighlyConfidential": "",
+      "fullName": {
+        "firstName": "",
+        "middleName": "",
+        "lastName": "",
+        "title": "",
+        "fullName": "",
+        "contact": {
+          "homephone": "",
+          "workphone": "",
+          "mobileno": "",
+          "personalemail": "",
+          "workemail": ""
+        }
       },
-      "isthsRecognizedCoOp": "",
-      "propertyAddress": {
+      "primaryCountryOfAssets": "",
+      "uniqueIdentifierType": "",
+      "uniqueIdentifier": "",
+      "clientSponsorName": "",
+      "isClientOrProspect": "",
+      "witholdingFederalStatus": "",
+      "netWorth": 0.0,
+      "legalAddress": {
         "number": 0,
         "address1": "",
         "address2": "",
@@ -96,199 +44,269 @@
           "personalemail": "",
           "workemail": ""
         }
-      }
+      },
+      "creditRequestCaptureMode": "",
+      "anyOutstandingJudgements": "",
+      "bankruptcyDuringLast7years": "",
+      "forclosureDuringLast7years": "",
+      "partyToLawsuit": "",
+      "obligationToOtherLoans": "",
+      "delinquencyOrDefaultStatus": "",
+      "isPartOfDownPaymentBorrowed": "",
+      "sourceOfDownPayment": "",
+      "comakerOrEndoreser": "",
+      "isUSCitizen": "",
+      "isPermenantResident": "",
+      "hadOwnershipInterestinProperty": "",
+      "typeOfProperty": "",
+      "howWasTitleHold": "",
+      "whenWasApplicationSubmitted": "",
+      "isJPMSClient": "",
+      "mortgageDocumentMailedToResidence": "",
+      "homeAddress": {
+        "number": 0,
+        "address1": "",
+        "address2": "",
+        "address3": "",
+        "city": "",
+        "state": "",
+        "zip": "",
+        "contactInfo": {
+          "homephone": "",
+          "workphone": "",
+          "mobileno": "",
+          "personalemail": "",
+          "workemail": ""
+        }
+      },
+      "isInternationalClient": "",
+      "entityDocument": null,
+      "eci": 0
     },
-    "loanDetails": {
-      "accountNo": "",
-      "producType": "",
-      "currency": "",
-      "interestRate": 0.0,
-      "purchaseYear": 0
-    },
-    "loanType": "",
-    "institutionNameHoldingCurrentLoan": "",
-    "refinanceLoanDetails": {
-      "accountNo": "",
-      "producType": "",
-      "currency": "",
-      "interestRate": 0.0,
-      "purchaseYear": 0
-    },
-    "useOfProceeds": "",
-    "isLoanUsedToPurchaseDwelling": "",
-    "isLoanUsedForPayoff": "",
-    "mortgageProductSelection": "",
-    "estiamtedPropertyValue": 0.0,
-    "isMortgageBrokerInvolved": "",
-    "appliedForMortgageBefore": "",
-    "isEscrowForRealEstateTaxes": "",
-    "isEscrowForHomeOwnersInsurance": "",
-    "keyContactOfThisTransaction": {
-      "firstName": "",
-      "middleName": "",
-      "lastName": "",
-      "title": "",
-      "fullName": "",
-      "contact": {
-        "homephone": "",
-        "workphone": "",
-        "mobileno": "",
-        "personalemail": "",
-        "workemail": ""
-      }
-    },
-    "contactForAppraisal": {
-      "firstName": "",
-      "middleName": "",
-      "lastName": "",
-      "title": "",
-      "fullName": "",
-      "contact": {
-        "homephone": "",
-        "workphone": "",
-        "mobileno": "",
-        "personalemail": "",
-        "workemail": ""
-      }
-    },
-    "income": {
-      "annualIncome": 0.0,
-      "incomeSources": [],
-      "incomeConsistentOverYears": ""
-    },
-    "marketBusinessManager": {
-      "firstName": "",
-      "middleName": "",
-      "lastName": "",
-      "title": "",
-      "fullName": "",
-      "contact": {
-        "homephone": "",
-        "workphone": "",
-        "mobileno": "",
-        "personalemail": "",
-        "workemail": ""
-      }
-    },
-    "capitalAdvisor": {
-      "firstName": "",
-      "middleName": "",
-      "lastName": "",
-      "title": "",
-      "fullName": "",
-      "contact": {
-        "homephone": "",
-        "workphone": "",
-        "mobileno": "",
-        "personalemail": "",
-        "workemail": ""
-      }
-    },
-    "bankerOrAdvisor": {
-      "firstName": "",
-      "middleName": "",
-      "lastName": "",
-      "title": "",
-      "fullName": "",
-      "contact": {
-        "homephone": "",
-        "workphone": "",
-        "mobileno": "",
-        "personalemail": "",
-        "workemail": ""
-      }
-    },
-    "advisorCostCenter": "",
-    "mortgageAdvisorNMLSId": "",
-    "attorneyDetails": {
-      "firstName": "",
-      "middleName": "",
-      "lastName": "",
-      "title": "",
-      "fullName": "",
-      "contact": {
-        "homephone": "",
-        "workphone": "",
-        "mobileno": "",
-        "personalemail": "",
-        "workemail": ""
-      }
-    },
-    "mortgageAnalyst": {
-      "firstName": "",
-      "middleName": "",
-      "lastName": "",
-      "title": "",
-      "fullName": "",
-      "contact": {
-        "homephone": "",
-        "workphone": "",
-        "mobileno": "",
-        "personalemail": "",
-        "workemail": ""
-      }
-    },
-    "isMLODiffThanAdvisor": "",
-    "mortgageLoanOriginator": {
-      "firstName": "",
-      "middleName": "",
-      "lastName": "",
-      "title": "",
-      "fullName": "",
-      "contact": {
-        "homephone": "",
-        "workphone": "",
-        "mobileno": "",
-        "personalemail": "",
-        "workemail": ""
-      }
-    },
-    "isMLOStatusValidated": "",
-    "titleHoldPlan": "",
-    "insuranceAgent": {
-      "firstName": "",
-      "middleName": "",
-      "lastName": "",
-      "title": "",
-      "fullName": "",
-      "contact": {
-        "homephone": "",
-        "workphone": "",
-        "mobileno": "",
-        "personalemail": "",
-        "workemail": ""
-      }
-    },
-    "valueOfNonJPMCAssets": 0.0,
-    "totalOutandingDebt": 0.0,
-    "monthlyPaymentAgainstDebt": 0.0,
-    "planForTravel": "",
-    "travelDates": "",
-    "borrowerRelationshipToJPMC": "",
-    "loanGurantorPresent": "",
-    "guranteeDocument": null,
-    "lastYearUnderwritingStatus": "",
-    "planToUsePOA": "",
-    "isGurantorForCreditFacilities": "",
-    "isSubjectToTaxJudgements": "",
-    "lastYearofTaxFiling": 0,
-    "taxPreparer": {
-      "firstName": "",
-      "middleName": "",
-      "lastName": "",
-      "title": "",
-      "fullName": "",
-      "contact": {
-        "homephone": "",
-        "workphone": "",
-        "mobileno": "",
-        "personalemail": "",
-        "workemail": ""
-      }
-    },
-    "isReturnAudited": "",
-    "mlonmsid": "",
-    "poadocument": null,
-    "mlolicenseStatus": ""
+    "mtgDetails": {
+      "intentToOccupyAsPrimaryResidence": "",
+      "propertyDetails": {
+        "propertyType": "",
+        "occupancyType": "",
+        "buildingContact": {
+          "homephone": "",
+          "workphone": "",
+          "mobileno": "",
+          "personalemail": "",
+          "workemail": ""
+        },
+        "isthsRecognizedCoOp": "",
+        "propertyAddress": {
+          "number": 0,
+          "address1": "",
+          "address2": "",
+          "address3": "",
+          "city": "",
+          "state": "",
+          "zip": "",
+          "contactInfo": {
+            "homephone": "",
+            "workphone": "",
+            "mobileno": "",
+            "personalemail": "",
+            "workemail": ""
+          }
+        }
+      },
+      "loanDetails": {
+        "accountNo": "",
+        "loanAmount": 0.0,
+        "producType": "",
+        "currency": "",
+        "interestRate": 0.0,
+        "purchaseYear": 0
+      },
+      "loanType": "",
+      "institutionNameHoldingCurrentLoan": "",
+      "refinanceLoanDetails": {
+        "accountNo": "",
+        "loanAmount": 0.0,
+        "producType": "",
+        "currency": "",
+        "interestRate": 0.0,
+        "purchaseYear": 0
+      },
+      "useOfProceeds": "",
+      "isLoanUsedToPurchaseDwelling": "",
+      "isLoanUsedForPayoff": "",
+      "mortgageProductSelection": "",
+      "estiamtedPropertyValue": 0.0,
+      "isMortgageBrokerInvolved": "",
+      "appliedForMortgageBefore": "",
+      "isEscrowForRealEstateTaxes": "",
+      "isEscrowForHomeOwnersInsurance": "",
+      "keyContactOfThisTransaction": {
+        "firstName": "",
+        "middleName": "",
+        "lastName": "",
+        "title": "",
+        "fullName": "",
+        "contact": {
+          "homephone": "",
+          "workphone": "",
+          "mobileno": "",
+          "personalemail": "",
+          "workemail": ""
+        }
+      },
+      "contactForAppraisal": {
+        "firstName": "",
+        "middleName": "",
+        "lastName": "",
+        "title": "",
+        "fullName": "",
+        "contact": {
+          "homephone": "",
+          "workphone": "",
+          "mobileno": "",
+          "personalemail": "",
+          "workemail": ""
+        }
+      },
+      "income": {
+        "annualIncome": 0.0,
+        "incomeSources": ["", ""],
+        "incomeConsistentOverYears": ""
+      },
+      "marketBusinessManager": {
+        "firstName": "",
+        "middleName": "",
+        "lastName": "",
+        "title": "",
+        "fullName": "",
+        "contact": {
+          "homephone": "",
+          "workphone": "",
+          "mobileno": "",
+          "personalemail": "",
+          "workemail": ""
+        }
+      },
+      "capitalAdvisor": {
+        "firstName": "",
+        "middleName": "",
+        "lastName": "",
+        "title": "",
+        "fullName": "",
+        "contact": {
+          "homephone": "",
+          "workphone": "",
+          "mobileno": "",
+          "personalemail": "",
+          "workemail": ""
+        }
+      },
+      "bankerOrAdvisor": {
+        "firstName": "",
+        "middleName": "",
+        "lastName": "",
+        "title": "",
+        "fullName": "",
+        "contact": {
+          "homephone": "",
+          "workphone": "",
+          "mobileno": "",
+          "personalemail": "",
+          "workemail": ""
+        }
+      },
+      "advisorCostCenter": "",
+      "mortgageAdvisorNMLSId": "",
+      "attorneyDetails": {
+        "firstName": "",
+        "middleName": "",
+        "lastName": "",
+        "title": "",
+        "fullName": "",
+        "contact": {
+          "homephone": "",
+          "workphone": "",
+          "mobileno": "",
+          "personalemail": "",
+          "workemail": ""
+        }
+      },
+      "mortgageAnalyst": {
+        "firstName": "",
+        "middleName": "",
+        "lastName": "",
+        "title": "",
+        "fullName": "",
+        "contact": {
+          "homephone": "",
+          "workphone": "",
+          "mobileno": "",
+          "personalemail": "",
+          "workemail": ""
+        }
+      },
+      "isMLODiffThanAdvisor": "",
+      "mortgageLoanOriginator": {
+        "firstName": "",
+        "middleName": "",
+        "lastName": "",
+        "title": "",
+        "fullName": "",
+        "contact": {
+          "homephone": "",
+          "workphone": "",
+          "mobileno": "",
+          "personalemail": "",
+          "workemail": ""
+        }
+      },
+      "isMLOStatusValidated": "",
+      "titleHoldPlan": "",
+      "insuranceAgent": {
+        "firstName": "",
+        "middleName": "",
+        "lastName": "",
+        "title": "",
+        "fullName": "",
+        "contact": {
+          "homephone": "",
+          "workphone": "",
+          "mobileno": "",
+          "personalemail": "",
+          "workemail": ""
+        }
+      },
+      "valueOfNonJPMCAssets": 0.0,
+      "totalOutandingDebt": 0.0,
+      "monthlyPaymentAgainstDebt": 0.0,
+      "planForTravel": "",
+      "travelDates": "",
+      "borrowerRelationshipToJPMC": "",
+      "loanGurantorPresent": "",
+      "guranteeDocument": null,
+      "lastYearUnderwritingStatus": "",
+      "planToUsePOA": "",
+      "isGurantorForCreditFacilities": "",
+      "isSubjectToTaxJudgements": "",
+      "lastYearofTaxFiling": 0,
+      "taxPreparer": {
+        "firstName": "",
+        "middleName": "",
+        "lastName": "",
+        "title": "",
+        "fullName": "",
+        "contact": {
+          "homephone": "",
+          "workphone": "",
+          "mobileno": "",
+          "personalemail": "",
+          "workemail": ""
+        }
+      },
+      "isReturnAudited": "",
+      "mlonmsid": "",
+      "poadocument": null,
+      "mlolicenseStatus": ""
+    }
   }
 }

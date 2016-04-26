@@ -13,9 +13,36 @@
 			switch(HTTP_SERVICE_INDICATOR)
 			{
 				case "AUTH_USER":
-				SERVICE_URL = "http://google.com";
+				SERVICE_URL = "http://localhost:8080/authenticateUser";
+				break;
+				
+				case "TIMELINE":
+				SERVICE_URL = "";
+				break;
+				
+				case "QUESTION_BANK":
+				SERVICE_URL = "";
+				break;
+				
+				case "VALIDATE_QUESTION":
+				SERVICE_URL = "";
 				break;
 
+				case "VALIDATE_LOAN":
+				SERVICE_URL = "";
+				break;
+				
+				case "GET_MORTGAGE":
+				SERVICE_URL = "";
+				break;
+				
+				case "SAVE_MORTGAGE":
+				SERVICE_URL = "";
+				break;
+				
+				case "UPLOAD_FILE":
+				SERVICE_URL = "";
+				break;
 			}
 
 			return makeHTTPRequest(SERVICE_URL,HTTP_REQUEST,HTTP_DATA);

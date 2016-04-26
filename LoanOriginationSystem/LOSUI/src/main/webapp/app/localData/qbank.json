@@ -1,0 +1,134 @@
+{
+	"Sections": [{
+		"value": "Applied",
+		"level": 0,
+		"sectionID": 101,
+		"status": "",
+		"questions": [{
+			"questionId": "1",
+			"questiondecription": "What is your name?",
+			"sequence": "1",
+			"hide": "N",
+			"validity": "B",
+			"attribute": [{
+				"attributeID": "1",
+				"attributeName": "txtFirstName",
+				"label": "Name",
+				"datatype": "textField",
+				"mortgageMap": "@entityClient@legalAddress@contactInfo@workemail"
+			}, {
+				"attributeID": "2",
+				"attributeName": "txtMiddleName",
+				"label": "",
+				"datatype": "textField",
+				"mortgageMap": "@entityClient@legalAddress@contactInfo@workemail"
+			}, {
+				"attributeID": "3",
+				"attributeName": "txtLastName",
+				"label": "",
+				"datatype": "textField",
+				"mortgageMap": "@entityClient@legalAddress@contactInfo@workemail"
+			}]
+		}],
+		"subsection": [{
+			"name": "",
+			"level": 2,
+			"sectionID": 102,
+			"questions": [{
+				"questionId": "1",
+				"questiondecription": "What is your company name?",
+				"sequence": "1",
+				"hide": "N",
+				"validity": "B",
+				"attribute": [{
+					"attributeID": "1",
+					"attributeName": "txtCompanyName",
+					"label": "Company Name",
+					"datatype": "textField",
+					"mortgageMap": "@entityClient@legalAddress@contactInfo@workemail"
+				}]
+			}]
+		}, {
+			"name": "",
+			"level": 2,
+			"sectionID": 103,
+			"questions": [{
+				"questionId": "1",
+				"questiondecription": "What is your company name?",
+				"sequence": "1",
+				"hide": "N",
+				"validity": "B",
+				"attribute": [{
+					"attributeID": "1",
+					"attributeName": "txtCompanyName",
+					"label": "Company Name",
+					"datatype": "textField",
+					"mortgageMap": "@entityClient@legalAddress@contactInfo@workemail"
+				}]
+			}]
+		}, {
+			"name": "",
+			"level": 2,
+			"sectionID": 104,
+			"questions": [{
+				"questionId": "1",
+				"questiondecription": "What is your mailing address?",
+				"sequence": "1",
+				"hide": "N",
+				"validity": "B",
+				"attribute": [{
+					"attributeID": "1",
+					"attributeName": "txtAddress1",
+					"label": "Mailing Address",
+					"datatype": "textField",
+					"mortgageMap": "@entityClient@legalAddress@contactInfo@workemail"
+				}, {
+					"attributeID": "2",
+					"attributeName": "txtAddress2",
+					"label": "",
+					"datatype": "textField",
+					"mortgageMap": "@entityClient@legalAddress@contactInfo@workemail"
+				}, {
+					"attributeID": "3",
+					"attributeName": "txtAddress3",
+					"label": "",
+					"datatype": "textField",
+					"mortgageMap": "@entityClient@legalAddress@contactInfo@workemail"
+				}]
+			}],
+			"subsection": [{
+
+				"name": "",
+				"level": 2,
+				"sectionID": 104,
+				"questions": [{
+					"questionId": "1",
+					"questiondecription": "What is your mailing address?",
+					"sequence": "1",
+					"hide": "N",
+					"validity": "B",
+					"attribute": [{
+						"attributeID": "1",
+						"attributeName": "txtAddress1",
+						"label": "Mailing Address",
+						"datatype": "textField",
+						"mortgageMap": "@entityClient@legalAddress@contactInfo@workemail"
+					}, {
+						"attributeID": "2",
+						"attributeName": "txtAddress2",
+						"label": "",
+						"datatype": "textField",
+						"mortgageMap": "@entityClient@legalAddress@contactInfo@workemail"
+					}, {
+						"attributeID": "3",
+						"attributeName": "txtAddress3",
+						"label": "",
+						"datatype": "textField",
+						"mortgageMap": "@entityClient@legalAddress@contactInfo@workemail"
+					}]
+				}]
+
+			}]
+		}]
+	}]
+}

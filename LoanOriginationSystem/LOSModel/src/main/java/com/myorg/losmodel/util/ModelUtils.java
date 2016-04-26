@@ -61,11 +61,12 @@ public class ModelUtils {
 		}
 	}
 
-	public static void addMesgToValidationMesgList(String type, String mesg) {
+	public static void addMesgToValidationMesgList(String type, String mesg, Integer questionid) {
 
 		ValidateMesg vMesg = new ValidateMesg();
 		vMesg.setType(type);
 		vMesg.setMesg(mesg);
+		vMesg.setQuestionId(questionid);
 
 		addMesgToValidationMesgList(vMesg);
 

@@ -13,7 +13,142 @@
                 </div>
                 <div class="col-md-9">
                     <!-- filter row-->
-                    <ng-include src="'/app/components/loanFilter/ng-template.html'"></ng-include>
+                    
+    <!--filters row-->
+    <div class="row">
+
+        <div class="col-md-2">
+            <div class="input-group">
+                <input type="text" class="form-control" value="" placeholder="My Filters">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" 
+                    aria-expanded="false"><span class="caret"></span></button>
+                    <ul class="dropdown-menu pull-right">
+                        <li><input type="checkbox" checked> Pending expirations</li>
+                        <li><input type="checkbox" checked> Waiting for rate lock</li>
+                        <li><a href="#" class="btn btn-primary btn-sm">+ Add Custom Filter</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="input-group">
+                <input type="text" class="form-control" value="" placeholder="Customer name">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" 
+                    aria-expanded="false"><span class="caret"></span></button>
+                    <ul class="dropdown-menu pull-right">
+                        <li>
+                            <a href="#" class="btn btn-primary btn-sm">A-Z
+                            <i class="glyphicon glyphicon-chevron-down pull-right"></i>
+                            </a>
+                        </li>
+                        <li><input type="checkbox" checked> Bill Gates</li>
+                        <li><input type="checkbox" checked> Larry Ellison</li>
+                        <li><input type="checkbox" checked> Sergey Brin</li>
+                        <li><input type="checkbox" checked> Sundar Pichai</li>
+                        <li><input type="checkbox" checked> Tim Cook</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="input-group">
+                <input type="text" class="form-control" value="" placeholder="Loan amount">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" 
+                    aria-expanded="false"><span class="caret"></span></button>
+                    <ul class="dropdown-menu pull-right">
+                        <li>
+                            <a href="#" class="btn btn-primary btn-sm">Small to Large
+                            <i class="glyphicon glyphicon-chevron-down pull-right"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <input type="text" class="input-sm" placeholder="min" size="3">to
+                            <input type="text" class="input-sm" placeholder="max" size="3">
+                        </li>
+                        <li><input type="checkbox"> 50 mil</li>
+                        <li><input type="checkbox"> 100 mil</li>
+                        <li><input type="checkbox"> 150 mil</li>
+                        <li><input type="checkbox"> 170 mil</li>
+                        <li><input type="checkbox"> 250 mil</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="input-group">
+                <input type="text" class="form-control" value="" placeholder="Awaiting action">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" 
+                    aria-expanded="false"><span class="caret"></span></button>
+                    <ul class="dropdown-menu pull-right">
+                        <li>
+                            <a href="#" class="btn btn-primary btn-sm">Latest
+                            <i class="glyphicon glyphicon-chevron-down pull-right"></i>
+                            </a>
+                        </li>
+                        <li><input type="checkbox" checked>All</li>
+                        <li><input type="checkbox"> Waiting to be submitted</li>
+                        <li><input type="checkbox"> Waiting for Confirm intent</li>
+                        <li><input type="checkbox"> Waiting for rate lock</li>
+                        <li><input type="checkbox"> Waiting for Documents</li>
+                        <li><input type="checkbox"> Waiting for information</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="input-group">
+                <input type="text" class="form-control" value="" placeholder="Days in process">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" 
+                    aria-expanded="false"><span class="caret"></span></button>
+                    <ul class="dropdown-menu pull-right">
+                        <li>
+                            <a href="#" class="btn btn-primary btn-sm">Latest
+                            <i class="glyphicon glyphicon-chevron-down pull-right"></i>
+                            </a>
+                        </li>
+                        <li><input type="checkbox" checked>All</li>
+                        <li><input type="checkbox"> Less than 30 days</li>
+                        <li><input type="checkbox"> 30 to 60 days</li>
+                        <li><input type="checkbox"> More than 60 days</li>
+                        <li><input type="checkbox"> Passed timeline</li>
+                        <li><input type="checkbox"> Suspended process</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="input-group">
+                <input type="text" class="form-control" value="" placeholder="Targe close">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" 
+                    aria-expanded="false"><span class="caret"></span></button>
+                    <ul class="dropdown-menu pull-right">
+                        <li>
+                            <a href="#" class="btn btn-primary btn-sm">Latest
+                            <i class="glyphicon glyphicon-chevron-down pull-right"></i>
+                            </a>
+                        </li>
+                        <li><input type="checkbox" checked>All</li>
+                        <li><input type="checkbox"> Within 30 days</li>
+                        <li><input type="checkbox"> Within 45 days</li>
+                        <li><input type="checkbox"> Within 60 days</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /filter row -->
                     <!-- /filter row-->
                 </div>
                 <div class="col-md-1">
@@ -56,7 +191,7 @@
                     </div>
                     <div class="col-md-10">
                         <!--time line-->
-                        <ng-include src="'/app/components/loanTimeline/ng-template.html'"></ng-include>
+                        <ng-outlet></ng-outlet>
                         <!--/time line-->
                     </div>
 

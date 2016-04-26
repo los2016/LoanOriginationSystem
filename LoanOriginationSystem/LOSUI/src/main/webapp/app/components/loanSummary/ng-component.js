@@ -22,6 +22,13 @@
 	angular.module("mainModule").component("appLoanSummary",{
 		templateUrl:"/app/components/loanSummary/ng-template.html",
 		controller:loanSummaryController,
+		$routeConfig:[
+		{
+			path:"/timeline/",
+			name:"Timeline",
+			useAsDefault:true,
+			component:"appLoanTimeline"
+		}],
 		bindings:{$router: '<'}
 	});
 })(window.angular);

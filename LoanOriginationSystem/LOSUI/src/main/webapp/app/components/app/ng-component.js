@@ -17,12 +17,12 @@
 				component:"appHome"
 			},
 			{
-				path:"/loanSummary/",
+				path:"/loanSummary/...",
 				name:"LoanSummary",
 				component:"appLoanSummary"
 			},
 			{
-				path:"/loanDetail/",
+				path:"/loanDetail/...",
 				name:"LoanDetail",
 				component:"appLoanDetail"
 			}]

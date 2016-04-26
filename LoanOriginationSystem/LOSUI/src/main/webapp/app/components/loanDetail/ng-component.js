@@ -131,6 +131,13 @@
 	angular.module("mainModule").component("appLoanDetail",{
 		templateUrl:"/app/components/loanDetail/ng-template.html",
 		controller:loanDocumentWorker,
+		$routeConfig:[
+		{
+			path:"/timeline/",
+			name:"Timeline",
+			useAsDefault:true,
+			component:"appLoanTimeline"
+		}],
 		bindings:{
 			$router: '<',
 			LOAN_ID:'<'

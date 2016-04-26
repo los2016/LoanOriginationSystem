@@ -11,11 +11,16 @@
 			if(loggedUser.isValid)
 			{
 				//TODO Code here
+				$ctrl.loadTimeLineData();
 			}
 			else
 			{
 				//this.$router.navigate(['Login']);
 			}
+		}
+
+		$ctrl.loadTimeLineData = function () {
+			
 		}	
 	}
 

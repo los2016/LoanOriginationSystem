@@ -107,12 +107,12 @@ public class MortgageRestController {
 	}
 
 	@RequestMapping(value = "/getMortgageQuestionsMetaData", method = RequestMethod.GET)
-	public ResponseEntity<Set<Section>> getMortgageQuestionsMetaData(@RequestParam String questionBank,
+	public ResponseEntity<Set<Section>> getMortgageQuestionsMetaData(@RequestParam String languageCd,
 			@RequestParam String userCode) {
 
 		Set<Section> sections = new TreeSet<Section>();
 		try {
-			sections = questionMetaData.questionDAOMethod(questionBank, userCode);
+			sections = questionMetaData.questionDAOMethod(languageCd, userCode);
 		} catch (SQLException e) {
 			LOSResponse response = new LOSResponse();
 			response.setReturnMsg("Application Failed to Fetch getMortgageQuestionsMetaData");

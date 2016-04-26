@@ -2,35 +2,10 @@ package com.myorg.losmodel.model.questions;
 
 public class LookupListOfValues implements Comparable<LookupListOfValues> {
 
-	public String getLookupCd() {
-		return lookupCd;
-	}
-
-	public void setLookupCd(String lookupCd) {
-		this.lookupCd = lookupCd;
-	}
-
-	public String getLookupValue() {
-		return lookupValue;
-	}
-
-	public void setLookupValue(String lookupValue) {
-		this.lookupValue = lookupValue;
-	}
-
-	public int getSortOrder() {
-		return sortOrder;
-	}
-
-	public void setSortOrder(int sortOrder) {
-		this.sortOrder = sortOrder;
-	}
-
 	String lookupCd;
 	String lookupValue;
 	int sortOrder;
 
-	@Override
 	public int compareTo(LookupListOfValues o) {
 		int ret;
 		if (this.getSortOrder() > o.getSortOrder()) {
@@ -52,8 +27,31 @@ public class LookupListOfValues implements Comparable<LookupListOfValues> {
 		return ret;
 	}
 
+	public String getLookupCd() {
+		return lookupCd;
+	}
+
+	public String getLookupValue() {
+		return lookupValue;
+	}
+	public int getSortOrder() {
+		return sortOrder;
+	}
 	public int hashCode() {
 		return this.getLookupCd().hashCode();
+	}
+
+	
+	public void setLookupCd(String lookupCd) {
+		this.lookupCd = lookupCd;
+	}
+
+	public void setLookupValue(String lookupValue) {
+		this.lookupValue = lookupValue;
+	}
+
+	public void setSortOrder(int sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 
 	public String toString() {

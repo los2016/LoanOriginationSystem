@@ -6,34 +6,23 @@ import java.util.TreeSet;
 public class Attribute implements Comparable<Attribute> {
 
 	protected int attributeId;
-
-	protected String colDesc;
-
 	protected String colName;
-
+	protected String colDesc;
 	protected DataType dataType;
-
-	protected boolean isMandatoryFl;
-
-	protected int lengthNum;
-
-	protected String lookupEntityNm;
-
 	protected int sequenceNo;
-
+	protected String objectAttrFQN;
+	protected boolean isMandatoryFl;
+	protected int lengthNum;
+	protected String lookupEntityNm;
 	protected TreeSet<LookupListOfValues> listOfValues = new TreeSet<LookupListOfValues>();
+	
 
-	private String objectAttrFQN;
 
-	public TreeSet<LookupListOfValues> getListOfValues() {
-		return listOfValues;
-	}
 
 	public void addListOfValues(LookupListOfValues l) {
 		listOfValues.add(l);
 	}
 
-	@Override
 	public int compareTo(Attribute o) {
 		int ret;
 		if (this.getSequenceNo() > o.getSequenceNo()) {
@@ -46,6 +35,7 @@ public class Attribute implements Comparable<Attribute> {
 		return ret;
 	}
 
+	
 	public boolean equals(Attribute e) {
 		boolean ret = false;
 		if (this.getAttributeId() == e.getAttributeId()) {
@@ -76,8 +66,16 @@ public class Attribute implements Comparable<Attribute> {
 		return lengthNum;
 	}
 
+	public TreeSet<LookupListOfValues> getListOfValues() {
+		return listOfValues;
+	}
+
 	public String getLookupEntityNm() {
 		return lookupEntityNm;
+	}
+
+	public String getObjectAttrFQN() {
+		return objectAttrFQN;
 	}
 
 	public int getSequenceNo() {
@@ -121,6 +119,10 @@ public class Attribute implements Comparable<Attribute> {
 		this.isMandatoryFl = isMandatoryFl;
 	}
 
+	public void setObjectAttrFQN(String objectAttrFQN) {
+		this.objectAttrFQN = objectAttrFQN;
+	}
+
 	public void setSequenceNo(int sequenceNo) {
 		this.sequenceNo = sequenceNo;
 	}
@@ -141,14 +143,6 @@ public class Attribute implements Comparable<Attribute> {
 		sb.append("}\n");
 
 		return sb.toString();
-	}
-
-	public String getObjectAttrFQN() {
-		return objectAttrFQN;
-	}
-
-	public void setObjectAttrFQN(String objectAttrFQN) {
-		this.objectAttrFQN = objectAttrFQN;
 	}
 
 }

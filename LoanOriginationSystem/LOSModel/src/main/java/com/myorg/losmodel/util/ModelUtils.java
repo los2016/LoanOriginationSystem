@@ -191,12 +191,20 @@ public class ModelUtils {
 
 					Object childobj = field.get(obj);
 
-					if (childobj != null) {
-						List<Field> fieldList = new ArrayList<Field>();
-						String className = parentClassName + "@" + getClassName(field.getType().getName());
-						readAllFields(getAllFields(fieldList, childobj.getClass()), childobj, dbFieldValues,
-								field.getAnnotation(DBEntityMapping.class), dbFieldToObjectModelMappings, className);
-					}
+                    if (childobj != null && dbFieldValues != null ) {
+                           List<Field> fieldList = new ArrayList<Field>();
+                           
+                           readAllFields(getAllFields(fieldList, childobj.getClass()), childobj, dbFieldValues,
+                                         field.getAnnotation(DBEntityMapping.class), dbFieldToObjectModelMappings, null);
+                    } else if (  dbFieldValues == null && dbFieldToObjectModelMappings != null ){
+                           childobj = Class.forName(field.getType().getName()).newInstance();
+                           List<Field> fieldList = new ArrayList<Field>();
+                           String className = parentClassName + "@" + getClassName(field.getType().getName());
+                           
+                           readAllFields(getAllFields(fieldList, childobj.getClass()), childobj, dbFieldValues,
+                                         field.getAnnotation(DBEntityMapping.class), dbFieldToObjectModelMappings, className);                                         
+                    }
+
 
 				}
 			}
@@ -207,6 +215,12 @@ public class ModelUtils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -245,8 +259,8 @@ public class ModelUtils {
 
 						if (dbFieldToObjectModelMappings != null) {
 							dbFieldToObjectModelMappings.put(dbAttrName, parentClassName + "@" + field.getName());
-							// System.out.println(parentClassName + "@" +
-							// field.getName());
+							 System.out.println(parentClassName + "@" +
+							 field.getName());
 						}
 					}
 				}
@@ -262,8 +276,8 @@ public class ModelUtils {
 
 				if (dbFieldToObjectModelMappings != null) {
 					dbFieldToObjectModelMappings.put(dbFieldName, parentClassName + "@" + field.getName());
-					// System.out.println(parentClassName + "@" +
-					// field.getName());
+					 System.out.println(parentClassName + "@" +
+					 field.getName());
 				}
 			}
 		}

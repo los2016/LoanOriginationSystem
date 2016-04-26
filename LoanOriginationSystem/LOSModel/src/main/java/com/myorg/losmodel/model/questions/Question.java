@@ -7,47 +7,39 @@ import java.util.TreeSet;
 
 public class Question implements Comparable<Question> {
 
-	Set<Attribute> attributes = new TreeSet<Attribute>();
-	protected HashSet<Question> childQuestions;
-	protected String mandatoryCd;
 	
-	//Changed - having both parent and child is getting into an infinite recursive loop
-	protected int parentQuestionId;
-
-	public int getParentQuestionId() {
-		return parentQuestionId;
-	}
-
-	public void setParentQuestionId(int parentQuestionId) {
-		this.parentQuestionId = parentQuestionId;
-	}
-
-	protected QuestionContext questionContext;
 	protected int questionId;
 	protected String questionLongDesc;
-	protected Role role;
-	//protected Section section;
 	protected int sequenceNo;
 	protected String toolTip;
-
-	public String getToolTip() {
-		return toolTip;
+	protected String mandatoryCd;
+	protected int parentQuestionId;
+	protected Role role;
+	protected QuestionContext questionContext;
+	Set<Attribute> attributes = new TreeSet<Attribute>();
+	protected Set<Question> childQuestions = new TreeSet<Question>();
+	
+	
+	public void addAttribute(Attribute attribute) {
+		this.attributes.add(attribute);
 	}
-
-	public void setToolTip(String toolTip) {
-		this.toolTip = toolTip;
-	}
-
-	public int getSequenceNo() {
-		return sequenceNo;
-	}
-
-	public void setSequenceNo(int sequenceNo) {
-		this.sequenceNo = sequenceNo;
-	}
-
 	public void addChildQuestion(Question childQuestions) {
 		this.childQuestions.add(childQuestions);
+	}
+
+	public int compareTo(Question o) {
+		int ret;
+
+		if (this.getSequenceNo() > (o).getSequenceNo()) {
+			ret = 1;
+		} else if (this.getSequenceNo() == (o).getSequenceNo()) {
+			ret = 0;
+		} else {
+			ret = -1;
+		}
+
+		return ret;
+
 	}
 
 	public boolean equals(Question q) {
@@ -62,7 +54,7 @@ public class Question implements Comparable<Question> {
 		return attributes;
 	}
 
-	public HashSet<Question> getChildQuestions() {
+	public Set<Question> getChildQuestions() {
 		return childQuestions;
 	}
 
@@ -70,7 +62,9 @@ public class Question implements Comparable<Question> {
 		return mandatoryCd;
 	}
 
-
+	public int getParentQuestionId() {
+		return parentQuestionId;
+	}
 
 	public QuestionContext getQuestionContext() {
 		return questionContext;
@@ -84,31 +78,41 @@ public class Question implements Comparable<Question> {
 		return questionLongDesc;
 	}
 
+
+
 	public Role getRole() {
 		return role;
 	}
 
-	//public Section getSection() {
-		//return section;
-	//}
+	public int getSequenceNo() {
+		return sequenceNo;
+	}
+
+	public String getToolTip() {
+		return toolTip;
+	}
 
 	public int hashCode() {
 		return this.getQuestionId() % 25;
 	}
 
-	public void addAttribute(Attribute attribute) {
-		this.attributes.add(attribute);
-	}
+	//public Section getSection() {
+	//return section;
+	//}
 
 	public void setMandatoryCd(String mandatoryCd) {
 		this.mandatoryCd = mandatoryCd;
 	}
 
-
+	public void setParentQuestionId(int parentQuestionId) {
+		this.parentQuestionId = parentQuestionId;
+	}
 
 	public void setQuestionContext(QuestionContext questionContext) {
 		this.questionContext = questionContext;
 	}
+
+
 
 	public void setQuestionId(int questionId) {
 		this.questionId = questionId;
@@ -122,25 +126,18 @@ public class Question implements Comparable<Question> {
 		this.role = role;
 	}
 
+	public void setSequenceNo(int sequenceNo) {
+		this.sequenceNo = sequenceNo;
+	}
+
 	//public void setSection(Section section) {
-		//this.section = section;
+	//this.section = section;
 	//}
 
-	
-	@Override
-	public int compareTo(Question o) {
-		int ret;
 
-		if (this.getSequenceNo() > (o).getSequenceNo()) {
-			ret = 1;
-		} else if (this.getSequenceNo() == (o).getSequenceNo()) {
-			ret = 0;
-		} else {
-			ret = -1;
-		}
 
-		return ret;
-
+	public void setToolTip(String toolTip) {
+		this.toolTip = toolTip;
 	}
 
 	public String toString() {

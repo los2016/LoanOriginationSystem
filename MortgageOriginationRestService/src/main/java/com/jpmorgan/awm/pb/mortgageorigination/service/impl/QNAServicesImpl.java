@@ -28,7 +28,7 @@ public class QNAServicesImpl implements QNAServices {
 	
 	
 
-	@Override
+	
 	public ValidateQuestionResponse validateQuestion(ValidateQuestionRequest request) {
 	
 	

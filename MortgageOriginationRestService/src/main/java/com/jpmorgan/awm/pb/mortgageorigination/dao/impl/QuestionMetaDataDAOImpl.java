@@ -1,11 +1,17 @@
 package com.jpmorgan.awm.pb.mortgageorigination.dao.impl;
 
+
+//Shubhrajit - 26/4 - Refactoring to break up into different methods
+
+
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -16,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import com.jpmorgan.awm.pb.mortgageorigination.dao.QuestionMetaDataDAO;
 import com.jpmorgan.awm.pb.mortgageorigination.utils.DatabaseService;
+import com.myorg.losmodel.model.client.MortgageApplication;
 import com.myorg.losmodel.model.questions.Attribute;
 import com.myorg.losmodel.model.questions.DataType;
 import com.myorg.losmodel.model.questions.LookupListOfValues;
@@ -31,35 +38,11 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 	@Autowired
 	private DataSource dataSource;
 
-	/**
-	 * Method to get the sections / questions / attributes / LOVS for a user
-	 * based on specified language or default language if language is not
-	 * selected
-	 * 
-	 * NOTE: The language must be for the user of Role Customer. Otherwise the
-	 * glass would break Ensure that the userid passed is the userid of the
-	 * customer
-	 * 
-	 * @param conn
-	 * @param languageCd
-	 * @param userCd
-	 * @return
-	 * @throws SQLException
-	 */
-	public Set<Section> questionDAOMethod(String languageCd, String userCd) throws SQLException {
-
-		Connection conn = null;
-		// Question question = null;
-		TreeSet<Section> sectionSet = new TreeSet<Section>();
-
+	
+	public String getLanguageCdDAO(Connection conn, String languageCd,String userCd) throws SQLException{
+			
 		try {
-			conn = DatabaseService.getConnection();
-			conn.setAutoCommit(false);
-
-			PreparedStatement questionPS = null;
-
-			PreparedStatement sectionPS = null;
-
+			
 			
 			PreparedStatement languageCdPS = conn
 					.prepareStatement("select default_language_cd from mortgage.users where user_cd = ?");
@@ -79,18 +62,25 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 			}
 
 			System.out.println("LANGUAGE CODE IS SET TO:-"+languageCd);
-			
-			
+		}catch (SQLException e){
+		    languageCd = "en";
+			throw e;
+		}
+		return languageCd;	
+	}
+	public Set<Section> getSectionDAO(Connection conn,String languageCd) throws SQLException{
+		//Connection conn = null;
+		// Question question = null;
+		TreeSet<Section> sectionSet = new TreeSet<Section>();
+		PreparedStatement sectionPS = null;
 			if("en".equals(languageCd)){
 				sectionPS = conn.prepareStatement(
 					"select s.section_id,s.present_section_nm, s.past_section_nm, s.future_section_nm, s.sequence_no,"
 							+ " s.parent_section_id as parent_id,"
 							+ " null as i18n_present_nm, null as i18N_past_nm,null as i18n_future_nm "
-							+ " from mortgage.section_metadata s"
-							
+							+ " from mortgage.section_metadata s"							
 				);
 			}else{
-				
 				sectionPS = conn.prepareStatement(
 						"select s.section_id,s.present_section_nm, s.past_section_nm, s.future_section_nm, s.sequence_no,"
 								+ " s.parent_section_id as parent_id,"
@@ -189,10 +179,7 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 
 				}
 
-			
-
-			
-			
+		
 			// When we are here all the sections know who is their parent, but
 			// we also need to know the level
 			// and list of children
@@ -206,253 +193,354 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 			
 			while(i.hasNext()){ 
 				Section check = i.next();
-				System.out.println("SECTION:"+check.getSectionId()+ "PARENT SECTION ID : "+check.getParentSectionId()+" NO OF CHILDREN: "+check.getChildSections().size());
+				//System.out.println("SECTION:"+check.getSectionId()+ "PARENT SECTION ID : "+check.getParentSectionId()+" NO OF CHILDREN: "+check.getChildSections().size());
 
 			}
+			
+			return sectionSet;
+			
+	}
+	
+	
+	public Set<Question> getQuestionDAO(Connection conn,String languageCd,Set<Section> sectionSet) throws SQLException{
+		PreparedStatement questionPS = null;
+		TreeSet<Question> questions = new TreeSet<Question>();
+		
+		if ("en".equals(languageCd)) {
+			questionPS = conn.prepareStatement(
+					"select q.question_id,q.question_long_desc,q.section_id,q.parent_question_id,q.role_id,q.question_context_help_desc,"
+							+ " q.mandatory_cd,q.sequence_no,r.ROLE_NM,q.QUESTION_CONTEXT_ID,qc.QUESTION_CONTEXT_DESC,null as q_long_desc_i18n, null as q_context_help_desc_i18n"
+							+ " from mortgage.question_metadata q"
+							+ " inner join role_metadata r on r.role_id = q.role_id"
+							+ " inner join question_context_metadata qc on q.QUESTION_CONTEXT_ID = qc.question_context_id"
 
+							+ " where q.logical_del_fl = 'N'");
+		} else {
 
-			if ("en".equals(languageCd)) {
-				questionPS = conn.prepareStatement(
-						"select q.question_id,q.question_long_desc,q.section_id,q.parent_question_id,q.role_id,q.question_context_help_desc,"
-								+ " q.mandatory_cd,q.sequence_no,r.ROLE_NM,q.QUESTION_CONTEXT_ID,qc.QUESTION_CONTEXT_DESC,null as q_long_desc_i18n, null as q_context_help_desc_i18n"
-								+ " from mortgage.question_metadata q"
-								+ " inner join role_metadata r on r.role_id = q.role_id"
-								+ " inner join question_context_metadata qc on q.QUESTION_CONTEXT_ID = qc.question_context_id"
+			questionPS = conn.prepareStatement(
+					"select q.question_id,q.question_long_desc,q.section_id,q.parent_question_id,q.role_id,q.question_context_help_desc,"
+							+ " q.mandatory_cd,q.sequence_no,r.ROLE_NM,q.QUESTION_CONTEXT_ID,qc.QUESTION_CONTEXT_DESC,qi.question_long_desc as q_long_desc_i18n, qi.question_context_help_desc as q_context_help_desc_i18n"
+							+ " from mortgage.question_metadata q"
+							+ " inner join role_metadata r on r.role_id = q.role_id"
+							+ " inner join question_context_metadata qc on q.QUESTION_CONTEXT_ID = qc.question_context_id"
+							+ " left outer join question_attribute_i18n qi on q.question_id = qi.question_id"
+							+ " where q.logical_del_fl = 'N' and qi.language_iso2_cd = ? ");
+		}
 
-								+ " where q.logical_del_fl = 'N'");
-			} else {
+		
+		// System.out.println(languageCd);
+		if (!"en".equals(languageCd)) {
+			questionPS.setString(1, languageCd);
+		}
+		ResultSet questionRs = questionPS.executeQuery();
 
-				questionPS = conn.prepareStatement(
-						"select q.question_id,q.question_long_desc,q.section_id,q.parent_question_id,q.role_id,q.question_context_help_desc,"
-								+ " q.mandatory_cd,q.sequence_no,r.ROLE_NM,q.QUESTION_CONTEXT_ID,qc.QUESTION_CONTEXT_DESC,qi.question_long_desc as q_long_desc_i18n, qi.question_context_help_desc as q_context_help_desc_i18n"
-								+ " from mortgage.question_metadata q"
-								+ " inner join role_metadata r on r.role_id = q.role_id"
-								+ " inner join question_context_metadata qc on q.QUESTION_CONTEXT_ID = qc.question_context_id"
-								+ " left outer join question_attribute_i18n qi on q.question_id = qi.question_id"
-								+ " where q.logical_del_fl = 'N' and qi.language_iso2_cd = ? ");
+		while (questionRs.next()) {
+			// System.out.println("1");
+			Question q = new Question();
+			q.setQuestionId(questionRs.getInt("question_id"));
+			String questionDescI18N = questionRs.getNString("q_long_desc_i18n");
+			String questionDesc = questionRs.getString("question_long_desc");
+			if (!((questionDescI18N == null) || ("".equals(questionDescI18N)))) {
+				questionDesc = questionDescI18N;
+			}
+			q.setQuestionLongDesc(questionDesc);
+
+			String toolTipI18N = questionRs.getNString("q_context_help_desc_i18n");
+			String toolTip = questionRs.getString("question_context_help_desc");
+			if (!((toolTipI18N == null) || ("".equals(toolTipI18N)))) {
+				toolTip = toolTipI18N;
 			}
 
-			TreeSet<Question> questions = new TreeSet<Question>();
-			// System.out.println(languageCd);
-			if (!"en".equals(languageCd)) {
-				questionPS.setString(1, languageCd);
+			q.setToolTip(toolTip);
+
+			// System.out.println(q.getQuestionId()+q.getQuestionLongDesc());
+
+			Section questionSectionFromRS = new Section();
+			questionSectionFromRS.setSectionId(questionRs.getInt("section_id"));
+
+			Section questionSectionFromSet = findSectionInSet(questionSectionFromRS, sectionSet);
+			//questionSectionFromSet.setActiveLanguage(languageCd);
+			//q.setSection(questionSectionFromSet);
+			questionSectionFromSet.addQuestion(q);
+			int parentQuestionId = questionRs.getInt("parent_question_id");
+			
+			q.setParentQuestionId(parentQuestionId);
+			//Question parentQuestionFromResultSet = null;
+			//
+			//if (parentQuestionId > 0) {
+				//parentQuestionFromResultSet = new Question();
+				//parentQuestionFromResultSet.setQuestionId(parentQuestionId);
+			//}
+			// If the parent is not already in the collection. create it.
+			// Take advantage of the equals method
+
+			//Question parentQuestionFromSet = null;
+			//if (parentQuestionFromResultSet != null) {
+				//parentQuestionFromSet = findQuestionInSet(parentQuestionFromResultSet, questions);
+			//}
+			//if (parentQuestionFromSet == null) {
+				//parentQuestionFromSet = parentQuestionFromResultSet;
+				//if (parentQuestionFromSet != null) {
+					//questions.add(parentQuestionFromSet);
+				//}
+			//}
+
+			Role r = new Role();
+			r.setRoleId(questionRs.getInt("role_id"));
+			r.setRoleNm(questionRs.getString("role_nm"));
+
+			q.setRole(r);
+
+			QuestionContext qc = new QuestionContext();
+			qc.setQuestionContextId(questionRs.getInt("question_context_id"));
+			qc.setQuestionContextNm(questionRs.getString("QUESTION_CONTEXT_DESC"));
+			q.setQuestionContext(qc);
+
+			q.setMandatoryCd(questionRs.getString("mandatory_cd"));
+			q.setSequenceNo(questionRs.getInt("sequence_no"));
+			questions.add(q);
+			// When we are here all the sections know who is their parent,
+			// but we also need to know the
+			// list of children
+			// So we pass the collection to a helper method to get all the
+			// children
+		}
+			computeChildrenForQuestion(questions);
+
+			// All questions read
+
+			Iterator<Question> qi =  questions.iterator();
+			while(qi.hasNext()){
+				Question qqi = qi.next();
+				//System.out.println("QUESTION ID:"+qqi.getQuestionId()+"Question DESC:"+qqi.getQuestionLongDesc()+"No of attributes:"+qqi.getAttributes().size());
 			}
-			ResultSet questionRs = questionPS.executeQuery();
+			
+			return questions;
+	}
+	
+	
+	public Set<Attribute> getAttributeDAO(Connection conn,String languageCd,Set<Question> questions) throws SQLException{
+	
+		// Now let get the attributes and add them to the questions
+		PreparedStatement attrPs = null;
+		if (!"en".equals(languageCd)) {
+			attrPs = conn.prepareStatement(
 
-			while (questionRs.next()) {
-				// System.out.println("1");
-				Question q = new Question();
-				q.setQuestionId(questionRs.getInt("question_id"));
-				String questionDescI18N = questionRs.getNString("q_long_desc_i18n");
-				String questionDesc = questionRs.getString("question_long_desc");
-				if (!((questionDescI18N == null) || ("".equals(questionDescI18N)))) {
-					questionDesc = questionDescI18N;
-				}
-				q.setQuestionLongDesc(questionDesc);
+					" select m.question_id,a.attribute_id,a.col_nm,a.col_desc,a.datatype_id,d.DATATYPE_NM,"
+							+ "a.lookup_entity_nm,i.LANGUAGE_ISO2_CD, i.COL_DESC as col_desc_i18n, m.sequence_no "
+							+ "from mortgage.attribute_metadata a "
+							+ "left outer join mortgage.attribute_i18n i on a.attribute_id = i.attribute_id "
+							+ "inner join mortgage.question_attribute_map m on m.col_id = a.attribute_id "
+							+ "inner join mortgage.datatype_metadata d on d.datatype_id = a.datatype_id "
+							+ "where a.logical_del_fl = 'N' and i.language_iso2_cd = ?");
 
-				String toolTipI18N = questionRs.getNString("q_context_help_desc_i18n");
-				String toolTip = questionRs.getString("question_context_help_desc");
-				if (!((toolTipI18N == null) || ("".equals(toolTipI18N)))) {
-					toolTip = toolTipI18N;
-				}
+			attrPs.setString(1, languageCd);
+		} else {
 
-				q.setToolTip(toolTip);
+			attrPs = conn.prepareStatement(
 
-				// System.out.println(q.getQuestionId()+q.getQuestionLongDesc());
+					" select m.question_id,a.attribute_id,a.col_nm,a.col_desc,a.datatype_id,d.DATATYPE_NM,"
+							+ "a.lookup_entity_nm, null as LANGUAGE_ISO2_CD, null as col_desc_i18n,m.sequence_no "
+							+ "from mortgage.attribute_metadata a "
 
-				Section questionSectionFromRS = new Section();
-				questionSectionFromRS.setSectionId(questionRs.getInt("section_id"));
+							+ "inner join mortgage.question_attribute_map m on m.col_id = a.attribute_id "
+							+ "inner join mortgage.datatype_metadata d on d.datatype_id = a.datatype_id "
+							+ "where a.logical_del_fl = 'N' ");
+		}
+		ResultSet attrRs = attrPs.executeQuery();
 
-				Section questionSectionFromSet = findSectionInSet(questionSectionFromRS, sectionSet);
-				//questionSectionFromSet.setActiveLanguage(languageCd);
-				//q.setSection(questionSectionFromSet);
-				questionSectionFromSet.addQuestion(q);
-				int parentQuestionId = questionRs.getInt("parent_question_id");
+		HashSet<Attribute> attributes = new HashSet<Attribute>();
+		while (attrRs.next()) {
+			Attribute attrFromResultSet = new Attribute();
+			attrFromResultSet.setAttributeId(attrRs.getInt("attribute_id"));
+			Question questionFromResultSet = new Question();
+			questionFromResultSet.setQuestionId(attrRs.getInt("question_id"));
+
+			Question questionFromSet = null;
+			if (questionFromResultSet != null) {
+				questionFromSet = findQuestionInSet(questionFromResultSet, questions);
+			}
+			if (questionFromSet == null) {
+				questionFromSet = questionFromResultSet;
+			}
+
+			questionFromSet.addAttribute(attrFromResultSet);
+			attrFromResultSet.setColName(attrRs.getString("col_nm"));
+
+			// Added by Gagan as per Vaibhav Model
+			//String attrFQNColName = ModelUtils.getDbAttributeToObjectNamesMap().get(attrRs.getString("col_nm"));
+			String attrFQNColName = "";
+			Map<String,String> attToObjectMap =  ModelUtils.getDbAttributeToObjectNamesMap();
+			if(attToObjectMap == null){
+				System.err.println("Attribute to Fully Qualified Map is NULL - Something is wrong");
+			}else{
 				
-				q.setParentQuestionId(parentQuestionId);
-				//Question parentQuestionFromResultSet = null;
-				//
-				//if (parentQuestionId > 0) {
-					//parentQuestionFromResultSet = new Question();
-					//parentQuestionFromResultSet.setQuestionId(parentQuestionId);
-				//}
-				// If the parent is not already in the collection. create it.
-				// Take advantage of the equals method
-
-				//Question parentQuestionFromSet = null;
-				//if (parentQuestionFromResultSet != null) {
-					//parentQuestionFromSet = findQuestionInSet(parentQuestionFromResultSet, questions);
-				//}
-				//if (parentQuestionFromSet == null) {
-					//parentQuestionFromSet = parentQuestionFromResultSet;
-					//if (parentQuestionFromSet != null) {
-						//questions.add(parentQuestionFromSet);
-					//}
-				//}
-
-				Role r = new Role();
-				r.setRoleId(questionRs.getInt("role_id"));
-				r.setRoleNm(questionRs.getString("role_nm"));
-
-				q.setRole(r);
-
-				QuestionContext qc = new QuestionContext();
-				qc.setQuestionContextId(questionRs.getInt("question_context_id"));
-				qc.setQuestionContextNm(questionRs.getString("QUESTION_CONTEXT_DESC"));
-				q.setQuestionContext(qc);
-
-				q.setMandatoryCd(questionRs.getString("mandatory_cd"));
-				q.setSequenceNo(questionRs.getInt("sequence_no"));
-
-				// When we are here all the sections know who is their parent,
-				// but we also need to know the
-				// list of children
-				// So we pass the collection to a helper method to get all the
-				// children
-
-				computeChildrenForQuestion(questions);
-
-				// All questions read
-
-				Iterator<Question> qi =  questions.iterator();
-				while(qi.hasNext()){
-					Question qqi = qi.next();
-					System.out.println("QUESTION ID:"+qqi.getQuestionId()+"Question DESC:"+qqi.getQuestionLongDesc()+"No of attributes:"+qqi.getAttributes().size());
-				}
 				
-				// Now let get the attributes and add them to the questions
-				PreparedStatement attrPs = null;
-				if (!"en".equals(languageCd)) {
-					attrPs = conn.prepareStatement(
-
-							" select m.question_id,a.attribute_id,a.col_nm,a.col_desc,a.datatype_id,d.DATATYPE_NM,"
-									+ "a.lookup_entity_nm,i.LANGUAGE_ISO2_CD, i.COL_DESC as col_desc_i18n, m.sequence_no "
-									+ "from mortgage.attribute_metadata a "
-									+ "left outer join mortgage.attribute_i18n i on a.attribute_id = i.attribute_id "
-									+ "inner join mortgage.question_attribute_map m on m.col_id = a.attribute_id "
-									+ "inner join mortgage.datatype_metadata d on d.datatype_id = a.datatype_id "
-									+ "where a.logical_del_fl = 'N' and i.language_iso2_cd = ?");
-
-					attrPs.setString(1, languageCd);
-				} else {
-
-					attrPs = conn.prepareStatement(
-
-							" select m.question_id,a.attribute_id,a.col_nm,a.col_desc,a.datatype_id,d.DATATYPE_NM,"
-									+ "a.lookup_entity_nm, null as LANGUAGE_ISO2_CD, null as col_desc_i18n,m.sequence_no "
-									+ "from mortgage.attribute_metadata a "
-
-									+ "inner join mortgage.question_attribute_map m on m.col_id = a.attribute_id "
-									+ "inner join mortgage.datatype_metadata d on d.datatype_id = a.datatype_id "
-									+ "where a.logical_del_fl = 'N' ");
-				}
-				ResultSet attrRs = attrPs.executeQuery();
-
-				HashSet<Attribute> attributes = new HashSet<Attribute>();
-				while (attrRs.next()) {
-					Attribute attrFromResultSet = new Attribute();
-					attrFromResultSet.setAttributeId(attrRs.getInt("attribute_id"));
-					Question questionFromResultSet = new Question();
-					questionFromResultSet.setQuestionId(attrRs.getInt("question_id"));
-
-					Question questionFromSet = null;
-					if (questionFromResultSet != null) {
-						questionFromSet = findQuestionInSet(questionFromResultSet, questions);
-					}
-					if (questionFromSet == null) {
-						questionFromSet = questionFromResultSet;
-					}
-
-					questionFromSet.addAttribute(attrFromResultSet);
-					attrFromResultSet.setColName(attrRs.getString("col_nm"));
-
-					// Added by Gagan as per Vaibhav Model
-					String attrFQNColName = ModelUtils.getDbAttributeToObjectNamesMap().get(attrRs.getString("col_nm"));
-					attrFromResultSet.setObjectAttrFQN(attrFQNColName);
-
-					String attrDescI18N = attrRs.getNString("col_desc_i18n");
-					String attrDesc = attrRs.getString("col_desc");
-					if (!((attrDescI18N == null) || ("".equals(attrDescI18N)))) {
-						attrDesc = attrDescI18N;
-					}
-					attrFromResultSet.setColDesc(attrDesc);
-					int datatypeId = attrRs.getInt("datatype_id");
-					String datatypeNm = attrRs.getString("DATATYPE_NM");
-					DataType dt = new DataType();
-					dt.setDataTypeId(datatypeId);
-					dt.setDataTypeNm(datatypeNm);
-					attrFromResultSet.setDataType(dt);
-					attrFromResultSet.setSequenceNo(attrRs.getInt("sequence_no"));
-					attrFromResultSet.setLookupEntityNm(attrRs.getString("lookup_entity_nm"));
-
-				}
-
-				// Here I have the list of attributes - only thing missing is
-				// the List of values
-
-				int index = 1;
-				PreparedStatement ps4 = null;
-				if ("en".equals(languageCd)) {
-					ps4 = conn.prepareStatement(
-							"select r.lookup_entity_nm, r.lookup_cd,r.lookup_desc, r.sort_order_no,null as lookup_desc_i18n from mortgage.reference_lookup r"
-
-									+ " where r.logical_del_fl = 'N' and r.lookup_entity_nm = ?");
-
-				} else {
-
-					ps4 = conn.prepareStatement(
-							"select r.lookup_entity_nm, r.lookup_cd,r.lookup_desc, r.sort_order_no,i.lookup_desc as lookup_desc_i18n from mortgage.reference_lookup r"
-									+ " left outer join mortgage.reference_lookup_i18n i on i.lookup_entity_nm = r.lookup_entity_nm and r.lookup_cd = i.lookup_cd"
-									+ " where r.logical_del_fl = 'N' and i.language_iso2_cd = ? and r.lookup_entity_nm = ?");
-					index = 2;
-					ps4.setString(1, languageCd);
-
-				}
-
-				Iterator<Attribute> it = attributes.iterator();
-				while (it.hasNext()) {
-					Attribute a = it.next();
-					ps4.setString(index, a.getLookupEntityNm());
-					ResultSet lookupRs = ps4.executeQuery();
-					while (lookupRs.next()) {
-
-						LookupListOfValues lov = new LookupListOfValues();
-						lov.setLookupCd(lookupRs.getString("lookupCd"));
-
-						String lookupDescI18N = attrRs.getNString("lookup_desc_i18n");
-						String lookupDesc = attrRs.getString("lookup_desc");
-						if (!((lookupDescI18N == null) || ("".equals(lookupDescI18N)))) {
-							lookupDesc = lookupDescI18N;
-						}
-						lov.setLookupValue(lookupDesc);
-						lov.setSortOrder(lookupRs.getInt("sort_order_no"));
-
-						a.addListOfValues(lov);
-					}
-
-				}
-
-				// Now - Section contains questions - question contains both
-				// section and attributes, attributes contain LOV
-
+				attrFQNColName = attToObjectMap.get(attrFromResultSet.getColName());
+				attrFromResultSet.setObjectAttrFQN(attrFQNColName);
+				System.err.println("DB COL NAME TO LOOKUP ATTRIBUTE: "+attrFromResultSet.getColName()+" FQN = "+attrFQNColName);
+				
+				
+				
 			}
-			conn.commit();
+			
+			
+
+			String attrDescI18N = attrRs.getNString("col_desc_i18n");
+			String attrDesc = attrRs.getString("col_desc");
+			if (!((attrDescI18N == null) || ("".equals(attrDescI18N)))) {
+				attrDesc = attrDescI18N;
+			}
+			attrFromResultSet.setColDesc(attrDesc);
+			int datatypeId = attrRs.getInt("datatype_id");
+			String datatypeNm = attrRs.getString("DATATYPE_NM");
+			DataType dt = new DataType();
+			dt.setDataTypeId(datatypeId);
+			dt.setDataTypeNm(datatypeNm);
+			attrFromResultSet.setDataType(dt);
+			attrFromResultSet.setSequenceNo(attrRs.getInt("sequence_no"));
+			attrFromResultSet.setLookupEntityNm(attrRs.getString("lookup_entity_nm"));
+			attributes.add(attrFromResultSet);
+			
 
 		}
 
-		catch (Exception ee) {
-			try {
-				conn.rollback();
-			} catch (Exception e) {
-				throw new SQLException("ROLLBACK FAILLED", e);
+		// Here I have the list of attributes - only thing missing is
+		// the List of values
+		return attributes;
+		
+	}
+	
+	
+	public void getLOVDAO(Connection conn,String languageCd, Set<Attribute> attributes) throws SQLException{
+		int index = 1;
+		PreparedStatement ps4 = null;
+		if ("en".equals(languageCd)) {
+			ps4 = conn.prepareStatement(
+					"select r.lookup_entity_nm, r.lookup_cd,r.lookup_desc, r.sort_order_no,null as lookup_desc_i18n from mortgage.reference_lookup r"
 
+							+ " where r.logical_del_fl = 'N' and r.lookup_entity_nm = ?");
+
+		} else {
+
+			ps4 = conn.prepareStatement(
+					"select r.lookup_entity_nm, r.lookup_cd,r.lookup_desc, r.sort_order_no,i.lookup_desc as lookup_desc_i18n from mortgage.reference_lookup r"
+							+ " left outer join mortgage.reference_lookup_i18n i on i.lookup_entity_nm = r.lookup_entity_nm and r.lookup_cd = i.lookup_cd"
+							+ " where r.logical_del_fl = 'N' and i.language_iso2_cd = ? and r.lookup_entity_nm = ?");
+			index = 2;
+			ps4.setString(1, languageCd);
+
+		}
+
+		Iterator<Attribute> it = attributes.iterator();
+		while (it.hasNext()) {
+			Attribute a = it.next();
+			//System.out.println(a.getLookupEntityNm());
+			ps4.setString(index, a.getLookupEntityNm());
+			ResultSet lookupRs = ps4.executeQuery();
+			while (lookupRs.next()) {
+
+				LookupListOfValues lov = new LookupListOfValues();
+				lov.setLookupCd(lookupRs.getString("lookup_cd"));
+				lov.setSortOrder(lookupRs.getInt("sort_order_no"));
+				String lookupDescI18N = lookupRs.getNString("lookup_desc_i18n");
+				String lookupDesc = lookupRs.getString("lookup_desc");
+				if (!((lookupDescI18N == null) || ("".equals(lookupDescI18N)))) {
+					lookupDesc = lookupDescI18N;
+				}
+				lov.setLookupValue(lookupDesc);
+				//System.out.println(lov.toString());
+				a.addListOfValues(lov);
 			}
-			throw new SQLException("ROLLED BACK DUE TO EXCEPTION", ee);
+
+		}
+
+		// Now - Section contains questions - question contains both
+		// section and attributes, attributes contain LOV
+
+	}
+	
+
+	
+	
+	
+	/**
+	 * Method to get the sections / questions / attributes / LOVS for a user
+	 * based on specified language or default language if language is not
+	 * selected
+	 * 
+	 * NOTE: The language must be for the user of Role Customer. Otherwise the
+	 * glass would break Ensure that the userid passed is the userid of the
+	 * customer
+	 * 
+	 * @param conn
+	 * @param languageCd
+	 * @param userCd
+	 * @return
+	 * @throws SQLException
+	 */
+	public Set<Section> questionDAOMethod(Connection connection,String languageCd, String userCd) throws SQLException {
+		Connection conn = null;
+		Set<Section> sectionSet = null;
+		Set<Question> questionSet = null;
+		Set<Attribute> attributeSet = null;
+		try{
+			
+			ModelUtils.initializeDBtoObjectModelMapping(new MortgageApplication());
+			Map<String,String> m = ModelUtils.getDbAttributeToObjectNamesMap();
+			System.err.println("SIZE "+m.size()+ "CONTENT"+m.toString());
+			
+			conn = connection;
+			conn.setAutoCommit(true);
+			languageCd = getLanguageCdDAO(conn,languageCd,userCd);
+			sectionSet = getSectionDAO(conn,languageCd);
+			questionSet = getQuestionDAO(conn,languageCd,sectionSet);
+			attributeSet = getAttributeDAO(conn,languageCd,questionSet);
+			getLOVDAO(conn,languageCd,attributeSet);
+			
+			Iterator <Section> si = sectionSet.iterator();
+			while(si.hasNext()){
+				Section s = si.next();
+				//System.out.println(s.toString());
+			}
+			Iterator<Question> qi =  questionSet.iterator();
+			while(qi.hasNext()){
+				Question qqi = qi.next();
+				//System.out.println("QUESTION ID:"+qqi.getQuestionId()+"Question DESC:"+qqi.getQuestionLongDesc()+"No of attributes:"+qqi.getAttributes().size());
+				//System.out.println(qqi.toString());
+			}
+			Iterator<Attribute> ai =  attributeSet.iterator();
+			while(ai.hasNext()){
+				Attribute aai = ai.next();
+				//System.out.println("QUESTION ID:"+qqi.getQuestionId()+"Question DESC:"+qqi.getQuestionLongDesc()+"No of attributes:"+qqi.getAttributes().size());
+				//System.out.println(aai.toString());
+				System.out.println(aai.getObjectAttrFQN());
+			}
+			
+
+		
+		}
+
+		catch (Exception ee) {
+
+			throw new SQLException("SQL Error - See stack-trace for details", ee);
 		}
 
 		return sectionSet;
 
 	}
+	
+	public Set<Section> questionDAOMethod(String languageCd, String userCd) throws SQLException{
+		Set<Section> s = null;
+		try{
+			Connection conn = DatabaseService.getConnection();
+			s = questionDAOMethod(conn,languageCd,userCd);
+		}catch (Exception e){
+			throw new SQLException(e);
+		}
+		return s;
+	}
+	
 
 	/**
 	 * Finds and returns an object from a given set
@@ -530,7 +618,7 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 				// I do have a parent - I need to add myself to parent
 				Section parent = findSectionInSet(parentStub,sectionSet);
 				parent.addChildSection(child);
-				System.out.println("Parent"+parent.getSectionId()+" child:"+child.getSectionId());
+				//System.out.println("Parent"+parent.getSectionId()+" child:"+child.getSectionId());
 
 			}
 		}
@@ -559,7 +647,7 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 					Section parentSetSectionStub = new Section();
 					parentSetSectionStub.setSectionId(parentSetSectionId);
 					Section parentSetSection = findSectionInSet(parentSetSectionStub,sectionSet);
-					System.out.println("PARENT SET SECTION ID" +parentSetSectionId);
+					//System.out.println("PARENT SET SECTION ID" +parentSetSectionId);
 					
 					if ((parentSetSection.getSectionLevel() == currentLevel)) {
 
@@ -571,7 +659,7 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 					}
 				}
 				// Let's print out section_id and level
-				System.out.println("Section Id:"+levelSetSection.getSectionId()+" Level:"+levelSetSection.getSectionLevel());
+				//System.out.println("Section Id:"+levelSetSection.getSectionId()+" Level:"+levelSetSection.getSectionLevel());
 
 			}
 
@@ -619,5 +707,55 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
+	
+	public static void main(String[] args) throws Exception {
+		
+		
+		Class.forName("oracle.jdbc.driver.OracleDriver");
+		Connection connection = null;
+
+		try {
+
+			connection = DriverManager.getConnection(
+					"jdbc:oracle:thin:@localhost:1521:XE", "mortgage",
+					"password");
+			QuestionMetaDataDAOImpl qdao = new QuestionMetaDataDAOImpl();
+			
+			
+		//Test case 1 - user with English and requests default	
+		Set<Section> s	= qdao.questionDAOMethod(connection,"default", "123456");
+		//Test Case 2 - user with English and requests en
+		//Set<Section> s	= qdao.questionDAOMethod(connection,"en", "123456");
+		//Test case 3 - user with English and requests spanish
+		//Set<Section> s	= qdao.questionDAOMethod(connection,"es", "123456");
+		//Test case 4 - user with spanish and requests default
+		//Set<Section> s	= qdao.questionDAOMethod(connection,"default", "123458");
+		//Test case 5 - user with spanish and requests english
+		//Set<Section> s	= qdao.questionDAOMethod(connection,"en", "123458");
+		//Test case 6 - user with spanish and requests spanish
+		//Set<Section> s	= qdao.questionDAOMethod(connection,"es", "123458");
+		//Test case 7 - requests unsupported language
+		//Set<Section> s	= qdao.questionDAOMethod(connection,"bn", "123456");
+		
+		
+		
+		Iterator<Section> i = s.iterator();
+		while(i.hasNext()){
+			Section ss = i.next();
+			//System.out.println(ss.toString());
+		}
+			
+			
+		} catch (SQLException e) {
+
+			System.out.println("Connection Failed! Check output console");
+			e.printStackTrace();
+			return;
+
+		}
+		
+			
+	}
+	
 
 }

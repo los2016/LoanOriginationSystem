@@ -6,29 +6,28 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class Section implements Comparable<Section> {
-
-	//protected String activeLanguage = "";
-	protected Set<Section> childSections = new TreeSet<Section>();
 	
-	//protected Section parentSection = null;
-	//Shubhrajit - This is creating an infinite recursion and so changed to contain only the id
-	protected int parentSectionId;
-	//protected HashMap<String, String> pastSectionNm = new HashMap<String, String>();
-	//protected HashMap<String, String> futureSectionNm = new HashMap<String, String>();
-	//protected HashMap<String, String> presentSectionNm = new HashMap<String, String>();
+	
 	
 	protected String presentSectionNm = "";
 	protected String pastSectionNm = "";
 	protected String futureSectionNm = "";
-
-	protected Set<Question> questions = new TreeSet<Question>();
-
+	protected int sectionLevel = -1; // -1 indicates that sectionLevel not calculated
 	protected int sectionId;
-
-	protected int sectionLevel = -1; // -1 indicates that sectionLevel not
-										// calculated
-
+	protected int parentSectionId;
 	protected int sequenceNo;
+	protected Set<Question> questions = new TreeSet<Question>();
+	protected Set<Section> childSections = new TreeSet<Section>();
+	
+	
+
+	
+
+	
+
+	
+
+	
 
 	public void addChildSection(Section child) {
 		this.childSections.add(child);
@@ -38,7 +37,7 @@ public class Section implements Comparable<Section> {
 		questions.add(q);
 	}
 
-	@Override
+	
 	public int compareTo(Section o) {
 		int ret;
 		if (this.getSequenceNo() > o.getSequenceNo()) {

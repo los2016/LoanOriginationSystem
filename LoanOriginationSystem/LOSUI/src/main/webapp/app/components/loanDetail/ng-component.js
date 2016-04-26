@@ -81,3 +81,18 @@ this.writeCustomerProperty(abc,k,600);
 console.log(this.readCustomerProperty(abc,k));
 
 }
+// TODO: @kaushik, please feel free to change
+(function(angular)
+{
+	"use strict";
+
+	function loanDetailController($scope, $element, $attrs,HTTPInterfaceProvider)
+	{
+		
+	}
+
+	angular.module("mainModule").component("appLoanDetail",{
+		templateUrl:"/app/components/loanDetail/ng-template.html",
+		controller:loanDetailController
+	});
+})(window.angular);

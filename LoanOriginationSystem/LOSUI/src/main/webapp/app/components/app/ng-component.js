@@ -22,7 +22,7 @@
 				component:"appLoanSummary"
 			},
 			{
-				path:"/loanDetail/...",
+				path:"/loanDetail/",
 				name:"LoanDetail",
 				component:"appLoanDetail"
 			}]

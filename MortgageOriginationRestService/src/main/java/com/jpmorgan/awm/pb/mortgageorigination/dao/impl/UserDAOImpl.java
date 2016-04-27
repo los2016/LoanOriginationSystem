@@ -2,9 +2,13 @@ package com.jpmorgan.awm.pb.mortgageorigination.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
@@ -21,6 +25,8 @@ public class UserDAOImpl implements UserDAO {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
+	Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
+
 	public boolean addUser(UserInfo userInfo) throws SQLException {
 		// TODO Auto-generated method stub
 		return false;
@@ -28,6 +34,8 @@ public class UserDAOImpl implements UserDAO {
 
 	public UserDetailsResponse authenticateUser(String userId, String password) {
 		UserDetailsResponse userDetailsResponse = new UserDetailsResponse();
+
+		logger.info("authenticateUser :: Entry::  userId: {} ", userId);
 
 		String sql = "select * from USERS where USER_CD = ?";
 		User user = new User();
@@ -43,16 +51,29 @@ public class UserDAOImpl implements UserDAO {
 		}
 
 		if (user != null && user.getPassword().equalsIgnoreCase(password)) {
+			logger.info("authenticateUser :: Authenticated Succesfuly ");
+
 			LOSResponse messageResponse = new LOSResponse();
 
 			messageResponse.setReturnMsg("User logged in Sucessfully");
 			messageResponse.setReturnType("Success");
 			userDetailsResponse.setResponse(messageResponse);
+
+			String sqlUpdate = "update USERS set LAST_LOGIN_TS = ? where USER_CD = ?";
+			try {
+				jdbcTemplate.update(sqlUpdate, new Date(), userId);
+			} catch (DataAccessException e) {
+				logger.error("authenticateUser :: While updating time stamp ");
+				e.printStackTrace();
+			}
+
 			if (user.getRoleId() == 1000) {
 				user.setUserType("A");
 			} else {
 				user.setUserType("C");
 			}
+			// Removes Role ID as we are sending UserType
+			user.setRoleId(0);
 			userDetailsResponse.setUser(user);
 		} else {
 			LOSResponse messageResponse = new LOSResponse();
@@ -60,6 +81,8 @@ public class UserDAOImpl implements UserDAO {
 			messageResponse.setReturnType("Error");
 			userDetailsResponse.setResponse(messageResponse);
 		}
+		logger.info("authenticateUser :: Exit ");
+
 		return userDetailsResponse;
 	}
 
@@ -79,6 +102,7 @@ public class UserDAOImpl implements UserDAO {
 				userInfo.setPartyId(rs.getInt("PARTY_ID"));
 				userInfo.setPassword(rs.getString("USER_PASSWORD_CD"));
 				userInfo.setRoleId(rs.getInt("ROLE_ID"));
+				userInfo.setLastLoginTimestamp(rs.getTimestamp("LAST_LOGIN_TS"));
 			}
 
 			return userInfo;

@@ -3,6 +3,7 @@ package com.jpmorgan.awm.pb.mortgageorigination.dao.impl;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -10,10 +11,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.sql.DataSource;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -25,6 +27,7 @@ import com.jpmorgan.awm.pb.mortgageorigination.response.SaveMortgageApplicationR
 import com.jpmorgan.awm.pb.mortgageorigination.utils.DatabaseService;
 import com.myorg.losmodel.model.LOSResponse;
 import com.myorg.losmodel.model.client.MortgageApplication;
+import com.myorg.losmodel.model.questions.TxMortgageApplication;
 import com.myorg.losmodel.util.ModelUtils;
 
 @Service
@@ -33,30 +36,69 @@ public class MortgageDAOImpl implements MortgageDAO {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-	@Autowired
-	private DataSource dataSource;
+	Logger logger = LoggerFactory.getLogger(MortgageDAOImpl.class);
 
-	public List<MortgageApplicationResponse> getMortgageDetails(String clientOrAdvisor, long clientOrAdvisorPartyId) {
-		// TODO Need to replace DAO logic to get Mortgage applications from
-		// database as JSON String.
+	public MortgageApplicationResponse getMortgageDetails(String clientOrAdvisor, long clientOrAdvisorPartyId,
+			long mortgageId) {
 
-		List<MortgageApplicationResponse> mortgageApplicationsList = new ArrayList<MortgageApplicationResponse>();
-		MortgageApplication mortgageApplication = new MortgageApplication();
+		logger.info("getMortgageDetails :: clientOrAdvisor: {} clientOrAdvisorPartyId : {} mortgageId : {}",
+				clientOrAdvisor, clientOrAdvisorPartyId, mortgageId);
+		List<MortgageApplication> mortgageApplicationList = new ArrayList<MortgageApplication>();
 		MortgageApplicationResponse mortgageApplicationResponse = new MortgageApplicationResponse();
-		mortgageApplicationResponse.setMortgageApplication(mortgageApplication);
+
+		List<TxMortgageApplication> txApplicationList = new ArrayList<TxMortgageApplication>();
+		try {
+
+			String sql = "";
+			if (mortgageId == 0l) {
+				sql = "select t.TRANSACTION_ID,t.COMPLETE_TRAN_OBJ from mortgage.transaction t where t.party_id = ?";
+
+				txApplicationList = jdbcTemplate.query(sql, new Object[] { clientOrAdvisorPartyId },
+						new TxMortgageApplicationRowMapper());
+			} else {
+				sql = "select t.TRANSACTION_ID,t.COMPLETE_TRAN_OBJ from mortgage.transaction t where t.transaction_id = ?";
+
+				txApplicationList = jdbcTemplate.query(sql, new Object[] { mortgageId },
+						new TxMortgageApplicationRowMapper());
+			}
+
+			// Logic to Convert to Mortgage Application
+
+			for (TxMortgageApplication txMortgageApplication : txApplicationList) {
+
+				logger.info("getMortgageDetails :: Processing for Transaction ID : {}",
+						txMortgageApplication.getTransactionId());
+
+				ObjectMapper mapper = new ObjectMapper();
+				mortgageApplicationList
+						.add(mapper.readValue(txMortgageApplication.getJsonString(), MortgageApplication.class));
+			}
+
+			// Added list object to main List
+			mortgageApplicationResponse.setMortgageApplications(mortgageApplicationList);
 		LOSResponse response = new LOSResponse();
 		response.setReturnMsg("List of Applications");
 		response.setReturnType("Success");
 		mortgageApplicationResponse.setResponse(response);
-		mortgageApplicationsList.add(mortgageApplicationResponse);
-		return mortgageApplicationsList;
+			logger.info("getMortgageDetails :: Exit ");
+
+		} catch (Exception e) {
+			LOSResponse messageResponse = new LOSResponse();
+			messageResponse.setReturnMsg("Login Failed");
+			messageResponse.setReturnType("Error");
+			mortgageApplicationResponse.setResponse(messageResponse);
+			e.printStackTrace();
+			return mortgageApplicationResponse;
+		}
+
+		return mortgageApplicationResponse;
 	}
 
 	public SaveMortgageApplicationResponse saveMortgageDetails(MortgageApplicationRequest mortgageApplicationRequest)
 			throws SQLException {
 		SaveMortgageApplicationResponse mortgageApplicationResponse = new SaveMortgageApplicationResponse();
 		LOSResponse response = new LOSResponse();
-
+		logger.info("saveMortgageDetails :: Entry ");
 		MortgageApplication mortgageApplication = null;
 		if (mortgageApplicationRequest != null && mortgageApplicationRequest.getMortgageApplication() != null) {
 			long transId = -1;
@@ -71,19 +113,20 @@ public class MortgageDAOImpl implements MortgageDAO {
 				String jsonMortgageApplication = mapper.writeValueAsString(mortgageApplication);
 				transId =  mortgageApplication.getApplicationID();
 				String statusCd = mortgageApplicationRequest.getSaveType();
+
+				logger.info("saveMortgageDetails :: Calling upsert for Transaction ID {} ", transId);
+
 				transId = upsert(attributeMap, transId, statusCd, jsonMortgageApplication,
 						mortgageApplication.getClientPartyId());
 
 				if(transId < 1){
+					logger.info("saveMortgageDetails :: Transaction ID {} ", transId);
 					throw new Exception("Dao layer failed to save the mortgage");
 				}
 				response.setReturnMsg("Application Saved Sucessfully");
 				response.setReturnType("Success");
 				mortgageApplicationResponse.setResponse(response);
 				mortgageApplicationResponse.setMortgageId(transId);
-				//Commented by Shubhrjit - Hard coded
-				//mortgageApplicationResponse.setMortgageId(23444345243l);
-
 			} catch (Exception e) {
 				response.setReturnMsg("Error in Saving the Application");
 				response.setReturnType("Error");
@@ -92,7 +135,7 @@ public class MortgageDAOImpl implements MortgageDAO {
 				e.printStackTrace();
 			}
 		}
-
+		logger.info("saveMortgageDetails :: Exit ");
 		return mortgageApplicationResponse;
 	}
 
@@ -100,9 +143,7 @@ public class MortgageDAOImpl implements MortgageDAO {
 	public long upsert(Map<String, Object> attributeMap, long tranId, String statusCd, String jsonObject,
 			String clientPartyId) throws SQLException {
 
-		
 		//Forcing a commit
-		
 		
 		// Vaibhav added some code.. in Model..
 		// For this DAO method ModelUtils.java ->
@@ -226,23 +267,19 @@ public class MortgageDAOImpl implements MortgageDAO {
 		return ret;
 	}
 
-	/*
-	 * public MortgageApplicationResponse
-	 * saveMortgageDetails(MortgageApplicationRequest
-	 * mortgageApplicationRequest) throws SQLException {
-	 * MortgageApplicationResponse mortgageApplicationResponse = new
-	 * MortgageApplicationResponse();
-	 * 
-	 * // TODO Need to replace DAO logic once we will have Query from //
-	 * Shubhrajit for Save Mortgage Application
-	 * 
-	 * LOSResponse response = new LOSResponse(); response.setReturnMsg(
-	 * "Application Saved Sucessfully"); response.setReturnType("Success");
-	 * mortgageApplicationResponse.setResponse(response);
-	 * mortgageApplicationResponse.setMortgageId(23444345243l);
-	 * 
-	 * return mortgageApplicationResponse; }
-	 */
+	private class TxMortgageApplicationRowMapper implements RowMapper<TxMortgageApplication> {
+
+		public TxMortgageApplication mapRow(ResultSet rs, int rowNum) throws SQLException {
+			TxMortgageApplication txMortgageApplication = new TxMortgageApplication();
+			if (rs != null) {
+				logger.info("TxMortgageApplication mapRow :: Transaction ID {} ", rs.getInt("TRANSACTION_ID"));
+				txMortgageApplication.setTransactionId(rs.getInt("TRANSACTION_ID"));
+				txMortgageApplication.setJsonString(rs.getClob("COMPLETE_TRAN_OBJ").toString());
+			}
+			return txMortgageApplication;
+
+		}
+	}
 
 	public JdbcTemplate getJdbcTemplate() {
 		return jdbcTemplate;
@@ -251,13 +288,4 @@ public class MortgageDAOImpl implements MortgageDAO {
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
-
-	public DataSource getDataSource() {
-		return dataSource;
-	}
-
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
-
 }

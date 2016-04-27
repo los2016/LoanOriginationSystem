@@ -17,6 +17,8 @@ import java.util.TreeSet;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +42,7 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 	@Autowired
 	private DataSource dataSource;
 
+	Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
 	
 	public String getLanguageCdDAO(Connection conn, String languageCd,String userCd) throws SQLException{
 			

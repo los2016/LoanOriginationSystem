@@ -21,6 +21,7 @@ import com.jpmorgan.awm.pb.mortgageorigination.dao.UserDAO;
 import com.jpmorgan.awm.pb.mortgageorigination.request.MortgageApplicationRequest;
 import com.jpmorgan.awm.pb.mortgageorigination.response.CoverageResponse;
 import com.jpmorgan.awm.pb.mortgageorigination.response.MortgageApplicationResponse;
+import com.jpmorgan.awm.pb.mortgageorigination.response.SaveMortgageApplicationResponse;
 import com.jpmorgan.awm.pb.mortgageorigination.response.UserDetailsResponse;
 import com.jpmorgan.awm.pb.mortgageorigination.service.QNAServices;
 import com.myorg.losmodel.model.LOSResponse;
@@ -67,35 +68,36 @@ public class MortgageRestController {
 	}
 
 	@RequestMapping(value = "/saveMortgageApplication", method = RequestMethod.POST)
-	public ResponseEntity<MortgageApplicationResponse> saveMortgageApplication(
+	public ResponseEntity<SaveMortgageApplicationResponse> saveMortgageApplication(
 			@RequestBody MortgageApplicationRequest mortgageApplicationRequest) {
 
 		// TODo code for calling Dao Layer
 
-		MortgageApplicationResponse mortgageApplicationResponse = new MortgageApplicationResponse();
+		SaveMortgageApplicationResponse mortgageApplicationResponse = new SaveMortgageApplicationResponse();
 		try {
 			mortgageApplicationResponse = mortgageDAO.saveMortgageDetails(mortgageApplicationRequest);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			LOSResponse response = new LOSResponse();
-			response.setReturnMsg("Application Save Failed Sucessfully");
+			response.setReturnMsg("Application Save Failed");
 			response.setReturnType("Error");
 			mortgageApplicationResponse.setResponse(response);
-			mortgageApplicationResponse.setMortgageId(23444345243l);
+			mortgageApplicationResponse.setMortgageId(-1);
 		}
 
-		return new ResponseEntity<MortgageApplicationResponse>(mortgageApplicationResponse, HttpStatus.OK);
+		return new ResponseEntity<SaveMortgageApplicationResponse>(mortgageApplicationResponse, HttpStatus.OK);
 
 	}
 
 	@RequestMapping(value = "/getMortgageApplicationsDetails", method = RequestMethod.GET)
-	public ResponseEntity<List<MortgageApplicationResponse>> getMortgageApplicationsDetails(
-			@RequestParam String clientOrAdvisor, @RequestParam long clientOrAdvisorPartyId) {
+	public ResponseEntity<MortgageApplicationResponse> getMortgageApplicationsDetails(
+			@RequestParam String clientOrAdvisor, @RequestParam long clientOrAdvisorPartyId,
+			@RequestParam long mortgageId) {
 
-		List<MortgageApplicationResponse> mortgageApplicationList = mortgageDAO.getMortgageDetails(clientOrAdvisor,
-				clientOrAdvisorPartyId);
+		MortgageApplicationResponse mortgageApplicationList = mortgageDAO.getMortgageDetails(clientOrAdvisor,
+				clientOrAdvisorPartyId, mortgageId);
 
-		return new ResponseEntity<List<MortgageApplicationResponse>>(mortgageApplicationList, HttpStatus.OK);
+		return new ResponseEntity<MortgageApplicationResponse>(mortgageApplicationList, HttpStatus.OK);
 
 	}
 

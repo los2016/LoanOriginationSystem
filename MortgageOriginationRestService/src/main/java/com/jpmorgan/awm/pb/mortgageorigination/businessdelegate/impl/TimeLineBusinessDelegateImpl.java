@@ -175,18 +175,22 @@ public class TimeLineBusinessDelegateImpl implements TimeLineBusinessDelegate{
 					System.out.println("Trying to get details with Mortgage ID "+mortgageId+" and party Id :"+partyId );
 					MortgageApplicationResponse getMortgageDetails = mortgageDAO.getMortgageDetails("C", Long.parseLong(partyId), mortgageId);
 					List<MortgageApplication> l = getMortgageDetails.getMortgageApplications();
+					System.out.println("NO OF MORTGAGE APPLICATION OBJECTS RECEIVED: "+l.size());
 					Iterator<MortgageApplication> maIt = l.iterator();
 					while(maIt.hasNext()){
+						
+						System.out.println("ITERATING ... YOU SHOULD SEE THIS "+l.size()+" TIMES");
 						MortgageApplication m = maIt.next();
 						TimelineElement telement = new TimelineElement();
 						telement.setBpmProcessId(m.getBpmProcessId());
-						timelineElementSet.add(telement);
+						
 						if(m.getApplicationID() >= 0l){
 							
 							telement.setMortgageId(m.getApplicationID());
 						}else{
 							telement.setMortgageId(mortgageId);
 						}
+						timelineElementSet.add(telement);
 						
 					}
 					

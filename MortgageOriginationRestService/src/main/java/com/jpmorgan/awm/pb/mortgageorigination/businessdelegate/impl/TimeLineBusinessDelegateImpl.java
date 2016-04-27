@@ -118,10 +118,11 @@ public class TimeLineBusinessDelegateImpl implements TimeLineBusinessDelegate{
 			
 			System.out.println("I have got all the DAOs");
 			String userCd = timelineRequest.getUserCode();
-			if(userCd == null){
-				System.out.println("USER CODE IS NULL hardcoding for test");
-				userCd = "123456";
-			}
+			//if(userCd == null){
+				//System.out.println("USER CODE IS NULL hardcoding for test");
+				//userCd = "123456";
+			//}
+			
 			System.out.println("USER CODE IS "+userCd);
 
 			User userInitial = questionMetaData.getUserDetails(userCd);
@@ -208,25 +209,40 @@ public class TimeLineBusinessDelegateImpl implements TimeLineBusinessDelegate{
 			//timeline.setSections(timelineSectionSet);
 			//At this point we got the ids
 			
+			
 			System.out.println("Each timeline element will have its own copy of the section set // before we can set status");
 			
-			Iterator<TimelineElement> tit = timelineElementSet.iterator();
+			
 			Set<TimelineSectionWrapper> copiedSet = new TreeSet<TimelineSectionWrapper>(new TimelineSectionWrapperComparator());
 			
+			System.out.println("PRINTING OUT THE COPIED SET");
+			Iterator<TimelineSectionWrapper> z = copiedSet.iterator();
+			while(z.hasNext()){
+				TimelineSectionWrapper tlsw = z.next();
+				System.out.println("ID "+tlsw.getSectionId()+" NAME "+tlsw.getPresentSectionNm()+ " NO OF CHILDREN "+tlsw.getChildSections().size());
+			}
+			
+			Iterator<TimelineElement> tit = timelineElementSet.iterator();
 			while (tit.hasNext()){
 				TimelineElement el = tit.next();
+				System.out.println("TIMELINE ELEMENT WITH MORTGAGE ID - "+el.getMortgageId());
 				Iterator<TimelineSectionWrapper> tswIt = timelineSectionSet.iterator();
 				while(tswIt.hasNext()){
 					TimelineSectionWrapper x = tswIt.next();
 					TimelineSectionWrapper s = new TimelineSectionWrapper();
 					s.setMortgageId(el.getMortgageId());
 					copyTimelineSection(x,s);
+					System.out.println("FOR MORTGAGE "+el.getMortgageId()+"WE CREATED SET "+s.getSectionId()+" NAME:"+s.getPresentSectionNm());
 					Iterator<TimelineSectionWrapper> childIt = x.getChildSections().iterator();
 					while(childIt.hasNext()){
 						TimelineSectionWrapper child = new TimelineSectionWrapper();
 						child.setMortgageId(el.getMortgageId());
 						copyTimelineSection(childIt.next(),child);
+						s.addChildSection(child);
 					}
+					System.out.println("FOR MORTGAGE "+el.getMortgageId()+"WE CREATED SET "+s.getSectionId()+
+							" NAME:"+s.getPresentSectionNm()+"NO OF CHILDREN: "+s.getChildSections().size());
+					
 						
 					
 					
@@ -245,6 +261,8 @@ public class TimeLineBusinessDelegateImpl implements TimeLineBusinessDelegate{
 					TimelineSectionWrapper wrapper = sit.next();
 					if((wrapper.getSectionLevel() == 1)&&(tele.getMortgageId() == wrapper.getMortgageId())){
 						tele.addSection(wrapper);
+						System.out.println("ADDING LEVEL 1 ELELMENT "+wrapper.getSectionId()+" NAME "+wrapper.getPresentSectionNm()
+						+" NO OF CHILDREN: "+wrapper.getChildSections().size()+" TO ELEMENT "+tele.getMortgageId());
 					}
 				}
 			}
@@ -255,6 +273,12 @@ public class TimeLineBusinessDelegateImpl implements TimeLineBusinessDelegate{
 			
 			//At this point - need to iterate and get the process states
 			
+			Iterator<TimelineElement> tit3 = timelineElementSet.iterator();
+			while(tit3.hasNext()){
+				TimelineElement elem = tit3.next();
+				System.out.println(" CALLING JBPM WITH PROCESS ID "+elem.getBpmProcessId()+" FOR MORTGAGE "+elem.getMortgageId());
+				//Need to iterate through all the states and call - expensive call - think how to make this compact
+			}
 			
 			
 		}catch(Exception e){
@@ -286,7 +310,7 @@ public class TimeLineBusinessDelegateImpl implements TimeLineBusinessDelegate{
 		wrapper.setSequenceNo(s.getSequenceNo());
 		wrapper.setMortgageId(-1l);
 		
-		Set childSections = s.getChildSections();
+		Set<Section> childSections = s.getChildSections();
 		Iterator<Section> children = childSections.iterator();
 		while(children.hasNext()){
 			Section child = children.next();

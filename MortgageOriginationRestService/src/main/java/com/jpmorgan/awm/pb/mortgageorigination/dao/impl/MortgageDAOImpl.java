@@ -70,6 +70,9 @@ public class MortgageDAOImpl implements MortgageDAO {
 						txMortgageApplication.getTransactionId());
 
 				ObjectMapper mapper = new ObjectMapper();
+				if ( txMortgageApplication.getJsonString() == null )
+					continue; 
+
 				mortgageApplicationList
 						.add(mapper.readValue(txMortgageApplication.getJsonString(), MortgageApplication.class));
 			}

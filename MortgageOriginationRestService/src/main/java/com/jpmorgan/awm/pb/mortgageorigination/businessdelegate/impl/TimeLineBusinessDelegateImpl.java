@@ -81,9 +81,10 @@ public class TimeLineBusinessDelegateImpl implements TimeLineBusinessDelegate{
 		this.questionMetaData = questionMetaData;
 	}
 
-	public Timeline getTimeline(TimelineRequest timelineRequest) throws Exception{
+	public Timeline getTimeline(TimelineRequest timelineRequest, MortgageDAO mdao) throws Exception{
 		System.out.println("INSIDE TIMELINE REQUEST BD");
 		
+		this.mortgageDAO = mdao;
 		
 		Timeline timeline = new Timeline();
 		Set<Section> sectionSet = null;
@@ -312,7 +313,7 @@ public class TimeLineBusinessDelegateImpl implements TimeLineBusinessDelegate{
 	}
 	
 	public static void main(String[] args) throws Exception{
-
+/*
 		Class.forName("oracle.jdbc.driver.OracleDriver");
 		Connection connection = null;
 
@@ -330,7 +331,7 @@ public class TimeLineBusinessDelegateImpl implements TimeLineBusinessDelegate{
 			l.add("14");
 			l.add("21");
 			req.setMortgageId(l);
-			Timeline t = td.getTimeline(req);
+			Timeline t = td.getTimeline(req, new MortgageDAO());
 			Set<TimelineElement> tp = t.getTimelineElement();
 			Iterator<TimelineElement> i = tp.iterator();
 			while(i.hasNext()){
@@ -349,7 +350,7 @@ public class TimeLineBusinessDelegateImpl implements TimeLineBusinessDelegate{
 			return;
 
 		}
-		
+		*/
 	}
 		
 		

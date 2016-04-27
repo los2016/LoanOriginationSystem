@@ -143,7 +143,7 @@ public class MortgageRestController {
 	public ResponseEntity<Timeline> getTimeline(@RequestBody TimelineRequest timelineRequest) {
 		Timeline timeline = null;
 		try {
-			timeline = timelineBd.getTimeline(timelineRequest);
+			timeline = timelineBd.getTimeline(timelineRequest,mortgageDAO);
 			
 
 		} catch (Exception e) {

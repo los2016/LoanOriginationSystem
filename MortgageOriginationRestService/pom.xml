@@ -119,6 +119,13 @@
 
 
 		<dependency>
+			<groupId>com.myorg.losworkflow</groupId>
+			<artifactId>WorkFlowRemoteClient</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		
+		<!-- Workflow Client JAR -->
+		<dependency>
 			<groupId>com.myorg</groupId>
 			<artifactId>LOSModel</artifactId>
 			<version>1.1-SNAPSHOT</version>

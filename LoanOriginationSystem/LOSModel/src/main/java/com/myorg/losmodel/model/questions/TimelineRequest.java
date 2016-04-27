@@ -1,20 +1,21 @@
-package com.myorg.losmodel.model;
+package com.myorg.losmodel.model.questions;
 
 import java.util.List;
 
-public class TimelineRequest extends LOSRequest {
+public class TimelineRequest {
 
 	protected String languageCd;
+	protected String userCode;
 	protected List<String> mortgageId;
-	protected String partyId;
+	
 	public String getLanguageCd() {
 		return languageCd;
 	}
 	public List<String> getMortgageId() {
 		return mortgageId;
 	}
-	public String getPartyId() {
-		return partyId;
+	public String getUserCode() {
+		return userCode;
 	}
 	public void setLanguageCd(String languageCd) {
 		this.languageCd = languageCd;
@@ -22,8 +23,8 @@ public class TimelineRequest extends LOSRequest {
 	public void setMortgageId(List<String> mortgageId) {
 		this.mortgageId = mortgageId;
 	}
-	public void setPartyId(String partyId) {
-		this.partyId = partyId;
+	public void setUserCode(String userCode) {
+		this.userCode = userCode;
 	}
 	
 }

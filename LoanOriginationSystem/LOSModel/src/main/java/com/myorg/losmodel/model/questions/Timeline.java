@@ -1,9 +1,7 @@
-package com.myorg.losmodel.model.client;
+package com.myorg.losmodel.model.questions;
 
 import java.util.List;
 import java.util.Set;
-
-import com.myorg.losmodel.model.questions.Section;
 
 public class Timeline {
 

@@ -274,7 +274,17 @@ public class MortgageDAOImpl implements MortgageDAO {
 			if (rs != null) {
 				logger.info("TxMortgageApplication mapRow :: Transaction ID {} ", rs.getInt("TRANSACTION_ID"));
 				txMortgageApplication.setTransactionId(rs.getInt("TRANSACTION_ID"));
-				txMortgageApplication.setJsonString(rs.getString("COMPLETE_TRAN_OBJ"));
+				//txMortgageApplication.setJsonString(rs.getString("COMPLETE_TRAN_OBJ"));
+				String completeTranObj = rs.getString("COMPLETE_TRAN_OBJ");
+				logger.debug ("Complete tran obj from database >>"+completeTranObj+" <<");
+				System.out.println ("Complete tran obj from database >>"+completeTranObj+" <<");
+				if(completeTranObj == null){
+					logger.warn("COMPLETE TRAN OBJ IS NULL");
+					System.out.println("COMPLETE TRAN OBJ IS NULL");
+							
+					completeTranObj = "";
+				}
+				txMortgageApplication.setJsonString(completeTranObj);
 			}
 			return txMortgageApplication;
 

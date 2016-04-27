@@ -184,12 +184,9 @@ public class TimeLineBusinessDelegateImpl implements TimeLineBusinessDelegate{
 						TimelineElement telement = new TimelineElement();
 						telement.setBpmProcessId(m.getBpmProcessId());
 						
-						if(m.getApplicationID() >= 0l){
-							
-							telement.setMortgageId(m.getApplicationID());
-						}else{
-							telement.setMortgageId(mortgageId);
-						}
+						
+						
+						telement.setMortgageId(mortgageId);
 						timelineElementSet.add(telement);
 						
 					}

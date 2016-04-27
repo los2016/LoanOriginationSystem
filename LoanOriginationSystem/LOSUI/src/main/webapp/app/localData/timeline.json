@@ -1,0 +1,34 @@
+{
+	"motgage": [{
+		"motgageid": "100",
+		"Sections": [{
+			"value": "applied",
+			"level": 1,
+			"sectionid": "101",
+			"status": "in-progress",
+			"subsection": [{
+				"name": "abc",
+				"level": 2,
+				"sectionid": "102",
+				"status": "in-progress"
+			}, {
+				"name": "def",
+				"level": 3,
+				"sectionid": "103",
+				"status": "completed"
+			}, {
+				"name": "ghi",
+				"level": 4,
+				"sectionid": "104",
+				"subsection": [{
+					"name": "abc",
+					"level": 5,
+					"sectionid": "105",
+					"status": "in-progress"
+				}]
+
+
+			}]
+		}]
+	}]
+}

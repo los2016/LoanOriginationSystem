@@ -1,0 +1,93 @@
+<div class="application-pages">
+    <!--header-->
+    <ng-include src="'/app/views/application/header/ng-template.html'"></ng-include>
+    <!--/header-->
+    <!--page container-->
+    
+        <div class="container-fluid detail-page-container">
+            <div class="row page-head-row">
+                <div class="col-md-2">
+                    <h3>My Loan</h3>    
+                </div>
+                <div class="col-md-8">
+<!--
+                    <div class="input-group stylish-input-group">
+                        <input type="text" class="form-control"  placeholder="Search your loan here..." >
+                        <span class="input-group-addon">
+                            <button type="submit">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>  
+                        </span>
+                    </div>
+-->
+                </div>
+                <div class="col-md-2">
+                    <a href="#" class="btn btn-default" >Back</a>
+                </div>
+            </div>
+            
+            <div class="loan-list-container">
+                
+                <!-- loan list rows-->
+                <ng-outlet></ng-outlet>
+                <!-- /loan list rows-->
+
+                <!-- form row -->
+                <div class="row form-row">
+                    <div class="col-md-9">
+                        <!--form panel-->
+                        <div class="form-panel">
+                            <div data-section="no_step">
+                                <div class="panel panel-danger">
+                                    <div class="panel-heading">
+                                        Error Information
+                                    </div>
+                                    <div class="panel-body">
+                                        No data found!
+                                    </div>
+                                </div>
+                            </div>
+                            <div data-section="section_1">
+                                
+                                    <div class="panel panel-info">
+                                        <div class="panel-heading">
+                                            Personal Information
+                                        </div>
+                                        <div class="panel-body">
+                                            <form role="form" method="get" action="#" id="frm_detail" class="form-inline">
+                                            <!-- dynamic content-->
+                                            </form>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <div class="panel-footer form-actions-panel">
+                                                <button type="button" class="btn btn-default">Cancel</button>
+                                                <button type="button" class="btn btn-primary" data-section="section_2">Submit</button>
+                                                <button type="button" class="btn btn-primary pull-right" data-section="section_2">Next</button>
+                                                <button type="button" class="btn btn-disabled pull-right" disabled>Previous</button>
+                                            </div>
+                                        </div>
+                                    </div>    
+                            </div>
+                        </div>
+                        <!--/form panel-->
+                    </div>
+                    <div class="col-md-3">
+                        <!--form panel-->
+                        
+                        <div class="pending-task-panel">
+
+                        </div>
+                        <!--/form panel-->
+                    </div>
+                </div>
+                <!-- /form row -->
+
+            </div>
+        </div>
+
+    <!--/page container-->
+
+    <!--footer-->
+    <ng-include src="'/app/views/application/footer/ng-template.html'"></ng-include>
+    <!--/footer-->
+</div>

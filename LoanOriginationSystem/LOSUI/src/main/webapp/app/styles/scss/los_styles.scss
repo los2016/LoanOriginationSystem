@@ -5,8 +5,14 @@
 
 body {
     /*common body styles*/
+    /*TODO: cleanup base styles*/
     /*font-family: $font-family;*/
+    /*temp styls start*/
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    /*text-transform: uppercase;*/
     a{
+        text-decoration: none;
         &:hover, &:link {
             text-decoration: none;
         }
@@ -15,6 +21,7 @@ body {
     .form-control {
         @include border-radius(0);
     }
+    /*temp styles end*/
     div {
         &.login-page { 
             /*login page styles*/
@@ -58,7 +65,7 @@ body {
             @include background-size(cover);
             .container-fluid {
                 background: $white;
-                width: 80%;
+                width: 90%;
             }
             nav.navbar {
                 /*top navbar styles - customized*/
@@ -121,7 +128,6 @@ body {
             .list-page-container, .detail-page-container{
                 height: 100vh;
                 padding-top: 70px;
-                
                 .dropdown-menu {
                     li {
                         padding: 10px;
@@ -142,7 +148,9 @@ body {
                 }
 
                 /* prop image styles */
-
+                .prop-panel {
+                    padding: 30px 40px;
+                }
                 .prop-panel img {
                     width: 200px;
                     height: 160px;

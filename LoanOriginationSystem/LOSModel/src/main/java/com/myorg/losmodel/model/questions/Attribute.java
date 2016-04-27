@@ -26,11 +26,11 @@ public class Attribute implements Comparable<Attribute> {
 	public int compareTo(Attribute o) {
 		int ret;
 		if (this.getSequenceNo() > o.getSequenceNo()) {
-			ret = 1;
+			ret = -1;
 		} else if (this.getSequenceNo() == o.getSequenceNo()) {
 			ret = 0;
 		} else {
-			ret = -1;
+			ret = 1;
 		}
 		return ret;
 	}

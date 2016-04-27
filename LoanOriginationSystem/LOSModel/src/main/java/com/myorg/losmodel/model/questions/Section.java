@@ -7,8 +7,56 @@ import java.util.TreeSet;
 
 public class Section implements Comparable<Section> {
 	
-	
-	
+	public String getPresentSectionNm() {
+		return presentSectionNm;
+	}
+
+
+	public void setPresentSectionNm(String presentSectionNm) {
+		this.presentSectionNm = presentSectionNm;
+	}
+
+
+	public String getPastSectionNm() {
+		return pastSectionNm;
+	}
+
+
+	public void setPastSectionNm(String pastSectionNm) {
+		this.pastSectionNm = pastSectionNm;
+	}
+
+
+	public String getFutureSectionNm() {
+		return futureSectionNm;
+	}
+
+
+	public void setFutureSectionNm(String futureSectionNm) {
+		this.futureSectionNm = futureSectionNm;
+	}
+
+
+	public int getParentSectionId() {
+		return parentSectionId;
+	}
+
+
+	public void setParentSectionId(int parentSectionId) {
+		this.parentSectionId = parentSectionId;
+	}
+
+
+	public void setQuestions(Set<Question> questions) {
+		this.questions = questions;
+	}
+
+
+	public void setChildSections(Set<Section> childSections) {
+		this.childSections = childSections;
+	}
+
+
 	protected String presentSectionNm = "";
 	protected String pastSectionNm = "";
 	protected String futureSectionNm = "";
@@ -16,36 +64,34 @@ public class Section implements Comparable<Section> {
 	protected int sectionId;
 	protected int parentSectionId;
 	protected int sequenceNo;
+
+	public Set<Question> getQuestions() {
+		return questions;
+	}
+
+
 	protected Set<Question> questions = new TreeSet<Question>();
 	protected Set<Section> childSections = new TreeSet<Section>();
-	
-	
 
 	
+	public void addQuestion(Question q) {
+		questions.add(q);
+	}
 
-	
-
-	
-
-	
 
 	public void addChildSection(Section child) {
 		this.childSections.add(child);
 	}
 
-	public void addQuestion(Question q) {
-		questions.add(q);
-	}
 
-	
 	public int compareTo(Section o) {
 		int ret;
 		if (this.getSequenceNo() > o.getSequenceNo()) {
-			ret = 1;
+			ret = -1;
 		} else if (this.getSequenceNo() == o.getSequenceNo()) {
 			ret = 0;
 		} else {
-			ret = -1;
+			ret = 1;
 		}
 		return ret;
 	}
@@ -59,37 +105,10 @@ public class Section implements Comparable<Section> {
 	}
 
 
-
 	public Set<Section> getChildSections() {
 		return childSections;
 	}
 
-	public String getFutureSectionNm() {
-		return futureSectionNm;
-	}
-
-	
-
-	public int getParentSectionId() {
-		return parentSectionId;
-	}
-
-	public String getPastSectionNm() {
-		return pastSectionNm;
-	}
-
-
-
-
-	public String getPresentSectionNm() {
-		return presentSectionNm;
-	}
-
-
-
-	public Set<Question> getQuestions() {
-		return questions;
-	}
 
 	public int getSectionId() {
 		return sectionId;
@@ -105,27 +124,6 @@ public class Section implements Comparable<Section> {
 
 	public int hashCode() {
 		return this.getSectionId() % 10;
-	}
-
-	
-	public void setFutureSectionNm(String futureSectionNm) {
-		
-		this.futureSectionNm = futureSectionNm;
-	}
-
-	public void setParentSectionId(int parentSectionId) {
-		this.parentSectionId = parentSectionId;
-	}
-
-
-
-	public void setPastSectionNm(String pastSectionNm) {
-			this.pastSectionNm=pastSectionNm;
-	}
-
-	public void setPresentSectionNm(String presentSectionNm) {
-	
-		this.presentSectionNm = presentSectionNm;
 	}
 
 	public void setSectionId(int sectionId) {

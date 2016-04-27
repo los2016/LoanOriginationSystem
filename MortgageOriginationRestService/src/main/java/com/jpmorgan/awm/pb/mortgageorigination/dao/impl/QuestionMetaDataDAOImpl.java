@@ -22,7 +22,9 @@ import org.springframework.stereotype.Service;
 
 import com.jpmorgan.awm.pb.mortgageorigination.dao.QuestionMetaDataDAO;
 import com.jpmorgan.awm.pb.mortgageorigination.utils.DatabaseService;
+import com.myorg.losmodel.model.TimelineRequest;
 import com.myorg.losmodel.model.client.MortgageApplication;
+import com.myorg.losmodel.model.client.Timeline;
 import com.myorg.losmodel.model.questions.Attribute;
 import com.myorg.losmodel.model.questions.DataType;
 import com.myorg.losmodel.model.questions.LookupListOfValues;
@@ -375,9 +377,8 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 				System.err.println("Attribute to Fully Qualified Map is NULL - Something is wrong");
 			}else{
 				
-				
-				attrFQNColName = attToObjectMap.get(attrFromResultSet.getColName());
 				attrFromResultSet.setObjectAttrFQN(attrFQNColName);
+				attrFQNColName = attToObjectMap.get(attrFromResultSet.getColName());
 				System.err.println("DB COL NAME TO LOOKUP ATTRIBUTE: "+attrFromResultSet.getColName()+" FQN = "+attrFQNColName);
 				
 				
@@ -484,6 +485,7 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 		Set<Section> sectionSet = null;
 		Set<Question> questionSet = null;
 		Set<Attribute> attributeSet = null;
+		TreeSet<Section> copy = new TreeSet<Section>();
 		try{
 			
 			ModelUtils.initializeDBtoObjectModelMapping(new MortgageApplication());
@@ -499,10 +501,16 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 			getLOVDAO(conn,languageCd,attributeSet);
 			
 			Iterator <Section> si = sectionSet.iterator();
+			
 			while(si.hasNext()){
 				Section s = si.next();
-				//System.out.println(s.toString());
+				if(s.getSectionLevel() == 1){
+					//Only top level sections here
+					copy.add(s);
+				}
 			}
+			
+			
 			Iterator<Question> qi =  questionSet.iterator();
 			while(qi.hasNext()){
 				Question qqi = qi.next();
@@ -526,7 +534,7 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 			throw new SQLException("SQL Error - See stack-trace for details", ee);
 		}
 
-		return sectionSet;
+		return copy;
 
 	}
 	
@@ -535,6 +543,44 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 		try{
 			Connection conn = DatabaseService.getConnection();
 			s = questionDAOMethod(conn,languageCd,userCd);
+		}catch (Exception e){
+			throw new SQLException(e);
+		}
+		return s;
+	}
+	
+
+	public Set<Section> timelineDAOMethod(Connection connection,String languageCd, String userCd) throws SQLException {
+		Connection conn = null;
+		Set<Section> sectionSet = null;
+	
+		try{
+			
+			conn = connection;
+			conn.setAutoCommit(true);
+			languageCd = getLanguageCdDAO(conn,languageCd,userCd);
+			sectionSet = getSectionDAO(conn,languageCd);
+			Iterator <Section> si = sectionSet.iterator();
+			while(si.hasNext()){
+				Section s = si.next();
+				//System.out.println(s.toString());
+			}
+		
+		}
+
+		catch (Exception ee) {
+
+			throw new SQLException("SQL Error - See stack-trace for details", ee);
+		}
+
+		return sectionSet;
+	}
+		
+	public Set<Section> timelineDAOMethod(String languageCd, String userCd) throws SQLException{
+		Set<Section> s = null;
+		try{
+			Connection conn = DatabaseService.getConnection();
+			s = timelineDAOMethod(conn,languageCd,userCd);
 		}catch (Exception e){
 			throw new SQLException(e);
 		}
@@ -754,8 +800,33 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 
 		}
 		
+
+		
 			
 	}
-	
 
+	
+	public Timeline getTimeline(TimelineRequest timelineRequest) throws SQLException{
+		Timeline timeline = null;
+		try{
+			Connection conn = DatabaseService.getConnection();
+			timeline = getTimeline(conn,timelineRequest);
+		}catch (Exception e){
+			throw new SQLException(e);
+		}
+		return timeline;
+	}
+
+	public Timeline getTimeline(Connection conn, TimelineRequest timelineRequest) throws SQLException{
+		Timeline timeline = null;
+		try{
+			
+			
+			
+		}catch (Exception e){
+			throw new SQLException(e);
+		}
+		return timeline;
+	}
+	
 }

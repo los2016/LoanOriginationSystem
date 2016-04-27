@@ -9,11 +9,11 @@ public class LookupListOfValues implements Comparable<LookupListOfValues> {
 	public int compareTo(LookupListOfValues o) {
 		int ret;
 		if (this.getSortOrder() > o.getSortOrder()) {
-			ret = 1;
+			ret = -1;
 		} else if (this.getSortOrder() == o.getSortOrder()) {
 			ret = 0;
 		} else {
-			ret = -1;
+			ret = 1;
 		}
 		return ret;
 	}

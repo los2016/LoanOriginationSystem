@@ -21,12 +21,14 @@ import com.jpmorgan.awm.pb.mortgageorigination.dao.UserDAO;
 import com.jpmorgan.awm.pb.mortgageorigination.request.MortgageApplicationRequest;
 import com.jpmorgan.awm.pb.mortgageorigination.response.CoverageResponse;
 import com.jpmorgan.awm.pb.mortgageorigination.response.MortgageApplicationResponse;
-import com.jpmorgan.awm.pb.mortgageorigination.response.SaveMortgageApplicationResponse;
 import com.jpmorgan.awm.pb.mortgageorigination.response.UserDetailsResponse;
 import com.jpmorgan.awm.pb.mortgageorigination.service.QNAServices;
 import com.myorg.losmodel.model.LOSResponse;
+import com.myorg.losmodel.model.TimelineRequest;
 import com.myorg.losmodel.model.ValidateQuestionRequest;
 import com.myorg.losmodel.model.ValidateQuestionResponse;
+import com.myorg.losmodel.model.client.Sections;
+import com.myorg.losmodel.model.client.Timeline;
 import com.myorg.losmodel.model.questions.Section;
 
 @RestController
@@ -65,24 +67,24 @@ public class MortgageRestController {
 	}
 
 	@RequestMapping(value = "/saveMortgageApplication", method = RequestMethod.POST)
-	public ResponseEntity<SaveMortgageApplicationResponse> saveMortgageApplication(
+	public ResponseEntity<MortgageApplicationResponse> saveMortgageApplication(
 			@RequestBody MortgageApplicationRequest mortgageApplicationRequest) {
 
 		// TODo code for calling Dao Layer
 
-		SaveMortgageApplicationResponse mortgageApplicationResponse = new SaveMortgageApplicationResponse();
+		MortgageApplicationResponse mortgageApplicationResponse = new MortgageApplicationResponse();
 		try {
 			mortgageApplicationResponse = mortgageDAO.saveMortgageDetails(mortgageApplicationRequest);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			LOSResponse response = new LOSResponse();
-			response.setReturnMsg("Application Save Failed");
+			response.setReturnMsg("Application Save Failed Sucessfully");
 			response.setReturnType("Error");
 			mortgageApplicationResponse.setResponse(response);
-			mortgageApplicationResponse.setMortgageId(-1);
+			mortgageApplicationResponse.setMortgageId(23444345243l);
 		}
 
-		return new ResponseEntity<SaveMortgageApplicationResponse>(mortgageApplicationResponse, HttpStatus.OK);
+		return new ResponseEntity<MortgageApplicationResponse>(mortgageApplicationResponse, HttpStatus.OK);
 
 	}
 
@@ -106,20 +108,40 @@ public class MortgageRestController {
 
 	}
 
-	@RequestMapping(value = "/getMortgageQuestionsMetaData", method = RequestMethod.GET)
-	public ResponseEntity<Set<Section>> getMortgageQuestionsMetaData(@RequestParam String languageCd,
-			@RequestParam String userCode) {
-
-		Set<Section> sections = new TreeSet<Section>();
+	
+	@RequestMapping(value = "/getTimeline", method = RequestMethod.POST)
+	public ResponseEntity<Timeline> getTimeline(@RequestBody TimelineRequest timelineRequest) {
+		Timeline timeline = null;
 		try {
-			sections = questionMetaData.questionDAOMethod(languageCd, userCode);
+			timeline = questionMetaData.getTimeline(timelineRequest);
+			
+
 		} catch (SQLException e) {
 			LOSResponse response = new LOSResponse();
 			response.setReturnMsg("Application Failed to Fetch getMortgageQuestionsMetaData");
 			response.setReturnType("Error");
 			e.printStackTrace();
 		}
-		return new ResponseEntity<Set<Section>>(sections, HttpStatus.OK);
+		return new ResponseEntity<Timeline>(timeline, HttpStatus.OK);
+
+	}
+	
+	
+	@RequestMapping(value = "/getMortgageQuestionsMetaData", method = RequestMethod.GET)
+	public ResponseEntity<Sections> getMortgageQuestionsMetaData(@RequestParam String languageCd,
+			@RequestParam String userCode) {
+
+		Sections sections = new Sections();
+		try {
+			Set<Section> sectionSet = questionMetaData.questionDAOMethod(languageCd, userCode);
+			sections.setSections(sectionSet);
+		} catch (SQLException e) {
+			LOSResponse response = new LOSResponse();
+			response.setReturnMsg("Application Failed to Fetch getMortgageQuestionsMetaData");
+			response.setReturnType("Error");
+			e.printStackTrace();
+		}
+		return new ResponseEntity<Sections>(sections, HttpStatus.OK);
 
 	}
 

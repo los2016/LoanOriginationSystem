@@ -1,13 +1,12 @@
 package com.myorg.losmodel.model.questions;
 
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
 public class Question implements Comparable<Question> {
 
-	
+
 	protected int questionId;
 	protected String questionLongDesc;
 	protected int sequenceNo;
@@ -31,13 +30,13 @@ public class Question implements Comparable<Question> {
 		int ret;
 
 		if (this.getSequenceNo() > (o).getSequenceNo()) {
-			ret = 1;
+			ret = -1;
 		} else if (this.getSequenceNo() == (o).getSequenceNo()) {
 			ret = 0;
 		} else {
-			ret = -1;
+			ret = 1;
 		}
-
+  
 		return ret;
 
 	}
@@ -62,8 +61,10 @@ public class Question implements Comparable<Question> {
 		return mandatoryCd;
 	}
 
+
 	public int getParentQuestionId() {
 		return parentQuestionId;
+
 	}
 
 	public QuestionContext getQuestionContext() {
@@ -104,8 +105,10 @@ public class Question implements Comparable<Question> {
 		this.mandatoryCd = mandatoryCd;
 	}
 
+
 	public void setParentQuestionId(int parentQuestionId) {
 		this.parentQuestionId = parentQuestionId;
+
 	}
 
 	public void setQuestionContext(QuestionContext questionContext) {
@@ -129,11 +132,6 @@ public class Question implements Comparable<Question> {
 	public void setSequenceNo(int sequenceNo) {
 		this.sequenceNo = sequenceNo;
 	}
-
-	//public void setSection(Section section) {
-	//this.section = section;
-	//}
-
 
 
 	public void setToolTip(String toolTip) {

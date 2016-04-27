@@ -380,8 +380,9 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 				System.err.println("Attribute to Fully Qualified Map is NULL - Something is wrong");
 			}else{
 				
-				attrFromResultSet.setObjectAttrFQN(attrFQNColName);
+				
 				attrFQNColName = attToObjectMap.get(attrFromResultSet.getColName());
+				attrFromResultSet.setObjectAttrFQN(attrFQNColName);
 				System.err.println("DB COL NAME TO LOOKUP ATTRIBUTE: "+attrFromResultSet.getColName()+" FQN = "+attrFQNColName);
 				
 				

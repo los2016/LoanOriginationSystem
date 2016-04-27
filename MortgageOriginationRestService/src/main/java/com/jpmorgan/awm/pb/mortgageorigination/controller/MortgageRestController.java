@@ -1,10 +1,8 @@
 package com.jpmorgan.awm.pb.mortgageorigination.controller;
 
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +23,8 @@ import com.jpmorgan.awm.pb.mortgageorigination.response.MortgageApplicationRespo
 import com.jpmorgan.awm.pb.mortgageorigination.response.SaveMortgageApplicationResponse;
 import com.jpmorgan.awm.pb.mortgageorigination.response.UserDetailsResponse;
 import com.jpmorgan.awm.pb.mortgageorigination.service.QNAServices;
+import com.myorg.losmodel.model.GetRuleForQuestionsRequest;
+import com.myorg.losmodel.model.GetRuleForQuestionsResponse;
 import com.myorg.losmodel.model.LOSResponse;
 import com.myorg.losmodel.model.TimelineRequest;
 import com.myorg.losmodel.model.ValidateQuestionRequest;
@@ -112,6 +112,15 @@ public class MortgageRestController {
 		ValidateQuestionResponse resp = qnaServices.validateQuestion(request);
 
 		return new ResponseEntity<ValidateQuestionResponse>(resp, HttpStatus.OK);
+
+	}
+
+	@RequestMapping(value = "/getRuleForQuestions", method = RequestMethod.POST)
+	public ResponseEntity<GetRuleForQuestionsResponse> getRuleForQuestions(@RequestBody GetRuleForQuestionsRequest request) {
+
+		GetRuleForQuestionsResponse resp = qnaServices.getRuleForQuestions(request);
+
+		return new ResponseEntity<GetRuleForQuestionsResponse>(resp, HttpStatus.OK);
 
 	}
 

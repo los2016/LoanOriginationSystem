@@ -64,6 +64,8 @@ public class QNAServicesImpl implements QNAServices {
 			
 		}
 		
+		
+		/*
 		if(ModelUtils.getValidationMesgList() != null && ModelUtils.getValidationMesgList().size() > 0) {
 			
 			resp = new ValidateQuestionResponse();
@@ -73,12 +75,14 @@ public class QNAServicesImpl implements QNAServices {
 			return resp;
 			
 		}
+		*/
 		
 		
 		resp = new ValidateQuestionResponse();
 		
 		resp.setEnableFields(ModelUtils.getEnableqnsIdList());
 		resp.setDisableFields(ModelUtils.getDisableqnsIdList());
+		resp.setValidateMesgList(ModelUtils.getValidationMesgList());
 		
 		resp.setReturnType("success");
 		

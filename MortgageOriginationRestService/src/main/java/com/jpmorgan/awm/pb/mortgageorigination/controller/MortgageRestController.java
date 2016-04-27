@@ -2,6 +2,7 @@ package com.jpmorgan.awm.pb.mortgageorigination.controller;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -27,9 +28,13 @@ import com.myorg.losmodel.model.LOSResponse;
 import com.myorg.losmodel.model.TimelineRequest;
 import com.myorg.losmodel.model.ValidateQuestionRequest;
 import com.myorg.losmodel.model.ValidateQuestionResponse;
+import com.myorg.losmodel.model.client.BPMResponse;
+import com.myorg.losmodel.model.client.BPMTask;
 import com.myorg.losmodel.model.client.Sections;
 import com.myorg.losmodel.model.client.Timeline;
 import com.myorg.losmodel.model.questions.Section;
+import com.myorg.losworkflow.services.WorkflowRemoteService;
+import com.myorg.losworkflow.services.WorkflowRemoteServiceImpl;
 
 @RestController
 public class MortgageRestController {
@@ -142,6 +147,143 @@ public class MortgageRestController {
 			e.printStackTrace();
 		}
 		return new ResponseEntity<Sections>(sections, HttpStatus.OK);
+
+	}
+	
+	/**
+	 * Start BPM work flow
+	 * @return
+	 */
+	@RequestMapping(value = "/startWorkflow", method = RequestMethod.GET)
+	public ResponseEntity<BPMResponse> startWorkflow() {
+		BPMResponse bpmResponse = new BPMResponse();
+		try {
+			//Using dummy implementation for demo
+			//Should use	 -- public WorkflowRemoteServiceImpl(String deploymentId, String baseUrl, String user, String password, String processName)
+			WorkflowRemoteService workflowRemoteService = new WorkflowRemoteServiceImpl();
+			
+			//Start Process
+			Map<String, String> startProcessResultMap = workflowRemoteService.startWorkflow();
+			long bpmProcessId = Long.parseLong(startProcessResultMap.get("bpmProcessId"));
+			System.out.println(startProcessResultMap);
+
+			//First task group will get started as part of work flow startup - so its ok if "Apply" task is not explicitly called.
+			//JBPM user names are hard coded for demo
+			Map<String, String> transitionResultMap1 = workflowRemoteService.transitionToNewTask(bpmProcessId, "krisv", null, "Property Address");
+			System.out.println(transitionResultMap1);
+			
+			bpmResponse.setBpmProcessId(bpmProcessId);
+			bpmResponse.setReturnMessage("Process started");
+			bpmResponse.setReturnType("Success");
+			
+		} catch (Exception e) {
+			LOSResponse response = new LOSResponse();
+			response.setReturnMsg("Application Failed to start BPM workflow");
+			response.setReturnType("Error");
+			e.printStackTrace();
+		}
+		return new ResponseEntity<BPMResponse>(bpmResponse, HttpStatus.OK);
+
+	}
+	
+	/**
+	 * Transition to new task 
+	 * Use this method in  two instance : 
+	 * 1) if user randomly moves through different screens within one section. In that case case user has to give current task name and new task name 
+	 * 2) If current task is complete, that would  be passed as null. and transition New task name
+	 * @param bpmProcessId
+	 * @param userId
+	 * @param currentTaskName
+	 * @param newTaskName
+	 * @return
+	 */
+	@RequestMapping(value = "/transitionToNewTask", method = RequestMethod.GET)
+	public ResponseEntity<BPMResponse> transitionToNewTask(@RequestParam long bpmProcessId,
+			@RequestParam String userId, @RequestParam String currentTaskName, @RequestParam String newTaskName) {
+		BPMResponse bpmResponse = new BPMResponse();
+		try {
+			WorkflowRemoteService workflowRemoteService = new WorkflowRemoteServiceImpl();
+			
+			//User name is hard coded for demo
+			Map<String, String> transitionResultMap = workflowRemoteService.transitionToNewTask(bpmProcessId, "krisv", currentTaskName, newTaskName);
+			
+			bpmResponse.setBpmProcessId(bpmProcessId);
+			bpmResponse.setReturnMessage(transitionResultMap.get("returnMessage"));
+			bpmResponse.setReturnType(transitionResultMap.get("returnType"));
+			
+		} catch (Exception e) {
+			LOSResponse response = new LOSResponse();
+			response.setReturnMsg("Application Failed to transition BPM workflow from " + currentTaskName + " to " + newTaskName );
+			response.setReturnType("Error");
+			e.printStackTrace();
+		}
+		return new ResponseEntity<BPMResponse>(bpmResponse, HttpStatus.OK);
+
+	}
+	
+	/**
+	 * Mark task as complete
+	 * @param bpmProcessId
+	 * @param userId
+	 * @param currentTaskName
+	 * @return
+	 */
+	@RequestMapping(value = "/markTaskAsComplete", method = RequestMethod.GET)
+	public ResponseEntity<BPMResponse> markTaskAsComplete(@RequestParam long bpmProcessId,
+			@RequestParam String userId, @RequestParam String currentTaskName) {
+		BPMResponse bpmResponse = new BPMResponse();
+		try {
+			WorkflowRemoteService workflowRemoteService = new WorkflowRemoteServiceImpl();
+			
+			//User name is hard coded for demo
+			Map<String, String> transitionResultMap = workflowRemoteService.markTaskAsComplete(bpmProcessId, "krisv", currentTaskName);
+			
+			bpmResponse.setBpmProcessId(bpmProcessId);
+			bpmResponse.setReturnMessage(transitionResultMap.get("returnMessage"));
+			bpmResponse.setReturnType(transitionResultMap.get("returnType"));
+			
+		} catch (Exception e) {
+			LOSResponse response = new LOSResponse();
+			response.setReturnMsg("Application Failed to complete BPM task " + currentTaskName);
+			response.setReturnType("Error");
+			e.printStackTrace();
+		}
+		return new ResponseEntity<BPMResponse>(bpmResponse, HttpStatus.OK);
+
+	}
+	
+	/**
+	 * Get task status from work flow. For demo, getTaksStatusForProcessInstance returns data from a static variable which 
+	 * updates variable value as per transition / completion calls
+	 * @param bpmProcessId
+	 * @return
+	 */
+	@RequestMapping(value = "/getTaksStatusForProcessInstance", method = RequestMethod.GET)
+	public ResponseEntity<BPMResponse> getTaksStatusForProcessInstance(@RequestParam long bpmProcessId) {
+		BPMResponse bpmResponse = new BPMResponse();
+		try {
+			WorkflowRemoteService workflowRemoteService = new WorkflowRemoteServiceImpl();
+			
+			//User name is hard coded for demo
+			Map<String, String> taskStatusMap = workflowRemoteService.getTaksStatusForProcessInstance(bpmProcessId);
+			
+			bpmResponse.setBpmProcessId(bpmProcessId);
+			bpmResponse.setReturnMessage(taskStatusMap.get("returnMessage"));
+			bpmResponse.setReturnType(taskStatusMap.get("returnType"));
+			
+			for(String key : taskStatusMap.keySet()) {
+				if(null != key && !key.equals("bpmProcessId") && !key.equals("returnType")){
+					bpmResponse.getTasks().add(new BPMTask(key, taskStatusMap.get(key)));
+				}
+			}
+			
+		} catch (Exception e) {
+			LOSResponse response = new LOSResponse();
+			response.setReturnMsg("Application Failed to get BPM task statuses for instance " + bpmProcessId);
+			response.setReturnType("Error");
+			e.printStackTrace();
+		}
+		return new ResponseEntity<BPMResponse>(bpmResponse, HttpStatus.OK);
 
 	}
 

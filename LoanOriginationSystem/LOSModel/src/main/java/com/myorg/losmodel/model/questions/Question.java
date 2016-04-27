@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class Question implements Comparable<Question> {
+public class Question{
 
 
 	protected int questionId;
@@ -15,8 +15,8 @@ public class Question implements Comparable<Question> {
 	protected int parentQuestionId;
 	protected Role role;
 	protected QuestionContext questionContext;
-	Set<Attribute> attributes = new TreeSet<Attribute>();
-	protected Set<Question> childQuestions = new TreeSet<Question>();
+	Set<Attribute> attributes = new TreeSet<Attribute>(new AttrubuteComparator());
+	protected Set<Question> childQuestions = new TreeSet<Question>(new QuestionComparator());
 	
 	
 	public void addAttribute(Attribute attribute) {

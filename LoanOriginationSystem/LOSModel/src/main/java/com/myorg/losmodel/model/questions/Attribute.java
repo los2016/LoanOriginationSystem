@@ -1,9 +1,10 @@
 package com.myorg.losmodel.model.questions;
 
 import java.util.Iterator;
+import java.util.Set;
 import java.util.TreeSet;
 
-public class Attribute implements Comparable<Attribute> {
+public class Attribute {
 
 	protected int attributeId;
 	protected String colName;
@@ -14,7 +15,7 @@ public class Attribute implements Comparable<Attribute> {
 	protected boolean isMandatoryFl;
 	protected int lengthNum;
 	protected String lookupEntityNm;
-	protected TreeSet<LookupListOfValues> listOfValues = new TreeSet<LookupListOfValues>();
+	protected Set<LookupListOfValues> listOfValues = new TreeSet<LookupListOfValues>(new LookupListOfValuesComparator());
 	
 
 
@@ -66,7 +67,7 @@ public class Attribute implements Comparable<Attribute> {
 		return lengthNum;
 	}
 
-	public TreeSet<LookupListOfValues> getListOfValues() {
+	public Set<LookupListOfValues> getListOfValues() {
 		return listOfValues;
 	}
 

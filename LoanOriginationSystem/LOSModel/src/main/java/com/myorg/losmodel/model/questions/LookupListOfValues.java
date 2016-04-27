@@ -1,6 +1,6 @@
 package com.myorg.losmodel.model.questions;
 
-public class LookupListOfValues implements Comparable<LookupListOfValues> {
+public class LookupListOfValues{
 
 	String lookupCd;
 	String lookupValue;

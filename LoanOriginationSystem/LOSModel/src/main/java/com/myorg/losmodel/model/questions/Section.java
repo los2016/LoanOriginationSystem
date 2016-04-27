@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class Section implements Comparable<Section> {
+public class Section{
 	
 	public String getPresentSectionNm() {
 		return presentSectionNm;
@@ -70,8 +70,8 @@ public class Section implements Comparable<Section> {
 	}
 
 
-	protected Set<Question> questions = new TreeSet<Question>();
-	protected Set<Section> childSections = new TreeSet<Section>();
+	protected Set<Question> questions = new TreeSet<Question>(new QuestionComparator());
+	protected Set<Section> childSections = new TreeSet<Section>(new SectionComparator());
 
 	
 	public void addQuestion(Question q) {
@@ -84,17 +84,7 @@ public class Section implements Comparable<Section> {
 	}
 
 
-	public int compareTo(Section o) {
-		int ret;
-		if (this.getSequenceNo() > o.getSequenceNo()) {
-			ret = -1;
-		} else if (this.getSequenceNo() == o.getSequenceNo()) {
-			ret = 0;
-		} else {
-			ret = 1;
-		}
-		return ret;
-	}
+
 
 	public boolean equals(Section s) {
 		boolean ret = false;

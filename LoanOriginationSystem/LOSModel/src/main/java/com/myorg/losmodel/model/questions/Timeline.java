@@ -1,24 +1,23 @@
 package com.myorg.losmodel.model.questions;
 
-import java.util.List;
 import java.util.Set;
 
 public class Timeline {
 
-	public List<?> getMortage() {
-		return mortage;
+	public int getMortgageId() {
+		return mortgageId;
 	}
-	public void setMortage(List<?> mortage) {
-		this.mortage = mortage;
+	public void setMortgageId(int mortgageId) {
+		this.mortgageId = mortgageId;
 	}
-	public Set<Section> getSections() {
+	public Set<TimelineSectionWrapper> getSections() {
 		return sections;
 	}
-	public void setSections(Set<Section> sections) {
+	public void setSections(Set<TimelineSectionWrapper> sections) {
 		this.sections = sections;
 	}
-	protected List<?> mortage;
-	protected Set<Section> sections;
+	protected int mortgageId;
+	protected Set<TimelineSectionWrapper> sections;
 	
 	
 }

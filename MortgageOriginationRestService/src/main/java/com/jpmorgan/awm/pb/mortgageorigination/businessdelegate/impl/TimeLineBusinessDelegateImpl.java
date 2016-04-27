@@ -216,12 +216,7 @@ public class TimeLineBusinessDelegateImpl implements TimeLineBusinessDelegate{
 			
 			Set<TimelineSectionWrapper> copiedSet = new TreeSet<TimelineSectionWrapper>(new TimelineSectionWrapperComparator());
 			
-			System.out.println("PRINTING OUT THE COPIED SET");
-			Iterator<TimelineSectionWrapper> z = copiedSet.iterator();
-			while(z.hasNext()){
-				TimelineSectionWrapper tlsw = z.next();
-				System.out.println("ID "+tlsw.getSectionId()+" NAME "+tlsw.getPresentSectionNm()+ " NO OF CHILDREN "+tlsw.getChildSections().size());
-			}
+
 			
 			Iterator<TimelineElement> tit = timelineElementSet.iterator();
 			while (tit.hasNext()){
@@ -233,6 +228,7 @@ public class TimeLineBusinessDelegateImpl implements TimeLineBusinessDelegate{
 					TimelineSectionWrapper s = new TimelineSectionWrapper();
 					s.setMortgageId(el.getMortgageId());
 					copyTimelineSection(x,s);
+					copiedSet.add(s);
 					System.out.println("FOR MORTGAGE "+el.getMortgageId()+"WE CREATED SET "+s.getSectionId()+" NAME:"+s.getPresentSectionNm());
 					Iterator<TimelineSectionWrapper> childIt = x.getChildSections().iterator();
 					while(childIt.hasNext()){
@@ -240,6 +236,7 @@ public class TimeLineBusinessDelegateImpl implements TimeLineBusinessDelegate{
 						child.setMortgageId(el.getMortgageId());
 						copyTimelineSection(childIt.next(),child);
 						s.addChildSection(child);
+						
 					}
 					System.out.println("FOR MORTGAGE "+el.getMortgageId()+"WE CREATED SET "+s.getSectionId()+
 							" NAME:"+s.getPresentSectionNm()+"NO OF CHILDREN: "+s.getChildSections().size());
@@ -248,18 +245,30 @@ public class TimeLineBusinessDelegateImpl implements TimeLineBusinessDelegate{
 					
 					
 				}
+				System.out.println("PRINTING OUT THE COPIED SET");
+				Iterator<TimelineSectionWrapper> z = copiedSet.iterator();
+				while(z.hasNext()){
+					TimelineSectionWrapper tlsw = z.next();
+					System.out.println("ID "+tlsw.getSectionId()+" NAME "+tlsw.getPresentSectionNm()+ " NO OF CHILDREN "+tlsw.getChildSections().size());
+				}
 				
 				
 				
 			}
 			
 			//At this stage, we have a set of sections for each mortgage Id (Timeline element - but not added to timeline objects yet
+			System.out.println("NO OF ELEMENTS IN TIMELINE>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+timelineElementSet.size());
 			Iterator<TimelineElement> tit2 = timelineElementSet.iterator();
 			while(tit2.hasNext()){
+				System.out.println("ITERATING INSIDE _> SEE THIS"+timelineElementSet.size()+" TIMES");
+				System.out.println("SIZE OF COPIED SET SHOULD BE SAME AS THE NO OF ITEMS IN DB - SIZE"+copiedSet.size());
 				Iterator<TimelineSectionWrapper> sit = copiedSet.iterator();
 				TimelineElement tele = tit2.next();
 				while(sit.hasNext()){
 					TimelineSectionWrapper wrapper = sit.next();
+					System.out.println("WRAPPER LEVEL "+wrapper.getSectionLevel()+" WRAPPER MORTGAGE ID"+wrapper.getMortgageId()
+					+ " TELE MORTGAGE ID "+tele.getMortgageId());
+					
 					if((wrapper.getSectionLevel() == 1)&&(tele.getMortgageId() == wrapper.getMortgageId())){
 						tele.addSection(wrapper);
 						System.out.println("ADDING LEVEL 1 ELELMENT "+wrapper.getSectionId()+" NAME "+wrapper.getPresentSectionNm()

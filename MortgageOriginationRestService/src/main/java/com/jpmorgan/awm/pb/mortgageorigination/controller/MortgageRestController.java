@@ -1,6 +1,7 @@
 package com.jpmorgan.awm.pb.mortgageorigination.controller;
 
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jpmorgan.awm.pb.mortgageorigination.businessdelegate.TimeLineBusinessDelegate;
+import com.jpmorgan.awm.pb.mortgageorigination.businessdelegate.impl.TimeLineBusinessDelegateImpl;
 import com.jpmorgan.awm.pb.mortgageorigination.dao.CoverageDAO;
 import com.jpmorgan.awm.pb.mortgageorigination.dao.MortgageDAO;
 import com.jpmorgan.awm.pb.mortgageorigination.dao.QuestionMetaDataDAO;
@@ -26,14 +29,14 @@ import com.jpmorgan.awm.pb.mortgageorigination.service.QNAServices;
 import com.myorg.losmodel.model.GetRuleForQuestionsRequest;
 import com.myorg.losmodel.model.GetRuleForQuestionsResponse;
 import com.myorg.losmodel.model.LOSResponse;
-import com.myorg.losmodel.model.TimelineRequest;
 import com.myorg.losmodel.model.ValidateQuestionRequest;
 import com.myorg.losmodel.model.ValidateQuestionResponse;
 import com.myorg.losmodel.model.client.BPMResponse;
 import com.myorg.losmodel.model.client.BPMTask;
 import com.myorg.losmodel.model.client.Sections;
-import com.myorg.losmodel.model.client.Timeline;
 import com.myorg.losmodel.model.questions.Section;
+import com.myorg.losmodel.model.questions.Timeline;
+import com.myorg.losmodel.model.questions.TimelineRequest;
 import com.myorg.losworkflow.services.WorkflowRemoteService;
 import com.myorg.losworkflow.services.WorkflowRemoteServiceImpl;
 
@@ -54,6 +57,17 @@ public class MortgageRestController {
 
 	@Autowired
 	private QuestionMetaDataDAO questionMetaData;
+	
+	public TimeLineBusinessDelegate getTimelineBd() {
+		return timelineBd;
+	}
+
+	public void setTimelineBd(TimeLineBusinessDelegate timelineBd) {
+		this.timelineBd = timelineBd;
+	}
+
+	//@Autowired 
+	private TimeLineBusinessDelegate timelineBd = new TimeLineBusinessDelegateImpl();
 
 	@RequestMapping(value = "/authenticateUser", method = RequestMethod.GET)
 	public ResponseEntity<UserDetailsResponse> authenticateUser(@RequestParam String userId,
@@ -129,12 +143,12 @@ public class MortgageRestController {
 	public ResponseEntity<Timeline> getTimeline(@RequestBody TimelineRequest timelineRequest) {
 		Timeline timeline = null;
 		try {
-			timeline = questionMetaData.getTimeline(timelineRequest);
+			timeline = timelineBd.getTimeline(timelineRequest);
 			
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			LOSResponse response = new LOSResponse();
-			response.setReturnMsg("Application Failed to Fetch getMortgageQuestionsMetaData");
+			response.setReturnMsg("Application Failed to Fetch Timeline");
 			response.setReturnType("Error");
 			e.printStackTrace();
 		}
@@ -151,6 +165,11 @@ public class MortgageRestController {
 		try {
 			Set<Section> sectionSet = questionMetaData.questionDAOMethod(languageCd, userCode);
 			sections.setSections(sectionSet);
+			Iterator<Section> i = sectionSet.iterator();
+			while(i.hasNext()){
+				Section s = i.next();
+				System.out.println("SECTION ID: "+s.getSectionId()+" SECTION NM: "+s.getPresentSectionNm()+"NO OF CHILD: "+s.getChildSections().size());
+			}
 		} catch (SQLException e) {
 			LOSResponse response = new LOSResponse();
 			response.setReturnMsg("Application Failed to Fetch getMortgageQuestionsMetaData");

@@ -14,4 +14,7 @@ public interface UserDAO {
 	public UserDetailsResponse authenticateUser(String userId, String password);
 
 	public List<User> getAllUsers();
+	
+	public User getUserDetails(String userCd) throws Exception;
+	
 }

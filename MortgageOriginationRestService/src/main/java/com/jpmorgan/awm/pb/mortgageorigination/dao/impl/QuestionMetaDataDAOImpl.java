@@ -23,17 +23,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jpmorgan.awm.pb.mortgageorigination.dao.QuestionMetaDataDAO;
+
 import com.jpmorgan.awm.pb.mortgageorigination.utils.DatabaseService;
-import com.myorg.losmodel.model.TimelineRequest;
+import com.myorg.losmodel.model.User;
 import com.myorg.losmodel.model.client.MortgageApplication;
-import com.myorg.losmodel.model.client.Timeline;
 import com.myorg.losmodel.model.questions.Attribute;
 import com.myorg.losmodel.model.questions.DataType;
 import com.myorg.losmodel.model.questions.LookupListOfValues;
 import com.myorg.losmodel.model.questions.Question;
+import com.myorg.losmodel.model.questions.QuestionComparator;
 import com.myorg.losmodel.model.questions.QuestionContext;
 import com.myorg.losmodel.model.questions.Role;
 import com.myorg.losmodel.model.questions.Section;
+import com.myorg.losmodel.model.questions.SectionComparator;
+import com.myorg.losmodel.model.questions.TimelineRequest;
 import com.myorg.losmodel.util.ModelUtils;
 
 @Service
@@ -76,7 +79,7 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 	public Set<Section> getSectionDAO(Connection conn,String languageCd) throws SQLException{
 		//Connection conn = null;
 		// Question question = null;
-		TreeSet<Section> sectionSet = new TreeSet<Section>();
+		TreeSet<Section> sectionSet = new TreeSet<Section>(new SectionComparator());
 		PreparedStatement sectionPS = null;
 			if("en".equals(languageCd)){
 				sectionPS = conn.prepareStatement(
@@ -209,7 +212,7 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 	
 	public Set<Question> getQuestionDAO(Connection conn,String languageCd,Set<Section> sectionSet) throws SQLException{
 		PreparedStatement questionPS = null;
-		TreeSet<Question> questions = new TreeSet<Question>();
+		TreeSet<Question> questions = new TreeSet<Question>(new QuestionComparator());
 		
 		if ("en".equals(languageCd)) {
 			questionPS = conn.prepareStatement(
@@ -377,13 +380,13 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 			String attrFQNColName = "";
 			Map<String,String> attToObjectMap =  ModelUtils.getDbAttributeToObjectNamesMap();
 			if(attToObjectMap == null){
-				System.err.println("Attribute to Fully Qualified Map is NULL - Something is wrong");
+				//System.err.println("Attribute to Fully Qualified Map is NULL - Something is wrong");
 			}else{
 				
 				
 				attrFQNColName = attToObjectMap.get(attrFromResultSet.getColName());
 				attrFromResultSet.setObjectAttrFQN(attrFQNColName);
-				System.err.println("DB COL NAME TO LOOKUP ATTRIBUTE: "+attrFromResultSet.getColName()+" FQN = "+attrFQNColName);
+				//System.err.println("DB COL NAME TO LOOKUP ATTRIBUTE: "+attrFromResultSet.getColName()+" FQN = "+attrFQNColName);
 				
 				
 				
@@ -489,12 +492,12 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 		Set<Section> sectionSet = null;
 		Set<Question> questionSet = null;
 		Set<Attribute> attributeSet = null;
-		TreeSet<Section> copy = new TreeSet<Section>();
+		TreeSet<Section> copy = new TreeSet<Section>(new SectionComparator());
 		try{
 			
 			ModelUtils.initializeDBtoObjectModelMapping(new MortgageApplication());
 			Map<String,String> m = ModelUtils.getDbAttributeToObjectNamesMap();
-			System.err.println("SIZE "+m.size()+ "CONTENT"+m.toString());
+			//System.err.println("SIZE "+m.size()+ "CONTENT"+m.toString());
 			
 			conn = connection;
 			conn.setAutoCommit(true);
@@ -526,7 +529,7 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 				Attribute aai = ai.next();
 				//System.out.println("QUESTION ID:"+qqi.getQuestionId()+"Question DESC:"+qqi.getQuestionLongDesc()+"No of attributes:"+qqi.getAttributes().size());
 				//System.out.println(aai.toString());
-				System.out.println(aai.getObjectAttrFQN());
+				//System.out.println(aai.getObjectAttrFQN());
 			}
 			
 
@@ -554,42 +557,7 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 	}
 	
 
-	public Set<Section> timelineDAOMethod(Connection connection,String languageCd, String userCd) throws SQLException {
-		Connection conn = null;
-		Set<Section> sectionSet = null;
 	
-		try{
-			
-			conn = connection;
-			conn.setAutoCommit(true);
-			languageCd = getLanguageCdDAO(conn,languageCd,userCd);
-			sectionSet = getSectionDAO(conn,languageCd);
-			Iterator <Section> si = sectionSet.iterator();
-			while(si.hasNext()){
-				Section s = si.next();
-				//System.out.println(s.toString());
-			}
-		
-		}
-
-		catch (Exception ee) {
-
-			throw new SQLException("SQL Error - See stack-trace for details", ee);
-		}
-
-		return sectionSet;
-	}
-		
-	public Set<Section> timelineDAOMethod(String languageCd, String userCd) throws SQLException{
-		Set<Section> s = null;
-		try{
-			Connection conn = DatabaseService.getConnection();
-			s = timelineDAOMethod(conn,languageCd,userCd);
-		}catch (Exception e){
-			throw new SQLException(e);
-		}
-		return s;
-	}
 	
 
 	/**
@@ -774,6 +742,7 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 			
 		//Test case 1 - user with English and requests default	
 		Set<Section> s	= qdao.questionDAOMethod(connection,"default", "123456");
+		//System.out.println(s.toString());
 		//Test Case 2 - user with English and requests en
 		//Set<Section> s	= qdao.questionDAOMethod(connection,"en", "123456");
 		//Test case 3 - user with English and requests spanish
@@ -793,6 +762,7 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 		while(i.hasNext()){
 			Section ss = i.next();
 			//System.out.println(ss.toString());
+			System.out.println("SECTION ID"+ss.getSectionId()+" SECTION NM"+ss.getPresentSectionNm()+" NO OF CHILDREN"+ss.getChildSections().size());
 		}
 			
 			
@@ -809,28 +779,58 @@ public class QuestionMetaDataDAOImpl implements QuestionMetaDataDAO {
 			
 	}
 
-	
-	public Timeline getTimeline(TimelineRequest timelineRequest) throws SQLException{
-		Timeline timeline = null;
+	public User getUserDetails(String userCd) throws Exception{
+		User u = new User();
+		
 		try{
 			Connection conn = DatabaseService.getConnection();
-			timeline = getTimeline(conn,timelineRequest);
+			PreparedStatement ps = conn.prepareStatement("select * from mortgage.users where user_cd = ?");
+			ps.setString(1, userCd);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				u.setPartyId(Long.parseLong(rs.getString("PARTY_ID")));
+				u.setUserId(rs.getString("USER_CD"));
+				u.setRoleId(rs.getInt("ROLE_ID"));;
+				
+			}
+					
+			
 		}catch (Exception e){
 			throw new SQLException(e);
 		}
-		return timeline;
+		return u;
+	       
+	}
+	
+	
+	
+	public Set<Section> getTimelineSections(TimelineRequest timelineRequest) throws SQLException{
+		Set<Section> timelineSet = null;
+		try{
+			Connection conn = DatabaseService.getConnection();
+			timelineSet = getTimelineSections(conn,timelineRequest);
+		}catch (Exception e){
+			throw new SQLException(e);
+		}
+		return timelineSet;
 	}
 
-	public Timeline getTimeline(Connection conn, TimelineRequest timelineRequest) throws SQLException{
-		Timeline timeline = null;
+	public Set<Section> getTimelineSections(Connection conn, TimelineRequest timelineRequest) throws SQLException{
+		
+		String languageCd="";
+		String userCd = "";
+		Set<Section> sectionSet = new TreeSet<Section>(new SectionComparator());
 		try{
-			
+			userCd = timelineRequest.getUserCode();
+			languageCd = timelineRequest.getLanguageCd();
+			languageCd = getLanguageCdDAO(conn,languageCd,userCd);
+			sectionSet = getSectionDAO(conn,languageCd);
 			
 			
 		}catch (Exception e){
 			throw new SQLException(e);
 		}
-		return timeline;
+		return sectionSet;
 	}
 	
 }

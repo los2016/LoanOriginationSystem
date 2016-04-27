@@ -9,6 +9,15 @@ public class TimelineSectionWrapper {
 
 	
 	protected int sectionId;
+	protected long mortgageId = -1l;
+	public long getMortgageId() {
+		return mortgageId;
+	}
+
+	public void setMortgageId(long mortgageId) {
+		this.mortgageId = mortgageId;
+	}
+
 	protected String presentSectionNm = "";
 	protected String pastSectionNm = "";
 	protected String futureSectionNm = "";
@@ -32,9 +41,9 @@ public class TimelineSectionWrapper {
 		this.childSections.add(child);
 	}
 
-	public boolean equals(Section s) {
+	public boolean equals(TimelineSectionWrapper s) {
 		boolean ret = false;
-		if (s.getSectionId() == this.getSectionId()) {
+		if ((s.getSectionId() == this.getSectionId()) && (this.getMortgageId() == s.getMortgageId())) {
 			ret = true;
 		}
 		return ret;

@@ -32,6 +32,23 @@ public class UserDAOImpl implements UserDAO {
 		return false;
 	}
 
+	
+	public User getUserDetails(String userCd) throws Exception{
+	    //String partyId = "";
+		String sql = "select * from users where user_cd = ?";
+	    User user = new User();
+	    
+	    
+	    try{
+	    	user = jdbcTemplate.queryForObject(sql, new Object[] { userCd }, new UsersRowMapper());
+	    	
+	    }catch (Exception e){
+	    	throw new Exception ("PARTY ID NOT FOUND for user "+userCd,e);
+	    }
+	    return user;
+	    
+	}
+	
 	public UserDetailsResponse authenticateUser(String userId, String password) {
 		UserDetailsResponse userDetailsResponse = new UserDetailsResponse();
 

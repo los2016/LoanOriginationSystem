@@ -3,8 +3,8 @@ package com.jpmorgan.awm.pb.mortgageorigination.businessdelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.jpmorgan.awm.pb.mortgageorigination.dao.QuestionMetaDataDAO;
-import com.myorg.losmodel.model.TimelineRequest;
-import com.myorg.losmodel.model.client.Timeline;
+import com.myorg.losmodel.model.questions.Timeline;
+import com.myorg.losmodel.model.questions.TimelineRequest;
 
 
 

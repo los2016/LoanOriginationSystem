@@ -72,7 +72,14 @@ public class WorkflowRemoteServiceImpl implements WorkflowRemoteService {
 	        resultMap.put("returnType", "success");
 	        resultMap.put("returnMessage", "Process created");
 	        
+	        //Start first task
 	        this.transitionToNewTask(procId, "krisv", null, "Apply");
+	        this.transitionToNewTask(procId, "krisv", null, "Property Address");
+	        
+	        //TO-DO - demo
+	        taskStatusMap.clear();
+	        taskStatusMap.put("Apply", "I");
+	        taskStatusMap.put("Property Address", "I");
 	        
 		} catch (Exception e) {
 			resultMap.put("bpmProcessId", null);

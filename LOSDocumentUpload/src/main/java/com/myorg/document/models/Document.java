@@ -15,6 +15,8 @@ public class Document implements Serializable{
 
 	private static final long serialVersionUID = -2474587140322632122L;
 
+	public static final String DATATYPE_ID = "2"; 
+
 	@Id
 	@Column(name ="ATTRIBUTE_ID")
 	private int documentTypeId;

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 @Transactional
 public class DocumentDao {
 
-	private static final String DATATYPE_ID = "2"; 
 	
 	@Autowired
 	private SessionFactory _sessionFactory;
@@ -25,13 +24,13 @@ public class DocumentDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Document> getAll() {
-		return getSession().createQuery("from Document where dataTypeId = :dataTypeId").setParameter("dataTypeId", DATATYPE_ID).list();
+		return getSession().createQuery("from Document where dataTypeId = :dataTypeId").setParameter("dataTypeId", Document.DATATYPE_ID).list();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public Document getDocumentDetails(int documentTypeId) {
 		Query query = getSession().createQuery("from Document where dataTypeId = :dataTypeId and documentTypeId = :documentTypeId");
-		query.setParameter("dataTypeId", DATATYPE_ID);
+		query.setParameter("dataTypeId", Document.DATATYPE_ID);
 		query.setParameter("documentTypeId", documentTypeId);
 		List<Document> list = query.list();
 		if(list != null && list.size() > 0) {

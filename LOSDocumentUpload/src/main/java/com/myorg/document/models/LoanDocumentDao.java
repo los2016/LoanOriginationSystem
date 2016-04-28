@@ -23,8 +23,11 @@ public class LoanDocumentDao {
 
 	@SuppressWarnings("unchecked")
 	public List<LoanDocument> getByLoanId(long mortgageApplicationID) {
-		return getSession().createQuery("from LoanDocument where loanDocumentComposite.mortgageApplicationID = :loanId").setParameter("loanId", mortgageApplicationID)
-				.list();
+		Query query = getSession().createQuery("from LoanDocument where loanDocumentComposite.mortgageApplicationID = :loanId and "
+				+ "documentMetadata.dataTypeId = :dataTypeId");
+		query.setParameter("loanId", mortgageApplicationID);
+		query.setParameter("dataTypeId", Document.DATATYPE_ID);
+		return query.list();
 	}
 	
 	@SuppressWarnings("unchecked")

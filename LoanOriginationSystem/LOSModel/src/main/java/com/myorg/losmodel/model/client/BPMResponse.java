@@ -5,10 +5,22 @@ import java.util.List;
 
 public class BPMResponse{
 
-	long bpmProcessId;
-	String returnType;
-	String returnMessage;
-	List<BPMTask> tasks = new ArrayList<BPMTask>();
+	public long getBpmProcessId() {
+		return bpmProcessId;
+	}
+
+	public String getReturnType() {
+		return returnType;
+	}
+
+	public String getReturnMessage() {
+		return returnMessage;
+	}
+
+	protected long bpmProcessId;
+	protected String returnType;
+	protected String returnMessage;
+	protected List<BPMTask> tasks = new ArrayList<BPMTask>();
 	
 	public void setBpmProcessId(long bpmProcessId) {
 		this.bpmProcessId = bpmProcessId;

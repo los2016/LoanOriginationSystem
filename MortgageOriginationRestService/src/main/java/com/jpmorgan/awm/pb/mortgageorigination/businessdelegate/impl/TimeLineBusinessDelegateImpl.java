@@ -8,10 +8,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import com.jpmorgan.awm.pb.mortgageorigination.businessdelegate.TimeLineBusinessDelegate;
 import com.jpmorgan.awm.pb.mortgageorigination.dao.CoverageDAO;
@@ -24,7 +27,10 @@ import com.jpmorgan.awm.pb.mortgageorigination.dao.impl.QuestionMetaDataDAOImpl;
 import com.jpmorgan.awm.pb.mortgageorigination.dao.impl.UserDAOImpl;
 import com.jpmorgan.awm.pb.mortgageorigination.response.CoverageResponse;
 import com.jpmorgan.awm.pb.mortgageorigination.response.MortgageApplicationResponse;
+import com.myorg.losmodel.model.LOSResponse;
 import com.myorg.losmodel.model.User;
+import com.myorg.losmodel.model.client.BPMResponse;
+import com.myorg.losmodel.model.client.BPMTask;
 import com.myorg.losmodel.model.client.MortgageApplication;
 import com.myorg.losmodel.model.questions.Section;
 import com.myorg.losmodel.model.questions.Timeline;
@@ -32,6 +38,8 @@ import com.myorg.losmodel.model.questions.TimelineElement;
 import com.myorg.losmodel.model.questions.TimelineRequest;
 import com.myorg.losmodel.model.questions.TimelineSectionWrapper;
 import com.myorg.losmodel.model.questions.TimelineSectionWrapperComparator;
+import com.myorg.losworkflow.services.WorkflowRemoteService;
+import com.myorg.losworkflow.services.WorkflowRemoteServiceImpl;
 
 
 
@@ -292,7 +300,29 @@ public class TimeLineBusinessDelegateImpl implements TimeLineBusinessDelegate{
 			while(tit3.hasNext()){
 				TimelineElement elem = tit3.next();
 				System.out.println(" CALLING JBPM WITH PROCESS ID "+elem.getBpmProcessId()+" FOR MORTGAGE "+elem.getMortgageId());
-				//Need to iterate through all the states and call - expensive call - think how to make this compact
+				BPMResponse bpmResponse = null;
+				long bpmProcessId = elem.getBpmProcessId();
+				bpmResponse = getBPMStatusFromProcessId(bpmProcessId);
+				List<BPMTask> t = bpmResponse.getTasks();
+				Iterator<BPMTask> taskIt = t.iterator();
+				while (taskIt.hasNext()){
+					BPMTask bpmTask = taskIt.next();
+					System.out.println("TASK NAME"+bpmTask.getTaskName()+" STATUS: "+bpmTask.getTaskstatus());
+					Set<TimelineSectionWrapper> tSet = elem.getSections();
+					Iterator <TimelineSectionWrapper> timelineSectionIt = tSet.iterator();
+					while(timelineSectionIt.hasNext()){
+						TimelineSectionWrapper wrapperFinal = timelineSectionIt.next();
+						System.out.println("SECTION NAME: "+wrapperFinal.getPresentSectionNm());
+						
+						setTaskStatus(bpmTask,wrapperFinal);
+						
+	
+					}
+				}
+				
+				
+				
+
 			}
 			
 			
@@ -302,6 +332,53 @@ public class TimeLineBusinessDelegateImpl implements TimeLineBusinessDelegate{
 		return timeline;
 	}
 	
+	public void setTaskStatus(BPMTask bpmTask, TimelineSectionWrapper wrapperFinal){
+		
+		if((bpmTask.getTaskName() != null)&&(wrapperFinal.getPresentSectionNm() != null)
+				&& (bpmTask.getTaskName().equalsIgnoreCase(wrapperFinal.getPresentSectionNm()))){
+			wrapperFinal.setStatus(bpmTask.getTaskstatus());
+			System.out.println("TRYING TO MATCH BPMTASK WITH NAME"+bpmTask.getTaskName()
+			+"WITH STATUS"+bpmTask.getTaskstatus()+" TO TIMELINE SECTION :"+wrapperFinal.getPresentSectionNm());
+			
+		}else{
+			wrapperFinal.setStatus("I");
+		}
+		
+		Set<TimelineSectionWrapper> s = wrapperFinal.getChildSections();
+		Iterator<TimelineSectionWrapper> i = s.iterator();
+		while(i.hasNext()){
+			TimelineSectionWrapper child = i.next();
+			setTaskStatus(bpmTask,child);
+		}
+		
+		
+	}
+	
+	public BPMResponse getBPMStatusFromProcessId(long bpmProcessId) throws Exception{
+				
+		 BPMResponse bpmResponse = new BPMResponse();
+		try {
+			WorkflowRemoteService workflowRemoteService = new WorkflowRemoteServiceImpl();
+			Map<String, String> taskStatusMap = workflowRemoteService.getTaksStatusForProcessInstance(bpmProcessId);
+			
+			bpmResponse.setBpmProcessId(bpmProcessId);
+			//bpmResponse.setReturnMessage(taskStatusMap.get("returnMessage"));
+			//bpmResponse.setReturnType(taskStatusMap.get("returnType"));
+			
+			
+			for(String key : taskStatusMap.keySet()) {
+				if(null != key && !key.equals("bpmProcessId") && !key.equals("returnType")){
+					bpmResponse.getTasks().add(new BPMTask(key, taskStatusMap.get(key)));
+				}
+			}
+			
+		} catch (Exception e) {
+			throw new Exception("COULD NOT GET BPM STATUS IN > CHECK STACK TRACE FOR MORE INFO");
+		}
+		return bpmResponse;
+		
+		 
+	}
 	public void copyTimelineSection(TimelineSectionWrapper source,TimelineSectionWrapper target){
 		//target.setSectionId(source.getSectionId());
 		target.setParentSectionId(source.getParentSectionId());

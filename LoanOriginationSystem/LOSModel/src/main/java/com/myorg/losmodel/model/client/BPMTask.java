@@ -2,8 +2,15 @@ package com.myorg.losmodel.model.client;
 
 public class BPMTask{
 
-	String taskName;
-	String taskstatus;
+	public String getTaskName() {
+		return taskName;
+	}
+
+	public String getTaskstatus() {
+		return taskstatus;
+	}
+	protected String taskName;
+	protected String taskstatus;
 	
 	public BPMTask(String taskName, String taskstatus) {
 		this.taskName = taskName;

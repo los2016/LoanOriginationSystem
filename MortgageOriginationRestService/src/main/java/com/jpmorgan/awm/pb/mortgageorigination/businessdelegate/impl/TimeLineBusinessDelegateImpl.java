@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -214,7 +215,7 @@ public class TimeLineBusinessDelegateImpl implements TimeLineBusinessDelegate{
 			System.out.println("Each timeline element will have its own copy of the section set // before we can set status");
 			
 			
-			Set<TimelineSectionWrapper> copiedSet = new TreeSet<TimelineSectionWrapper>(new TimelineSectionWrapperComparator());
+			Set<TimelineSectionWrapper> copiedSet = new HashSet<TimelineSectionWrapper>();
 			
 
 			
@@ -227,14 +228,18 @@ public class TimeLineBusinessDelegateImpl implements TimeLineBusinessDelegate{
 					TimelineSectionWrapper x = tswIt.next();
 					TimelineSectionWrapper s = new TimelineSectionWrapper();
 					s.setMortgageId(el.getMortgageId());
+					s.setSectionId(x.getSectionId());
 					copyTimelineSection(x,s);
 					copiedSet.add(s);
-					System.out.println("FOR MORTGAGE "+el.getMortgageId()+"WE CREATED SET "+s.getSectionId()+" NAME:"+s.getPresentSectionNm());
+					System.out.println("FOR MORTGAGE "+el.getMortgageId()+"WE CREATED SET "+s.getSectionId()+" NAME:"+s.getPresentSectionNm()+
+							"MORTGAGE ID IN SET "+s.getMortgageId());
 					Iterator<TimelineSectionWrapper> childIt = x.getChildSections().iterator();
 					while(childIt.hasNext()){
 						TimelineSectionWrapper child = new TimelineSectionWrapper();
+						TimelineSectionWrapper templateChild = childIt.next();
 						child.setMortgageId(el.getMortgageId());
-						copyTimelineSection(childIt.next(),child);
+						child.setSectionId(templateChild.getSectionId());
+						copyTimelineSection(templateChild,child);
 						s.addChildSection(child);
 						
 					}
@@ -249,7 +254,7 @@ public class TimeLineBusinessDelegateImpl implements TimeLineBusinessDelegate{
 				Iterator<TimelineSectionWrapper> z = copiedSet.iterator();
 				while(z.hasNext()){
 					TimelineSectionWrapper tlsw = z.next();
-					System.out.println("ID "+tlsw.getSectionId()+" NAME "+tlsw.getPresentSectionNm()+ " NO OF CHILDREN "+tlsw.getChildSections().size());
+					System.out.println("MORTGAGE ID "+tlsw.getMortgageId()+" ID "+tlsw.getSectionId()+" NAME "+tlsw.getPresentSectionNm()+ " NO OF CHILDREN "+tlsw.getChildSections().size());
 				}
 				
 				
@@ -298,7 +303,7 @@ public class TimeLineBusinessDelegateImpl implements TimeLineBusinessDelegate{
 	}
 	
 	public void copyTimelineSection(TimelineSectionWrapper source,TimelineSectionWrapper target){
-		target.setSectionId(source.getSectionId());
+		//target.setSectionId(source.getSectionId());
 		target.setParentSectionId(source.getParentSectionId());
 		target.setSectionLevel(source.getSectionLevel());
 		target.setPresentSectionNm(source.getPresentSectionNm());

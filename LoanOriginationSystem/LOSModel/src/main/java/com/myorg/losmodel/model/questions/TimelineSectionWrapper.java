@@ -43,9 +43,23 @@ public class TimelineSectionWrapper {
 
 	public boolean equals(TimelineSectionWrapper s) {
 		boolean ret = false;
-		if ((s.getSectionId() == this.getSectionId()) && (this.getMortgageId() == s.getMortgageId())) {
+		boolean b1 = (s.getSectionId() == this.getSectionId());
+		boolean b2 = (this.getMortgageId() == s.getMortgageId());
+		
+		System.out.println("Object 1: Section ID:"+ s.getSectionId()
+		+ " Mortgage ID"+s.getMortgageId());
+		
+		System.out.println("Object 2: Section ID:"+ this.getSectionId()
+		+ " Mortgage ID"+this.getMortgageId());
+		
+		
+		System.out.println("B1 = "+b1);
+		System.out.println("B2 "+b2);
+		
+		if(b1 && b2){
 			ret = true;
 		}
+		System.out.println(" RETURN VALUE: "+ret);
 		return ret;
 	}
 	public Set<TimelineSectionWrapper> getChildSections() {

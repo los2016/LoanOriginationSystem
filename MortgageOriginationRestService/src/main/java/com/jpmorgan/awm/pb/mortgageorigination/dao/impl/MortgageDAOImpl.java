@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,11 @@ import com.jpmorgan.awm.pb.mortgageorigination.dao.MortgageDAO;
 import com.jpmorgan.awm.pb.mortgageorigination.request.MortgageApplicationRequest;
 import com.jpmorgan.awm.pb.mortgageorigination.response.MortgageApplicationResponse;
 import com.jpmorgan.awm.pb.mortgageorigination.response.SaveMortgageApplicationResponse;
+import com.jpmorgan.awm.pb.mortgageorigination.service.QNAServices;
 import com.jpmorgan.awm.pb.mortgageorigination.utils.DatabaseService;
 import com.myorg.losmodel.model.LOSResponse;
+import com.myorg.losmodel.model.ValidateQuestionRequest;
+import com.myorg.losmodel.model.ValidateQuestionResponse;
 import com.myorg.losmodel.model.client.MortgageApplication;
 import com.myorg.losmodel.model.questions.TxMortgageApplication;
 import com.myorg.losmodel.util.ModelUtils;
@@ -36,6 +40,9 @@ public class MortgageDAOImpl implements MortgageDAO {
 	private JdbcTemplate jdbcTemplate;
 
 	Logger logger = LoggerFactory.getLogger(MortgageDAOImpl.class);
+	
+	@Autowired
+	private QNAServices qnaServices;
 
 	public MortgageApplicationResponse getMortgageDetails(String clientOrAdvisor, long clientOrAdvisorPartyId,
 			long mortgageId) {
@@ -110,6 +117,16 @@ public class MortgageDAOImpl implements MortgageDAO {
 				// Need to fire all rules from this point.
 				// If not error then we need to execute further DAO calls
 				// otherwise return Error response
+				
+				ValidateQuestionRequest req = new ValidateQuestionRequest();
+				req.setMortgageApplication(mortgageApplication);
+				
+				
+				ValidateQuestionResponse resp = qnaServices.validateQuestion(req);
+				
+				if(CollectionUtils.isEmpty(resp.getValidateMesgList()) ) {
+					// Need to handle how to return validation error messages.
+				}
 
 				Map<String, Object> attributeMap = ModelUtils
 						.getObjectToDbAttributeMapping(mortgageApplicationRequest.getMortgageApplication());

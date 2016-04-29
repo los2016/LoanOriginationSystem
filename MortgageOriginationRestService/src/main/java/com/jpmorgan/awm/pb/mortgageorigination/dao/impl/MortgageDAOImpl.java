@@ -18,7 +18,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jpmorgan.awm.pb.mortgageorigination.dao.MortgageDAO;
 import com.jpmorgan.awm.pb.mortgageorigination.request.MortgageApplicationRequest;
@@ -70,8 +69,8 @@ public class MortgageDAOImpl implements MortgageDAO {
 						txMortgageApplication.getTransactionId());
 
 				ObjectMapper mapper = new ObjectMapper();
-				if ( txMortgageApplication.getJsonString() == null )
-					continue; 
+				if (txMortgageApplication.getJsonString() == null)
+					continue;
 
 				mortgageApplicationList
 						.add(mapper.readValue(txMortgageApplication.getJsonString(), MortgageApplication.class));
@@ -79,10 +78,10 @@ public class MortgageDAOImpl implements MortgageDAO {
 
 			// Added list object to main List
 			mortgageApplicationResponse.setMortgageApplications(mortgageApplicationList);
-		LOSResponse response = new LOSResponse();
-		response.setReturnMsg("List of Applications");
-		response.setReturnType("Success");
-		mortgageApplicationResponse.setResponse(response);
+			LOSResponse response = new LOSResponse();
+			response.setReturnMsg("List of Applications");
+			response.setReturnType("Success");
+			mortgageApplicationResponse.setResponse(response);
 			logger.info("getMortgageDetails :: Exit ");
 
 		} catch (Exception e) {
@@ -108,13 +107,17 @@ public class MortgageDAOImpl implements MortgageDAO {
 			try {
 				mortgageApplication = mortgageApplicationRequest.getMortgageApplication();
 
+				// Need to fire all rules from this point.
+				// If not error then we need to execute further DAO calls
+				// otherwise return Error response
+
 				Map<String, Object> attributeMap = ModelUtils
 						.getObjectToDbAttributeMapping(mortgageApplicationRequest.getMortgageApplication());
 
 				ObjectMapper mapper = new ObjectMapper();
 
 				String jsonMortgageApplication = mapper.writeValueAsString(mortgageApplication);
-				transId =  mortgageApplication.getApplicationID();
+				transId = mortgageApplication.getApplicationID();
 				String statusCd = mortgageApplicationRequest.getSaveType();
 
 				logger.info("saveMortgageDetails :: Calling upsert for Transaction ID {} ", transId);
@@ -122,7 +125,7 @@ public class MortgageDAOImpl implements MortgageDAO {
 				transId = upsert(attributeMap, transId, statusCd, jsonMortgageApplication,
 						mortgageApplication.getClientPartyId());
 
-				if(transId < 1){
+				if (transId < 1) {
 					logger.info("saveMortgageDetails :: Transaction ID {} ", transId);
 					throw new Exception("Dao layer failed to save the mortgage");
 				}
@@ -142,19 +145,19 @@ public class MortgageDAOImpl implements MortgageDAO {
 		return mortgageApplicationResponse;
 	}
 
-	//Shubhrajit - 25/4
+	// Shubhrajit - 25/4
 	public long upsert(Map<String, Object> attributeMap, long tranId, String statusCd, String jsonObject,
 			String clientPartyId) throws SQLException {
 
-		//Forcing a commit
-		
+		// Forcing a commit
+
 		// Vaibhav added some code.. in Model..
 		// For this DAO method ModelUtils.java ->
 		// getObjectToDbAttributeMapping(MortgageApplication)
 		// Also need to pass JSON String in jsonObject - > MortgageApplication
 		// Object
 		Connection conn = DatabaseService.getConnection();
-		//Shubhrajit - 25/4
+		// Shubhrajit - 25/4
 		long ret = -1;
 		conn.setAutoCommit(false);
 		long transactionId = tranId;
@@ -176,7 +179,7 @@ public class MortgageDAOImpl implements MortgageDAO {
 		PreparedStatement ps5 = conn.prepareStatement("delete transaction_data_item" + " where transaction_id = ?");
 
 		// PreparedStatement ps6 =
-		
+
 		try {
 			if (transactionId <= 0) { // New transaction
 
@@ -199,7 +202,7 @@ public class MortgageDAOImpl implements MortgageDAO {
 				ps2.setString(1, statusCd);
 				ps2.setString(2, jsonObject);
 				ps2.setString(3, clientPartyId);
-				ps2.setLong(4,transactionId);
+				ps2.setLong(4, transactionId);
 				ps2.execute();
 			}
 
@@ -277,14 +280,14 @@ public class MortgageDAOImpl implements MortgageDAO {
 			if (rs != null) {
 				logger.info("TxMortgageApplication mapRow :: Transaction ID {} ", rs.getInt("TRANSACTION_ID"));
 				txMortgageApplication.setTransactionId(rs.getInt("TRANSACTION_ID"));
-				//txMortgageApplication.setJsonString(rs.getString("COMPLETE_TRAN_OBJ"));
+				// txMortgageApplication.setJsonString(rs.getString("COMPLETE_TRAN_OBJ"));
 				String completeTranObj = rs.getString("COMPLETE_TRAN_OBJ");
-				logger.debug ("Complete tran obj from database >>"+completeTranObj+" <<");
-				System.out.println ("Complete tran obj from database >>"+completeTranObj+" <<");
-				if(completeTranObj == null){
+				logger.debug("Complete tran obj from database >>" + completeTranObj + " <<");
+				System.out.println("Complete tran obj from database >>" + completeTranObj + " <<");
+				if (completeTranObj == null) {
 					logger.warn("COMPLETE TRAN OBJ IS NULL");
 					System.out.println("COMPLETE TRAN OBJ IS NULL");
-							
+
 					completeTranObj = "";
 				}
 				txMortgageApplication.setJsonString(completeTranObj);

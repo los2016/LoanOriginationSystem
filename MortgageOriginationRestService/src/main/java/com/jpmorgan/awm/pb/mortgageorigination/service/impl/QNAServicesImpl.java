@@ -57,27 +57,13 @@ public class QNAServicesImpl implements QNAServices {
 			
 
 			resp = new ValidateQuestionResponse();
-			resp.setReturnType("error");
+			resp.setReturnType("success");
 			resp.setReturnMsg("No Rules got fired for given information");
 			
 			return resp;
 			
-		}
-		
-		
-		/*
-		if(ModelUtils.getValidationMesgList() != null && ModelUtils.getValidationMesgList().size() > 0) {
-			
-			resp = new ValidateQuestionResponse();
-			resp.setReturnType(ModelUtils.getValidationMesgList().get(0).getType());
-			resp.setReturnMsg(ModelUtils.getValidationMesgList().get(0).getMesg());
-			
-			return resp;
-			
-		}
-		*/
-		
-		
+		}	
+				
 		resp = new ValidateQuestionResponse();
 		
 		resp.setEnableFields(ModelUtils.getEnableqnsIdList());

@@ -30,18 +30,22 @@ public class CoverageDAOImpl implements CoverageDAO {
 
 		String sql = "";
 
+		boolean isValidClientOrAdvisor = false;
 		try {
-		if (userType.equalsIgnoreCase("C")) {
-			sql = "select p.advisor_party_id as party_id from demo_client_team p where p.party_id = ?";
-		} else {
-			sql = "select p.party_id as party_id from demo_client_team p where p.ADVISOR_PARTY_ID = ?";
-		}
+			if (userType.equalsIgnoreCase("C")) {
+				sql = "select p.advisor_party_id as party_id from demo_client_team p where p.party_id = ?";
+				isValidClientOrAdvisor = true;
+			} else if (userType.equalsIgnoreCase("A")) {
+				sql = "select p.party_id as party_id from demo_client_team p where p.ADVISOR_PARTY_ID = ?";
+				isValidClientOrAdvisor = true;
+			}
 
-		List<Long> coverageList = jdbcTemplate.query(sql,new Object[] { partyId },  new UsersRowMapper());
-		coverageResponse.setCoverageList(coverageList);
+			if (isValidClientOrAdvisor) {
+				List<Long> coverageList = jdbcTemplate.query(sql, new Object[] { partyId }, new UsersRowMapper());
+				coverageResponse.setCoverageList(coverageList);
 
-			logger.info("getClientOrAdvisorCoverage :: Exit ::  No of Parties : {}", coverageList.size());
-
+				logger.info("getClientOrAdvisorCoverage :: Exit ::  No of Parties : {}", coverageList.size());
+			}
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 		}

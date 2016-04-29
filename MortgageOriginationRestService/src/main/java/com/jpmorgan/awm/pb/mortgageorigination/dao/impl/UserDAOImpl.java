@@ -82,13 +82,14 @@ public class UserDAOImpl implements UserDAO {
 				e.printStackTrace();
 			}
 
-			if (user.getRoleId() == 1000) {
+			if (user.getRoleId() == 2000) {
 				user.setUserType("A");
-			} else {
+			} else if (user.getRoleId() == 1000) {
 				user.setUserType("C");
 			}
 			// Removes Role ID as we are sending UserType
 			user.setRoleId(0);
+			user.setPassword("");
 			userDetailsResponse.setUser(user);
 		} else {
 			LOSResponse messageResponse = new LOSResponse();

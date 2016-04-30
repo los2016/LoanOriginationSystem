@@ -15,9 +15,6 @@ public class DatabaseService {
 
 	private static Connection con;
 	private static final String Driver = "oracle.jdbc.driver.OracleDriver";
-	// private static final String ConnectionString =
-	// "jdbc:oracle:thin:@localhost:1521:XE";
-	// private static final String user = "mortgage";
 
 	@Value("${oracle.db.url}")
 	private static String connectionString;

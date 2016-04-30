@@ -20,15 +20,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ImportResource("classpath:drools-context.xml")
 public class MortgageConfiguration {
 
-	@Value("${mysql.db.url}")
-	private String mysqldbUrl;
-
-	@Value("${mysql.db.user}")
-	private String mysqlUser;
-
-	@Value("${mysql.db.password}")
-	private String mysqlPassword;
-
 	@Value("${oracle.db.url}")
 	private String oracledbUrl;
 
@@ -41,16 +32,6 @@ public class MortgageConfiguration {
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
 		return new PropertySourcesPlaceholderConfigurer();
-	}
-
-	@Bean
-	public DataSource dataSource() {
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		dataSource.setUrl(mysqldbUrl);
-		dataSource.setUsername(mysqlUser);
-		dataSource.setPassword(mysqlPassword);
-		return dataSource;
 	}
 
 	@Bean
